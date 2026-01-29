@@ -1,0 +1,107 @@
+@inject Microsoft.Extensions.Options.IOptions<AppOptions> App
+<section class="hero">
+  <div class="container">
+    <h1>Tecnologia para vender, organizar e automatizar seu negócio</h1>
+    <p class="lead">Sistemas, sites e automações desenvolvidos para o dia a dia das empresas.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="https://wa.me/" target="_blank" rel="noopener" data-evt="cta_whatsapp">Falar no WhatsApp</a>
+      <a class="btn btn-outline" href="/Company/Contact" data-evt="cta_diagnostico">Solicitar diagnóstico técnico</a>
+    </div>
+    <div class="hero-badges">
+      <span>★ Entenda em 5 segundos: o que fazemos, para quem, e qual problema resolvemos</span>
+    </div>
+  </div>
+  <div class="hero-bg" aria-hidden="true"></div>
+</section>
+
+<section class="benefits">
+  <div class="container grid cols-4">
+    <div class="card">Mais controle</div>
+    <div class="card">Menos trabalho manual</div>
+    <div class="card">Mais vendas</div>
+    <div class="card">Mais organização</div>
+  </div>
+</section>
+
+<section class="services">
+  <div class="container">
+    <h2>Serviços em destaque</h2>
+    <div class="grid cols-5">
+      <a class="card hoverable" href="/Services/Software">Desenvolvimento de Software</a>
+      <a class="card hoverable" href="/Services/FoodService">Sistemas para Lanchonetes/Restaurantes</a>
+      <a class="card hoverable" href="/Services/WebApps">Sites & Aplicações Web</a>
+      <a class="card hoverable" href="/Services/MobileApps">Aplicativos</a>
+      <a class="card hoverable" href="/Services/Automations">Automações (incl. WhatsApp)</a>
+    </div>
+  </div>
+</section>
+
+<section class="kpis">
+  <div class="container">
+    <h2>Números da NexCore</h2>
+    <div class="grid cols-6 counters">
+      <div class="kpi" data-target="128">Projetos entregues</div>
+      <div class="kpi" data-target="92">NPS / Satisfação</div>
+      <div class="kpi" data-target="30">Tempo médio de entrega (dias)</div>
+      <div class="kpi" data-target="45000">Pedidos processados</div>
+      <div class="kpi" data-target="24">Integrações ativas</div>
+      <div class="kpi" data-target="99.98">Uptime (%)</div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials">
+  <div class="container">
+    <h2>Depoimentos</h2>
+    <div class="carousel" id="testimonialCarousel" aria-roledescription="carousel" aria-label="Depoimentos de clientes">
+      <div class="carousel-track">
+        <article class="testimonial-card">
+          <img src="/img/people/p1.jpg" alt="Foto de cliente" />
+          <div class="stars" aria-label="5 de 5 estrelas">★★★★★</div>
+          <blockquote>"Reduzimos 32% do tempo operacional e aumentamos 21% dos pedidos online."</blockquote>
+          <cite>Carla — Pizzaria Sabor & Arte</cite>
+        </article>
+        <article class="testimonial-card">
+          <img src="/img/people/p2.jpg" alt="Foto de cliente" />
+          <div class="stars">★★★★★</div>
+          <blockquote>"Integração com WhatsApp trouxe agilidade ao atendimento e menos erros."</blockquote>
+          <cite>João — LancheFast</cite>
+        </article>
+        <article class="testimonial-card">
+          <img src="/img/people/p3.jpg" alt="Foto de cliente" />
+          <div class="stars">★★★★★</div>
+          <blockquote>"Sistema simples de usar e poderoso. O suporte é excelente."</blockquote>
+          <cite>Ana — Empório Central</cite>
+        </article>
+      </div>
+      <button class="carousel-prev" aria-label="Anterior">◀</button>
+      <button class="carousel-next" aria-label="Próximo">▶</button>
+    </div>
+  </div>
+</section>
+
+<section class="logos">
+  <div class="container grid cols-6 logos-grid">
+    <img src="/img/brands/b1.svg" alt="Marca parceira 1" />
+    <img src="/img/brands/b2.svg" alt="Marca parceira 2" />
+    <img src="/img/brands/b3.svg" alt="Marca parceira 3" />
+    <img src="/img/brands/b4.svg" alt="Marca parceira 4" />
+    <img src="/img/brands/b5.svg" alt="Marca parceira 5" />
+    <img src="/img/brands/b6.svg" alt="Marca parceira 6" />
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="container">
+    <h2>Pronto para acelerar seu negócio?</h2>
+    <p>Solicite um diagnóstico técnico gratuito e receba um plano de ação.</p>
+    <form method="get" action="/Company/Contact" class="inline-form">
+      <input name="Name" placeholder="Seu nome" required />
+      <input name="Company" placeholder="Empresa" required />
+      <input name="Email" type="email" placeholder="E-mail" required />
+      <input name="Phone" placeholder="WhatsApp/Telefone" required />
+      <input name="Need" placeholder="Descreva rapidamente sua necessidade" required />
+      <button class="btn btn-primary" type="submit" data-evt="cta_form_home">Quero meu diagnóstico</button>
+    </form>
+  </div>
+</section>

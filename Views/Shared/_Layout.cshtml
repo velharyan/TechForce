@@ -1,0 +1,269 @@
+@using Microsoft.Extensions.Options
+@inject IOptions<AppOptions> AppOptions
+@inject IOptions<SeoOptions> SeoOptions
+@{
+    var title = ViewData["Title"] as string ?? SeoOptions.Value.DefaultTitle;
+    var description = ViewData["Description"] as string ?? SeoOptions.Value.DefaultDescription;
+
+    // Checa variável de ambiente para controlar aviso do chat (IA real vs simulação)
+    var hasAiKey = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("NEXCORE_AI_API_KEY"));
+
+    // Navegação única usada para desktop e mobile (evita duplicação)
+    var nav = new (string href, string text, bool primary)[] {
+        ("/", "Home", false),
+        ("/Services", "Serviços", false),
+        ("/Products", "Produtos", false),
+        ("/Cases", "Cases", false),
+        ("/Testimonials", "Depoimentos", false),
+        ("/Company/About", "Sobre", false),
+        ("/Company/Contact", "Orçamento", true)
+    };
+    var path = (Context?.Request?.Path.Value ?? "/").ToLowerInvariant();
+
+    // Canonical (se houver BaseUrl)
+    var baseUrl = SeoOptions?.Value?.BaseUrl?.TrimEnd('/');
+    var canonical = !string.IsNullOrWhiteSpace(baseUrl)
+        ? $"{baseUrl}{Context?.Request?.Path.Value}"
+        : null;
+   
+
+    // ✅ OG image com fallback (também cobre string vazia/brancos)
+    var ogImage = !string.IsNullOrWhiteSpace(SeoOptions?.Value?.OgImage)
+        ? SeoOptions!.Value!.OgImage
+        : Url.Content("~/img/og-default.png");
+}
+
+
+
+<!-- Intro Overlay (vídeo tela cheia) -->
+<div id="introOverlay" class="intro-overlay" aria-hidden="true" hidden>
+    <video id="introVideo"
+           class="intro-video"
+           preload="auto"
+           playsinline
+           muted
+           disablePictureInPicture
+           webkit-playsinline>
+    </video>
+
+    <button id="introSkip" class="intro-skip" aria-label="Pular intro">Pular intro ↦</button>
+</div>
+
+
+<html lang="pt-BR" class="no-js" data-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <!-- viewport-fit cobre safe areas no iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>@title</title>
+    <meta name="description" content="@description" />
+    <meta property="og:title" content="@title" />
+    <meta property="og:description" content="@description" />
+    <meta property="og:image" content="@ogImage" />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0ea5e9" />
+    @if (!string.IsNullOrWhiteSpace(canonical))
+    {
+        <link rel="canonical" href="@canonical" />
+    }
+
+    <!-- Fontes e assets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet" />
+    <link rel="manifest" href="~/manifest.json" asp-append-version="true" />
+    <link rel="icon" href="~/favicon.ico" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+
+</head>
+<body>
+    <noscript>
+        <div style="background:#111827;color:#e6edf3;padding:10px;text-align:center">
+            Este site utiliza JavaScript para interações e gráficos. Ative para melhor experiência.
+        </div>
+    </noscript>
+
+    <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+    <header class="header" role="banner">
+        <div class="container">
+            <a class="brand" href="/" aria-label="NexCore — Início">
+                <!-- Tamanho da logo é controlado via CSS (tokens) -->
+                <img src="~/img/logo.png" asp-append-version="true" alt="NexCore" />
+            </a>
+
+            <!-- Menu desktop -->
+            <nav class="nav" aria-label="Principal">
+                @foreach (var item in nav)
+                {
+                    var isActive = path == item.href.ToLowerInvariant();
+                    if (item.primary)
+                    {
+                        <a href="@item.href"
+                           class="btn btn-primary"
+                           data-evt="cta_contact"
+                           aria-current="@(isActive ? "page" : null)">
+                            @item.text
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@item.href"
+                           class="nav-link"
+                           aria-current="@(isActive ? "page" : null)">
+                            @item.text
+                        </a>
+                    }
+                }
+            </nav>
+
+           
+            <!-- Botão: menu mobile -->
+            <button id="menuToggle"
+                    class="menu-toggle"
+                    aria-label="Abrir menu"
+                    aria-controls="mobileNav"
+                    aria-expanded="false">☰</button>
+
+            <nav id="mobileNav" class="mobile-nav" aria-label="Menu móvel" hidden>
+                @foreach (var item in nav)
+                {
+                    var isActive = path == item.href.ToLowerInvariant();
+                    var cls = item.primary ? "mobile-link primary" : "mobile-link";
+                    <a href="@item.href" class="@cls" aria-current="@(isActive ? "page" : null)">
+                        @item.text
+                    </a>
+                }
+            </nav>
+
+
+
+           
+        </div>
+
+        
+    </header>
+
+    <main id="conteudo" class="main" role="main">
+        @RenderBody()
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container grid">
+            <div>
+                <img src="~/img/logo.png" asp-append-version="true" alt="NexCore" />
+                <p class="muted">@AppOptions.Value.Tagline</p>
+                <p class="muted small">© @DateTime.UtcNow.Year — Desenvolvido por NexCore</p>
+            </div>
+            <div>
+                <h4>Empresa</h4>
+                <ul>
+                    <li><a href="/Company/About">Sobre</a></li>
+                    <li><a href="/Testimonials">Depoimentos</a></li>
+                    <li><a href="/Cases">Cases</a></li>
+                    <li><a href="/Home/Accessibility">Acessibilidade</a></li>
+                    <li><a href="/Home/Sitemap">Mapa do site</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="/Legal/Privacy">Política de Privacidade</a></li>
+                    <li><a href="/Legal/Terms">Termos de Uso</a></li>
+                    <li><a href="/robots.txt">robots.txt</a> • <a href="/sitemap.xml">sitemap.xml</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Contato</h4>
+                <ul>
+                    <li><a class="btn btn-outline" href="https://wa.me/" data-evt="cta_whatsapp" target="_blank" rel="noopener">Falar no WhatsApp</a></li>
+                    <li><a href="mailto:@AppOptions.Value.ContactEmail">@AppOptions.Value.ContactEmail</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chat -->
+    <button id="chatWidget" class="chat-widget" aria-label="Converse com nossa IA" data-evt="cta_chat">💬</button>
+    <div id="chatPanel" class="chat-panel" aria-live="polite" aria-label="Janela de chat">
+        <div class="chat-header">
+            Converse com nossa IA
+            <button id="chatClose" aria-label="Fechar">✖</button>
+        </div>
+        <div id="chatMessages" class="chat-messages" role="log" aria-live="polite"></div>
+        <form id="chatForm" class="chat-form" autocomplete="off">
+            <label class="sr-only" for="chatInput">Mensagem</label>
+            <input id="chatInput" name="message" placeholder="Pergunte sobre serviços, prazos, tecnologias…" required />
+            <button class="btn btn-primary" type="submit">Enviar</button>
+        </form>
+        @if (!hasAiKey)
+        {
+            <p class="chat-disclaimer">Modo simulado. Para respostas reais, fale com um especialista.</p>
+        }
+    </div>
+
+    <!-- Cookies -->
+    <div id="cookieBanner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Consentimento de cookies" aria-modal="true" hidden>
+        <div class="cookie-content">
+            <h3>Preferências de cookies</h3>
+            <p>Usamos cookies para medir e melhorar a experiência. Personalize seu consentimento conforme a LGPD.</p>
+            <div class="cookie-options">
+                <label><input type="checkbox" checked disabled /> Necessários</label>
+                <label><input id="ckAnalytics" type="checkbox" /> Analytics</label>
+                <label><input id="ckMarketing" type="checkbox" /> Marketing</label>
+            </div>
+            <div class="actions">
+                <button id="btnAcceptAll" class="btn btn-primary">Aceitar todos</button>
+                <button id="btnSavePrefs" class="btn">Salvar preferências</button>
+            </div>
+            <a class="small" href="/Legal/Privacy">Saiba mais</a>
+        </div>
+    </div>
+
+    <!-- WhatsApp FAB -->
+    <a href="https://wa.me/" target="_blank" rel="noopener" class="whatsapp-fab" aria-label="Falar no WhatsApp" data-evt="cta_whatsapp">WhatsApp</a>
+
+    @RenderSection("Scripts", required: false)
+
+    <!-- Scripts (defer) com cache busting -->
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
+            integrity="sha384-AzQp9aQxXbTzqgJShwz+FqzE0o/3zKXbTiUeHn2wFZxVYkqW9uYHh2fS8b0c6k9i"
+            crossorigin="anonymous"></script>
+    <script defer src="~/js/consent.js" asp-append-version="true"></script>
+    <script defer src="~/js/analytics.js" asp-append-version="true"></script>
+    <script defer src="~/js/theme.js" asp-append-version="true"></script>
+    <script defer src="~/js/site.js" asp-append-version="true"></script>
+    <script defer src="~/js/chat.js" asp-append-version="true"></script>
+    <script defer src="~/js/sw-register.js" asp-append-version="true"></script>
+</body>
+</html>
+
+<!-- JSON-LD seguro -->
+<script type="application/ld+json">
+    @Html.Raw(@"{
+      ""@context"": ""https://schema.org"",
+      ""@type"": ""Organization"",
+            ""name"": ""NexCore"",
+            ""url"": ""https://www.nexcore.com.br"",
+      ""logo"": "" / img / logo.png"",
+            ""sameAs"": []
+        }")
+</script>
+
+<script type="application/ld+json">
+    @Html.Raw(@"{
+            ""@context"": ""https://schema.org"",
+      ""@type"": ""WebSite"",
+            ""name"": ""NexCore"",
+            ""url"": ""https://www.nexcore.com.br"",
+      ""potentialAction"": {
+            ""@type"": ""SearchAction"",
+                ""target"": ""https://www.nexcore.com.br/Blog?query={search_term_string}"",
+            ""query - input"": ""required name = search_term_string""
+            }
+        }")
+</script>
+
+<script defer src="~/js/intro.js" asp-append-version="true"></script>

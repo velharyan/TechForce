@@ -1,0 +1,38 @@
+@model NexCore.Web.Controllers.ContactForm
+@inject Microsoft.Extensions.Options.IOptions<AppOptions> App
+<section class="container narrow">
+  <h1>Contato & Orçamento</h1>
+  <p>WhatsApp: <a class="btn btn-outline" href="https://wa.me/" target="_blank" rel="noopener" data-evt="cta_whatsapp">Falar no WhatsApp</a></p>
+  <p>E-mail: <a href="mailto:@App.Value.ContactEmail">@App.Value.ContactEmail</a></p>
+  @if(TempData["Success"] != null){<div class="alert success">@TempData["Success"]</div>}
+  <form asp-action="Contact" method="post" class="grid form">
+    <div>
+      <label for="Name">Nome</label>
+      <input asp-for="Name" />
+      <span asp-validation-for="Name" class="validation"></span>
+    </div>
+    <div>
+      <label for="Company">Empresa</label>
+      <input asp-for="Company" />
+      <span asp-validation-for="Company" class="validation"></span>
+    </div>
+    <div>
+      <label for="Email">E-mail</label>
+      <input asp-for="Email" type="email" />
+      <span asp-validation-for="Email" class="validation"></span>
+    </div>
+    <div>
+      <label for="Phone">Telefone/WhatsApp</label>
+      <input asp-for="Phone" />
+      <span asp-validation-for="Phone" class="validation"></span>
+    </div>
+    <div class="col-span-2">
+      <label for="Need">Necessidade</label>
+      <textarea asp-for="Need"></textarea>
+      <span asp-validation-for="Need" class="validation"></span>
+    </div>
+    <div class="col-span-2">
+      <button class="btn btn-primary" type="submit" data-evt="cta_orcamento">Enviar</button>
+    </div>
+  </form>
+</section>

@@ -1,0 +1,18 @@
+@{
+    ViewData["Title"] = "Nossos Números — NexCore";
+}
+<section class="page-header container">
+  <h1>Nossos Números</h1>
+  <p>Indicadores com dados de exemplo para visualização.</p>
+</section>
+<section class="container grid cols-2">
+  <canvas id="chartProjetos"></canvas>
+  <canvas id="chartServicosMes"></canvas>
+  <canvas id="chartNps"></canvas>
+  <canvas id="chartTempoEntrega"></canvas>
+  <canvas id="chartPedidos"></canvas>
+  <canvas id="chartAutomacoes"></canvas>
+</section>
+@section Scripts{
+  <script src="/js/charts.js"></script>
+}

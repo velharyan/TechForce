@@ -1,0 +1,9 @@
+@model IEnumerable<NexCore.Web.Controllers.Post>
+<section class="container">
+  <h1>Blog & Artigos</h1>
+  <ul class="post-list">
+    @foreach(var p in Model){
+      <li class="card"><a href="/Blog/@p.Slug"><h3>@p.Title</h3><p class="muted">@p.Excerpt</p></a></li>
+    }
+  </ul>
+</section>
