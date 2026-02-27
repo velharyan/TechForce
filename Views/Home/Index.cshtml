@@ -1,109 +1,473 @@
 @inject Microsoft.Extensions.Options.IOptions<AppOptions> App
-<section class="hero">
-  <div class="container">
-    <h1>Tecnologia para vender, organizar e automatizar seu negócio</h1>
-    <p class="lead">Sistemas, sites e automações desenvolvidos para o dia a dia das empresas.</p>
-    <div class="actions">
-      <a class="btn btn-primary" href="https://wa.me/" target="_blank" rel="noopener" data-evt="cta_whatsapp">Falar no WhatsApp</a>
-      <a class="btn btn-outline" href="/Company/Contact" data-evt="cta_diagnostico">Solicitar diagnóstico técnico</a>
+
+<style>
+    /* Estilos Específicos da Home - Premium UI */
+    .nx-section { padding: 120px 0; position: relative; }
+    .nx-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; z-index: 2; position: relative; }
+    
+    /* Hero Section */
+    .nx-hero {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        background: radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 50%);
+        padding-top: 140px; /* Compensa o header */
+    }
+    .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
+    
+    .hero-text h1 {
+        font-size: 3.8rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 24px;
+        letter-spacing: -0.03em;
+        color: var(--text-light);
+    }
+    .hero-text h1 span {
+        background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: inline-block;
+    }
+    .lead { 
+        font-size: 1.25rem; 
+        color: var(--text-muted); 
+        line-height: 1.6; 
+        margin-bottom: 40px; 
+        max-width: 90%; 
+        font-weight: 400;
+    }
+    
+    .hero-actions { display: flex; gap: 16px; margin-bottom: 40px; flex-wrap: wrap; }
+    
+    .nx-btn {
+        padding: 14px 32px; 
+        border-radius: 999px; 
+        font-weight: 600; 
+        font-size: 1rem;
+        text-decoration: none; 
+        transition: var(--transition-smooth); 
+        display: inline-flex; 
+        align-items: center; 
+        justify-content: center;
+        cursor: pointer;
+    }
+    .nx-btn.primary {
+        background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+        color: white; 
+        box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3);
+        border: 1px solid transparent;
+    }
+    .nx-btn.primary:hover { 
+        transform: translateY(-3px); 
+        box-shadow: 0 8px 30px rgba(14, 165, 233, 0.5); 
+    }
+    .nx-btn.outline {
+        background: transparent; 
+        border: 1px solid var(--glass-border); 
+        color: var(--text-light);
+    }
+    .nx-btn.outline:hover { 
+        background: var(--glass-bg); 
+        border-color: #38bdf8; 
+    }
+    
+    .hero-badge {
+        display: inline-flex; 
+        align-items: center;
+        padding: 8px 20px; 
+        background: rgba(56, 189, 248, 0.05);
+        border: 1px solid rgba(56, 189, 248, 0.2); 
+        border-radius: 100px;
+        font-size: 0.9rem; 
+        color: #bae6fd; 
+        font-weight: 500;
+        backdrop-filter: blur(10px);
+    }
+
+    /* Hero Visual - Premium Floating Panels */
+    /* Hero Visual - Premium Floating Panels */
+    .hero-visual {
+        position: relative;
+        height: 500px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Base style for panels */
+    .glass-panel {
+        position: absolute;
+        background: rgba(15, 23, 42, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        background-size: cover;
+        background-position: center;
+        transition: transform 0.6s ease, opacity 0.6s ease;
+    }
+
+    /* Painel 1 - Programador interagindo */
+    /* Painel 1 - Design Principal */
+    .panel-1 {
+        width: 300px;
+        height: 360px;
+        z-index: 2;
+        background-image: url("/img/img2.png"); /* Caminho corrigido */
+        background-size: cover;
+        border-top: 1px solid rgba(56, 189, 248, 0.3);
+        animation: float 6s ease-in-out infinite;
+    }
+
+    /* Painel 2 - Código renderizando */
+    .panel-2 {
+        width: 240px;
+        height: 300px;
+        right: 0;
+        top: 20px;
+        z-index: 1;
+        background-image: url("/img/img3.png"); /* Caminho corrigido */
+        background-size: cover;
+        border: 1px solid rgba(129, 140, 248, 0.2);
+        animation: float 7s ease-in-out infinite reverse;
+    }
+
+    /* Painel 3 - Site final no monitor */
+    .panel-3 {
+        width: 280px;
+        height: 130px;
+        left: 0;
+        bottom: 4px;
+        z-index: 3;
+        background-image: url("/img/img1.png"); /* Caminho corrigido */
+        background-size: cover;
+        border: 1px solid rgba(56, 189, 248, 0.4);
+        box-shadow: 0 0 400px rgba(56, 189, 248, 0.2);
+        animation: float 5s ease-in-out infinite 1s;
+    }
+    /* Floating animation */
+    @@keyframes float {
+        0% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-20px);
+        }
+
+        100% {
+            transform: translateY(0px);
+        }
+    }
+
+    /* Responsividade */
+   @@media(max - width: 1024px)
+
+    {
+        .hero-grid {
+            grid-template-columns: 1fr;
+            text-align: center;
+            gap: 40px;
+        }
+
+        .hero-actions {
+            justify-content: center;
+        }
+
+        .hero-visual {
+            height: 400px;
+        }
+
+        .grid-4, .grid-3, .grid-6, .testimonial-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+
+    /* Sessões Genéricas */
+    .section-title { font-size: 2.8rem; text-align: center; margin-bottom: 16px; font-weight: 800; letter-spacing: -0.02em; }
+    .section-subtitle { text-align: center; color: var(--text-muted); font-size: 1.15rem; margin-bottom: 60px; font-weight: 400; max-width: 600px; margin-inline: auto; }
+
+    /* Cards - Glassmorphism Refinado */
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    
+    .nx-card, .service-card, .testimonial-card {
+        background: rgba(15, 23, 42, 0.4);
+        border: 1px solid var(--glass-border);
+        padding: 40px 32px;
+        border-radius: 20px;
+        transition: var(--transition-smooth);
+        text-decoration: none;
+        color: var(--text-light);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .nx-card::before, .service-card::before {
+        content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(56, 189, 248, 0.06), transparent 40%);
+        opacity: 0; transition: opacity 0.3s; pointer-events: none;
+    }
+    
+    .nx-card:hover, .service-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(56, 189, 248, 0.3);
+        background: rgba(30, 41, 59, 0.6);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(56, 189, 248, 0.05);
+    }
+    .nx-card:hover::before, .service-card:hover::before { opacity: 1; }
+
+    .nx-card h3, .service-card h3 { font-size: 1.3rem; margin-bottom: 16px; font-weight: 700; color: #f8fafc; }
+    .nx-card p, .service-card p { color: var(--text-muted); line-height: 1.6; margin: 0; font-size: 0.95rem; }
+
+    /* KPIs */
+    .nx-kpis { background: linear-gradient(180deg, transparent, rgba(15, 23, 42, 0.8), transparent); }
+    .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px; text-align: center; }
+    .kpi { padding: 24px 0; }
+    .kpi .num {
+        display: block; font-size: 3.5rem; font-weight: 800;
+        background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px;
+        line-height: 1;
+    }
+    .kpi p { color: #38bdf8; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; }
+
+    /* Depoimentos */
+    .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .stars { color: #fbbf24; margin-bottom: 20px; font-size: 1.2rem; letter-spacing: 2px; }
+    .testimonial-card p { font-style: italic; margin-bottom: 24px; font-size: 1.05rem; line-height: 1.7; color: #e2e8f0; }
+    .testimonial-card span { display: block; font-size: 0.95rem; font-weight: 700; color: #38bdf8; border-top: 1px solid var(--glass-border); padding-top: 16px; }
+
+    /* CTA Final */
+    .nx-final-cta { text-align: center; margin-top: 40px; }
+    .cta-box {
+        background: radial-gradient(circle at center, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        border-radius: 32px;
+        padding: 80px 40px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .cta-box h2 { font-size: 3rem; margin-bottom: 24px; font-weight: 800; letter-spacing: -0.02em; }
+    .cta-box p { font-size: 1.25rem; color: var(--text-muted); margin-bottom: 40px; max-width: 600px; margin-inline: auto; }
+    .nx-btn.big { padding: 18px 48px; font-size: 1.15rem; }
+
+    /* Classes de Animação de Scroll (Reveal) */
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+
+    /* Responsividade */
+    @@media(max-width: 1024px) {
+      /*   .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+        .hero-actions { justify-content: center; }
+        .hero-visual { height: 400px; } */
+        .grid-4, .grid-3, .grid-6, .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @@media(max-width: 768px) {
+        .grid-4, .grid-3, .grid-6, .testimonial-grid { grid-template-columns: 1fr; }
+        .hero-text h1 { font-size: 2.8rem; }
+        .nx-section { padding: 80px 0; }
+        .section-title { font-size: 2.2rem; }
+        .cta-box { padding: 40px 20px; }
+        .cta-box h2 { font-size: 2.2rem; }
+    }
+</style>
+
+<section class="nx-section nx-hero">
+    <div class="nx-container hero-grid">
+        <div class="hero-text reveal">
+            <div class="hero-badge" style="margin-bottom: 24px;  margin-top: 140px;">
+                ⚡ Transformação digital de ponta a ponta
+            </div>
+            <h1>Soluções em Software <span>Arquitetadas para Escalar</span></h1>
+            <p class="lead">
+                Desenvolvemos sistemas corporativos, automações e plataformas web sob medida. Reduza custos operacionais e eleve a eficiência da sua empresa com tecnologia de alto nível.
+            </p>
+            <div class="hero-actions">
+                <a class="nx-btn primary" href="https://wa.me/" target="_blank">
+                    Falar com Especialista
+                </a>
+                <a class="nx-btn outline" href="/Company/Contact">
+                    Explorar Nossas Soluções
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-visual reveal delay-2">
+            <div class="glass-panel panel-1"></div>
+            <div class="glass-panel panel-2"></div>
+            <div class="glass-panel panel-3"></div>
+        </div>
+
     </div>
-    <div class="hero-badges">
-      <span>★ Entenda em 5 segundos: o que fazemos, para quem, e qual problema resolvemos</span>
-    </div>
-  </div>
-  <div class="hero-bg" aria-hidden="true"></div>
 </section>
 
-<section class="benefits">
-  <div class="container grid cols-4">
-    <div class="card">Mais controle</div>
-    <div class="card">Menos trabalho manual</div>
-    <div class="card">Mais vendas</div>
-    <div class="card">Mais organização</div>
-  </div>
-</section>
- 
-@* 
-///teste/// *@
-<section class="services">
-  <div class="container">
-    <h2>Serviços em destaque</h2>
-    <div class="grid cols-5">
-      <a class="card hoverable" href="/Services/Software">Desenvolvimento de Software</a>
-      <a class="card hoverable" href="/Services/FoodService">Sistemas para Lanchonetes/Restaurantes</a>
-      <a class="card hoverable" href="/Services/WebApps">Sites & Aplicações Web</a>
-      <a class="card hoverable" href="/Services/MobileApps">Aplicativos</a>
-      <a class="card hoverable" href="/Services/Automations">Automações (incl. WhatsApp)</a>
+<section class="nx-section nx-benefits">
+    <div class="nx-container grid-4">
+        <div class="nx-card reveal">
+            <h3>📊 Controle Total</h3>
+            <p>Sistemas personalizados projetados especificamente para a realidade e complexidade da sua operação.</p>
+        </div>
+        <div class="nx-card reveal delay-1">
+            <h3>⚙️ Automação Inteligente</h3>
+            <p>Elimine tarefas manuais repetitivas, minimize erros humanos e ganhe velocidade de execução.</p>
+        </div>
+        <div class="nx-card reveal delay-2">
+            <h3>🚀 Performance Extrema</h3>
+            <p>Aplicações com arquitetura moderna, ultrarrápidas e preparadas para alto volume de acessos.</p>
+        </div>
+        <div class="nx-card reveal delay-3">
+            <h3>🧩 Integração Simples</h3>
+            <p>Conectamos seu novo software às ferramentas que você já usa através de APIs robustas e seguras.</p>
+        </div>
     </div>
-  </div>
 </section>
 
-<section class="kpis">
-  <div class="container">
-    <h2>Números da NexCore</h2>
-    <div class="grid cols-6 counters">
-      <div class="kpi" data-target="128">Projetos entregues</div>
-      <div class="kpi" data-target="92">NPS / Satisfação</div>
-      <div class="kpi" data-target="30">Tempo médio de entrega (dias)</div>
-      <div class="kpi" data-target="45000">Pedidos processados</div>
-      <div class="kpi" data-target="24">Integrações ativas</div>
-      <div class="kpi" data-target="99.98">Uptime (%)</div>
+<section class="nx-section nx-services">
+    <div class="nx-container">
+        <h2 class="section-title reveal">Nossa Expertise Técnica</h2>
+        <p class="section-subtitle reveal">Engenharia de software focada em resolver gargalos reais de negócios complexos.</p>
+
+        <div class="grid-3">
+            <a class="service-card reveal" href="/Services/Software">
+                <h3>💻 Software Sob Medida</h3>
+                <p>Arquitetura e desenvolvimento de sistemas internos, ERPs customizados, painéis de gestão de dados e plataformas SaaS escaláveis.</p>
+            </a>
+            <a class="service-card reveal delay-1" href="/Services/WebApps">
+                <h3>🌐 Web Apps & Portais</h3>
+                <p>Presença digital premium com interfaces responsivas, design focado em UX/UI e aplicações progressivas otimizadas para conversão.</p>
+            </a>
+            <a class="service-card reveal delay-2" href="/Services/Automations">
+                <h3>🤖 Automações & APIs</h3>
+                <p>Criação de robôs de atendimento integrados ao WhatsApp, orquestração de microsserviços e automação completa de fluxos de trabalho.</p>
+            </a>
+        </div>
     </div>
-  </div>
 </section>
 
-<section class="testimonials">
-  <div class="container">
-    <h2>Depoimentos</h2>
-    <div class="carousel" id="testimonialCarousel" aria-roledescription="carousel" aria-label="Depoimentos de clientes">
-      <div class="carousel-track">
-        <article class="testimonial-card">
-          <img src="/img/people/p1.jpg" alt="Foto de cliente" />
-          <div class="stars" aria-label="5 de 5 estrelas">★★★★★</div>
-          <blockquote>"Reduzimos 32% do tempo operacional e aumentamos 21% dos pedidos online."</blockquote>
-          <cite>Carla — Pizzaria Sabor & Arte</cite>
-        </article>
-        <article class="testimonial-card">
-          <img src="/img/people/p2.jpg" alt="Foto de cliente" />
-          <div class="stars">★★★★★</div>
-          <blockquote>"Integração com WhatsApp trouxe agilidade ao atendimento e menos erros."</blockquote>
-          <cite>João — LancheFast</cite>
-        </article>
-        <article class="testimonial-card">
-          <img src="/img/people/p3.jpg" alt="Foto de cliente" />
-          <div class="stars">★★★★★</div>
-          <blockquote>"Sistema simples de usar e poderoso. O suporte é excelente."</blockquote>
-          <cite>Ana — Empório Central</cite>
-        </article>
-      </div>
-      <button class="carousel-prev" aria-label="Anterior">◀</button>
-      <button class="carousel-next" aria-label="Próximo">▶</button>
+<section class="nx-section nx-kpis">
+    <div class="nx-container">
+        <div class="grid-6 counters">
+            <div class="kpi reveal">
+                <span class="num" data-target="128">0</span>
+                <p>Projetos Entregues</p>
+            </div>
+            <div class="kpi reveal delay-1">
+                <span class="num" data-target="98" data-suffix="%">0</span>
+                <p>Taxa de Retenção</p>
+            </div>
+            <div class="kpi reveal delay-2">
+                <span class="num" data-target="45000" data-suffix="+">0</span>
+                <p>Transações/Dia</p>
+            </div>
+            <div class="kpi reveal delay-3">
+                <span class="num" data-target="24" data-suffix="/7">0</span>
+                <p>Suporte Técnico</p>
+            </div>
+            <div class="kpi reveal delay-1">
+                <span class="num" data-target="30" data-suffix="ms">0</span>
+                <p>Latência Média</p>
+            </div>
+            <div class="kpi reveal delay-2">
+                <span class="num" data-target="99" data-suffix="%">0</span>
+                <p>Uptime Garantido</p>
+            </div>
+        </div>
     </div>
-  </div>
 </section>
 
-<section class="logos">
-  <div class="container grid cols-6 logos-grid">
-    <img src="/img/brands/b1.svg" alt="Marca parceira 1" />
-    <img src="/img/brands/b2.svg" alt="Marca parceira 2" />
-    <img src="/img/brands/b3.svg" alt="Marca parceira 3" />
-    <img src="/img/brands/b4.svg" alt="Marca parceira 4" />
-    <img src="/img/brands/b5.svg" alt="Marca parceira 5" />
-    <img src="/img/brands/b6.svg" alt="Marca parceira 6" />
-  </div>
+<section class="nx-section nx-testimonials">
+    <div class="nx-container">
+        <h2 class="section-title reveal">Quem confia na NexCore</h2>
+        <p class="section-subtitle reveal">Resultados reais medidos pelos líderes que utilizam nossa tecnologia.</p>
+
+        <div class="testimonial-grid">
+            <div class="testimonial-card reveal">
+                <div class="stars">★★★★★</div>
+                <p>"A arquitetura do novo sistema reduziu em 40% nosso tempo operacional. A estabilidade da plataforma mesmo em picos de acesso é impressionante."</p>
+                <span>Carla Mendes — Diretora de Operações</span>
+            </div>
+            <div class="testimonial-card reveal delay-1">
+                <div class="stars">★★★★★</div>
+                <p>"A integração de APIs que a NexCore construiu entre nosso ERP e o WhatsApp praticamente zerou nossos erros de faturamento."</p>
+                <span>João Pedro — Head de Tecnologia</span>
+            </div>
+            <div class="testimonial-card reveal delay-2">
+                <div class="stars">★★★★★</div>
+                <p>"Código limpo, entregas no prazo e um time técnico que realmente entende de regras de negócios complexas. Recomendo de olhos fechados."</p>
+                <span>Ana Beatriz — CEO, TechLogistics</span>
+            </div>
+        </div>
+    </div>
 </section>
 
-<section class="final-cta">
-  <div class="container">
-    <h2>Pronto para acelerar seu negócio?</h2>
-    <p>Solicite um diagnóstico técnico gratuito e receba um plano de ação.</p>
-    <form method="get" action="/Company/Contact" class="inline-form">
-      <input name="Name" placeholder="Seu nome" required />
-      <input name="Company" placeholder="Empresa" required />
-      <input name="Email" type="email" placeholder="E-mail" required />
-      <input name="Phone" placeholder="WhatsApp/Telefone" required />
-      <input name="Need" placeholder="Descreva rapidamente sua necessidade" required />
-      <button class="btn btn-primary" type="submit" data-evt="cta_form_home">Quero meu diagnóstico</button>
-    </form>
-  </div>
+<section class="nx-section nx-final-cta reveal">
+    <div class="nx-container">
+        <div class="cta-box">
+            <h2>Pronto para escalar com a tecnologia certa?</h2>
+            <p>Agende uma reunião técnica com nossos arquitetos de software e descubra como podemos acelerar o crescimento da sua operação.</p>
+            <a class="nx-btn primary big" href="/Company/Contact">
+                Solicitar Diagnóstico Técnico Integrado
+            </a>
+        </div>
+    </div>
 </section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        
+        // --- 1. Animação de Surgimento (Reveal no Scroll) ---
+        const reveals = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    revealObserver.unobserve(entry.target); // Anima só uma vez
+                }
+            });
+        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+
+        reveals.forEach(reveal => revealObserver.observe(reveal));
+
+        // --- 2. Contador de KPIs (Suave e com formatação pt-BR) ---
+        const counters = document.querySelectorAll(".num");
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const counter = entry.target;
+                    const target = +counter.getAttribute("data-target");
+                    const suffix = counter.getAttribute("data-suffix") || "";
+                    const duration = 2500; // 2.5 segundos de animação
+                    let startTimestamp = null;
+
+                    const step = (timestamp) => {
+                        if (!startTimestamp) startTimestamp = timestamp;
+                        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                        
+                        // Easing (easeOutExpo) para desacelerar no final
+                        const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                        const current = Math.floor(easeProgress * target);
+                        
+                        // Formata o número (ex: 45000 -> 45.000)
+                        counter.innerText = current.toLocaleString('pt-BR') + suffix;
+
+                        if (progress < 1) {
+                            window.requestAnimationFrame(step);
+                        } else {
+                            counter.innerText = target.toLocaleString('pt-BR') + suffix; // Garante o final exato
+                        }
+                    };
+                    window.requestAnimationFrame(step);
+                    counterObserver.unobserve(counter);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        counters.forEach(counter => counterObserver.observe(counter));
+    });
+</script>
