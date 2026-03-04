@@ -1,4 +1,4 @@
-@inject Microsoft.Extensions.Options.IOptions<AppOptions> App
+@* @inject Microsoft.Extensions.Options.IOptions<AppOptions> App
 
 <style>
     /* Estilos Específicos da Home - Premium UI */
@@ -112,8 +112,8 @@
     /* Painel 1 - Programador interagindo */
     /* Painel 1 - Design Principal */
     .panel-1 {
-        width: 300px;
-        height: 360px;
+        width: 340px;
+        height: 300px;
         z-index: 2;
         background-image: url("/img/img2.png"); /* Caminho corrigido */
         background-size: cover;
@@ -123,7 +123,7 @@
 
     /* Painel 2 - Código renderizando */
     .panel-2 {
-        width: 240px;
+        width: 340px;
         height: 300px;
         right: 0;
         top: 20px;
@@ -136,8 +136,8 @@
 
     /* Painel 3 - Site final no monitor */
     .panel-3 {
-        width: 280px;
-        height: 130px;
+        width: 340px;
+        height: 300px;
         left: 0;
         bottom: 4px;
         z-index: 3;
@@ -469,5 +469,226 @@
         }, { threshold: 0.5 });
 
         counters.forEach(counter => counterObserver.observe(counter));
+    });
+</script> *@
+
+@inject Microsoft.Extensions.Options.IOptions<AppOptions> App
+
+<style>
+    /* Estilos Premium Reutilizados */
+    .nx-section {
+        padding: 120px 0;
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nx-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 24px;
+        z-index: 2;
+        position: relative;
+    }
+
+    /* Background e Efeitos */
+    body {
+        background-color: #0f172a;
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+    .bg-gradient {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* Hero Centralizado para Atualização */
+    .hero-maintenance {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+        .hero-maintenance h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+            color: var(--text-light, #f8fafc);
+        }
+
+            .hero-maintenance h1 span {
+                background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+    .lead-maintenance {
+        font-size: 1.5rem;
+        color: #94a3b8;
+        line-height: 1.6;
+        margin-bottom: 40px;
+    }
+
+    /* Badge de Status Animado */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 20px;
+        background: rgba(56, 189, 248, 0.1);
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        border-radius: 100px;
+        font-size: 0.9rem;
+        color: #38bdf8;
+        font-weight: 600;
+        margin-bottom: 30px;
+        animation: pulse 2s infinite;
+    }
+
+    @@keyframes pulse {
+        0% {
+            opacity: 0.6;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0.6;
+        }
+    }
+
+    /* Botões */
+    .hero-actions {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+    }
+
+    .nx-btn {
+        padding: 14px 32px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+    }
+
+        .nx-btn.primary {
+            background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3);
+        }
+
+            .nx-btn.primary:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 30px rgba(14, 165, 233, 0.5);
+            }
+
+    /* Floating Visual Panels (Mantidos do seu original) */
+    .hero-visual-maintenance {
+        position: relative;
+        height: 300px;
+        margin-top: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .glass-panel {
+        position: absolute;
+        background: rgba(15, 23, 42, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(16px);
+        border-radius: 24px;
+        width: 280px;
+        height: 180px;
+        background-size: cover;
+        background-position: center;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .panel-1 {
+        background-image: url("/img/img1.png");
+        left: 10%;
+        transform: rotate(-5deg);
+    }
+
+    .panel-2 {
+        background-image: url("/img/img2.png");
+        right: 20%;
+        animation-delay: 1s;
+        transform: rotate(5deg);
+    }
+
+    @@keyframes float {
+        0%, 100% {
+            transform: translateY(0px) rotate(-5deg);
+        }
+
+        50% {
+            transform: translateY(-20px) rotate(-2deg);
+        }
+    }
+
+    /* Reveal Animation */
+    .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 1s ease;
+    }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+</style>
+
+<div class="bg-gradient"></div>
+
+<section class="nx-section">
+    <div class="nx-container">
+        <div class="hero-maintenance reveal active">
+            <div class="status-badge">
+                🛠️ ESTAMOS EM ATUALIZAÇÃO
+            </div>
+            <h1>NexCore <span>Elevando o Nível</span></h1>
+            <p class="lead-maintenance">
+                Estamos arquitetando uma nova experiência digital. Em breve, você terá acesso a soluções em software ainda mais robustas e escaláveis.
+            </p>
+
+            <div class="hero-actions">
+                <a class="nx-btn primary" href="https://wa.me/SEUNUMERO" target="_blank">
+                    Falar via WhatsApp
+                </a>
+            </div>
+
+            <div class="hero-visual-maintenance reveal active" style="transition-delay: 0.5s">
+                <div class="glass-panel panel-1"></div>
+                <div class="glass-panel panel-2"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const reveals = document.querySelectorAll('.reveal');
+        setTimeout(() => {
+            reveals.forEach(el => el.classList.add('active'));
+        }, 100);
     });
 </script>

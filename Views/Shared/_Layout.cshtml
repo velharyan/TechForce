@@ -9,15 +9,15 @@
     var hasAiKey = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("NEXCORE_AI_API_KEY"));
 
     // Navegação única
-    var nav = new (string href, string text, bool primary)[] {
-        ("/", "Home", false),
-        ("/Services", "Serviços", false),
-        ("/Products", "Produtos", false),
-        ("/Cases", "Cases", false),
-        ("/Testimonials", "Depoimentos", false),
-        ("/Company/About", "Sobre", false),
-        ("/Company/Contact", "Orçamento", true)
-    };
+    // var nav = new (string href, string text, bool primary)[] {
+    //     ("/", "Home", false),
+    //     ("/Services", "Serviços", false),
+    //     ("/Products", "Produtos", false),
+    //     ("/Cases", "Cases", false),
+    //     ("/Testimonials", "Depoimentos", false),
+    //     ("/Company/About", "Sobre", false),
+    //     ("/Company/Contact", "Orçamento", true)
+    // };
     var path = (Context?.Request?.Path.Value ?? "/").ToLowerInvariant();
 
     // Canonical
@@ -94,24 +94,12 @@
             opacity: 0.5;
         }
 
-        /* Utilidades */
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* =========================================
-           Header & Navegação
-        ========================================= */
-        .header {
-            position: fixed;
-            top: 0; width: 100%;
-            z-index: 1000;
-            transition: var(--transition-smooth);
-            background: transparent;
-            padding: 24px 0;
-            border-bottom: 1px solid transparent;
+        .header .container {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Alinha o conteúdo ao centro horizontalmente */
+            flex-direction: column; /* Se quiser o menu abaixo do logo, ou mantenha em linha */
+            gap: 10px; /* Espaçamento entre logo e outros elementos se houver */
         }
 
         .header.scrolled {
@@ -279,7 +267,7 @@
             </a>
 
             <nav id="mobileNav" class="nav" aria-label="Principal">
-                @foreach (var item in nav)
+               @*  @foreach (var item in nav)
                 {
                     var isActive = path == item.href.ToLowerInvariant();
                     if (item.primary)
@@ -294,16 +282,10 @@
                             @item.text
                         </a>
                     }
-                }
+                } *@
             </nav>
             
-            <button id="menuToggle" class="menu-toggle" aria-label="Abrir menu" aria-controls="mobileNav" aria-expanded="false">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-            </button>
+          
         </div>
     </header>
 
