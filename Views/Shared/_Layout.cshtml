@@ -1,476 +1,191 @@
 @using Microsoft.Extensions.Options
 @inject IOptions<AppOptions> AppOptions
 @inject IOptions<SeoOptions> SeoOptions
+@inject IOptions<AnalyticsOptions> AnalyticsOptions
 @{
-    var title = ViewData["Title"] as string ?? SeoOptions.Value.DefaultTitle;
-    var description = ViewData["Description"] as string ?? SeoOptions.Value.DefaultDescription;
-
-    // Checa variável de ambiente para controlar aviso do chat
-    var hasAiKey = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("NEXCORE_AI_API_KEY"));
-
-    // Navegação única
-    // var nav = new (string href, string text, bool primary)[] {
-    //     ("/", "Home", false),
-    //     ("/Services", "Serviços", false),
-    //     ("/Products", "Produtos", false),
-    //     ("/Cases", "Cases", false),
-    //     ("/Testimonials", "Depoimentos", false),
-    //     ("/Company/About", "Sobre", false),
-    //     ("/Company/Contact", "Orçamento", true)
-    // };
+    var app = AppOptions.Value;
+    var seo = SeoOptions.Value;
+    var title = ViewData["Title"] as string ?? seo.DefaultTitle;
+    var description = ViewData["Description"] as string ?? seo.DefaultDescription;
     var path = (Context?.Request?.Path.Value ?? "/").ToLowerInvariant();
+    var pathSegments = path.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries);
+    var sectionKey = pathSegments.Length > 0 ? pathSegments[0] : "home";
+    var pageKey = pathSegments.Length > 1 ? $"{sectionKey}-{pathSegments[1]}" : sectionKey;
+    var baseUrl = seo.BaseUrl?.TrimEnd('/');
+    var canonical = !string.IsNullOrWhiteSpace(baseUrl) ? $"{baseUrl}{Context?.Request?.Path.Value}" : null;
+    var ogImage = !string.IsNullOrWhiteSpace(seo.OgImage) ? seo.OgImage : Url.Content("~/img/og-default.png");
 
-    // Canonical
-    var baseUrl = SeoOptions?.Value?.BaseUrl?.TrimEnd('/');
-    var canonical = !string.IsNullOrWhiteSpace(baseUrl)
-        ? $"{baseUrl}{Context?.Request?.Path.Value}"
-        : null;
+    var nav = new (string href, string text, bool cta)[] {
+        ("/", "Home", false),
+        ("/Services", "Servicos", false),
+        ("/Products", "Produtos", false),
+        ("/Cases", "Cases", false),
+        ("/Testimonials", "Depoimentos", false),
+        ("/Blog", "Blog", false),
+        ("/Company/About", "Sobre", false),
+        ("/Company/Contact", "Falar com time", true)
+    };
 
-    // OG image com fallback
-    var ogImage = !string.IsNullOrWhiteSpace(SeoOptions?.Value?.OgImage)
-        ? SeoOptions!.Value!.OgImage
-        : Url.Content("~/img/og-default.png");
+    Func<string, bool> isActive = href =>
+    {
+        var lower = href.ToLowerInvariant();
+        return lower == "/" ? path == "/" : path.StartsWith(lower);
+    };
+
+    var normalizedWhatsApp = System.Text.RegularExpressions.Regex.Replace(app.WhatsAppNumber ?? string.Empty, "[^019997614591]", string.Empty);
+    var whatsappHref = string.IsNullOrWhiteSpace(normalizedWhatsApp) ? null : $"https://wa.me/{normalizedWhatsApp}";
 }
-
 <!DOCTYPE html>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <html lang="pt-BR" class="no-js" data-theme="dark">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>@title</title>
     <meta name="description" content="@description" />
-    <meta property="og:title" content="@title" />
-    <meta property="og:description" content="@description" />
-    <meta property="og:image" content="@ogImage" />
-    <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#020617" />
-    
     @if (!string.IsNullOrWhiteSpace(canonical))
     {
         <link rel="canonical" href="@canonical" />
     }
-
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="@title" />
+    <meta property="og:description" content="@description" />
+    @if (!string.IsNullOrWhiteSpace(canonical))
+    {
+        <meta property="og:url" content="@canonical" />
+    }
+    <meta property="og:image" content="@ogImage" />
+    <meta name="theme-color" content="#0a162d" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    
-    <link rel="manifest" href="~/manifest.json" asp-append-version="true" />
-    <link rel="icon" href="~/favicon.ico" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
-    <style>
-        /* =========================================
-           Estilos Base Premium
-        ========================================= */
-        :root {
-            --bg-dark: #020617; 
-            --bg-surface: #0f172a;
-            --primary-blue: #38bdf8; 
-            --primary-glow: rgba(56, 189, 248, 0.25);
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
-            --glass-bg: rgba(2, 6, 23, 0.75); 
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            font-family: 'Inter', -apple-system, sans-serif;
-            margin: 0; padding: 0;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* Canvas Background */
-        .bg-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            z-index: -1;
-            pointer-events: none;
-            opacity: 0.5;
-        }
-
-        .header .container {
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Alinha o conteúdo ao centro horizontalmente */
-            flex-direction: column; /* Se quiser o menu abaixo do logo, ou mantenha em linha */
-            gap: 10px; /* Espaçamento entre logo e outros elementos se houver */
-        }
-
-        .header.scrolled {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--glass-border);
-            padding: 16px 0;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .header .container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .brand { position: relative; z-index: 1001; }
-        .brand img { height: 145px; transition: var(--transition-smooth); }
-        .brand:hover img { opacity: 0.8; }
-
-        .nav { display: flex; gap: 36px; align-items: center; }
-        .nav-link { 
-            color: var(--text-muted); 
-            text-decoration: none; 
-            font-size: 0.95rem; font-weight: 500; 
-            transition: var(--transition-smooth);
-            position: relative;
-        }
-        .nav-link:hover, .nav-link[aria-current="page"] { color: var(--text-light); }
-        
-        /* Indicador ativo desktop */
-        .nav-link[aria-current="page"]::after {
-            content: ''; position: absolute;
-            bottom: -6px; left: 0; width: 100%; height: 2px;
-            background: var(--primary-blue); border-radius: 2px;
-            box-shadow: 0 0 8px var(--primary-glow);
-        }
-
-        /* CTA Button */
-        .btn-primary {
-            background: transparent;
-            color: var(--text-light);
-            padding: 10px 24px;
-            border-radius: 999px;
-            text-decoration: none; font-size: 0.95rem; font-weight: 600;
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            transition: var(--transition-smooth);
-            position: relative; overflow: hidden;
-            display: inline-flex; align-items: center; justify-content: center;
-        }
-        .btn-primary::before {
-            content: ''; position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(90deg, #0ea5e9, #38bdf8);
-            z-index: -1; opacity: 0.1; transition: var(--transition-smooth);
-        }
-        .btn-primary:hover {
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 20px var(--primary-glow);
-            transform: translateY(-2px);
-        }
-
-        /* =========================================
-           Menu Mobile Premium
-        ========================================= */
-        .menu-toggle {
-            display: none; background: none; border: none;
-            color: var(--text-light); font-size: 1.5rem; cursor: pointer;
-            z-index: 1002; padding: 8px;
-        }
-
-        @@media (max-width: 992px) {
-            .menu-toggle { display: block; }
-            
-            .nav {
-                position: fixed;
-                top: 0; left: 0;
-                width: 100%; height: 100vh;
-                background: rgba(2, 6, 23, 0.95); /* Fundo semi-transparente escuro */
-                backdrop-filter: blur(20px); /* Efeito vidro premium */
-                -webkit-backdrop-filter: blur(20px);
-                flex-direction: column; justify-content: center; align-items: center; gap: 32px;
-                
-                transform: translateX(100%);
-                opacity: 0; visibility: hidden;
-                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, visibility 0.4s;
-                z-index: 1001;
-            }
-
-            .nav.active {
-                transform: translateX(0);
-                opacity: 1; visibility: visible; pointer-events: auto;
-            }
-
-            .nav-link { font-size: 1.5rem; width: auto; text-align: center; display: block; }
-            .nav-link[aria-current="page"]::after { display: none; } /* Remove traço no mobile */
-            .btn-primary { font-size: 1.25rem; padding: 14px 32px; margin-top: 16px; }
-        }
-
-        /* =========================================
-           Estrutura Principal & Footer
-        ========================================= */
-        main { min-height: calc(100vh - 300px); }
-
-        .footer {
-            border-top: 1px solid var(--glass-border); 
-            margin-top: 80px; padding: 80px 0 40px; 
-            background: linear-gradient(to bottom, transparent, var(--bg-surface));
-            position: relative;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 40px;
-
-
-             v
-        }
-
-        .footer-brand img { height: 100px;  }
-        .footer-brand p { color: var(--text-muted); line-height: 1.7; max-width: 85%; margin: 0; font-size: 0.95rem; }
-        .footer-copyright { color: var(--text-muted); font-size: 0.85rem; margin-top: 32px; }
-
-        .footer-col h4 { color: var(--text-light); margin-bottom: 24px; font-weight: 600; font-size: 1.05rem; }
-        .footer-col ul { list-style: none; padding: 0; margin: 0; }
-        .footer-col li { margin-bottom: 16px; }
-        
-        .footer-link {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: var(--transition-smooth);
-            font-size: 0.95rem;
-        }
-        .footer-link:hover { color: var(--primary-blue); }
-        .footer-link.highlight { color: var(--primary-blue); font-weight: 500; }
-
-        @@media (max-width: 992px) {
-            .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 40px 24px; }
-            .footer-brand { grid-column: span 2; }
-            .footer-brand p { max-width: 100%; }
-        }
-        @@media (max-width: 576px) {
-            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-            .footer-brand { grid-column: span 1; }
-        }
-    </style>
 </head>
-<body>
-    <noscript>
-        <div style="background:#dc2626;color:#fff;padding:12px;text-align:center;font-weight:500;">
-            Aviso: Este site corporativo utiliza JavaScript para interações essenciais. Ative-o para a melhor experiência.
-        </div>
-    </noscript>
+<body data-section="@sectionKey" data-page="@pageKey">
+    <a class="skip-link" href="#conteudo">Ir para o conteudo principal</a>
+    <div id="scrollProgress" class="scroll-progress" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-a" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-b" aria-hidden="true"></div>
 
-    <canvas id="bgCanvas" class="bg-canvas" aria-hidden="true"></canvas>
-    
-    <a class="skip-link" href="#conteudo" style="position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;">Ir para o conteúdo</a>
-
-    <header id="mainHeader" class="header" role="banner">
-        <div class="container">
-            <a class="brand" href="/" aria-label="NexCore — Início">
-                <img src="~/img/logo3.png" asp-append-version="true" alt="NexCore" />
+    <header class="site-header" id="mainHeader" role="banner">
+        <div class="container header-inner">
+            <a class="brand" href="/" aria-label="Ir para Home">
+                <img src="~/img/logo3.png" asp-append-version="true" alt="@app.CompanyName" />
+                
             </a>
 
-            <nav id="mobileNav" class="nav" aria-label="Principal">
-               @*  @foreach (var item in nav)
+            <nav class="desktop-nav" aria-label="Navegacao principal">
+                @foreach (var item in nav)
                 {
-                    var isActive = path == item.href.ToLowerInvariant();
-                    if (item.primary)
-                    {
-                        <a href="@item.href" class="btn-primary" data-evt="cta_contact" aria-current="@(isActive ? "page" : null)">
-                            @item.text
-                        </a>
-                    }
-                    else
-                    {
-                        <a href="@item.href" class="nav-link" aria-current="@(isActive ? "page" : null)">
-                            @item.text
-                        </a>
-                    }
-                } *@
+                    var active = isActive(item.href);
+                    <a href="@item.href" class="@(item.cta ? "btn btn-primary nav-cta" : "nav-link")" aria-current="@(active ? "page" : null)">@item.text</a>
+                }
             </nav>
-            
-          
+
+            <button id="menuToggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menu">Menu</button>
         </div>
+
+        <nav id="mobileNav" class="mobile-nav" aria-label="Navegacao mobile" hidden>
+            <div class="mobile-nav-inner">
+                @foreach (var item in nav)
+                {
+                    var active = isActive(item.href);
+                    <a href="@item.href" class="@(item.cta ? "btn btn-primary" : "mobile-link")" aria-current="@(active ? "page" : null)">@item.text</a>
+                }
+            </div>
+        </nav>
     </header>
 
-    <main id="conteudo" role="main">
+    <main id="conteudo" class="site-main" role="main" tabindex="-1">
         @RenderBody()
     </main>
 
-    <footer class="footer" role="contentinfo">
+    <footer class="site-footer" role="contentinfo">
         <div class="container footer-grid">
-            <div class="footer-brand">
-                <img src="~/img/logo3.png" asp-append-version="true" alt="NexCore" />
-                <p>@AppOptions.Value.Tagline</p>
-                <p class="footer-copyright">© @DateTime.UtcNow.Year — NexCore Solutions. Todos os direitos reservados.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Empresa</h4>
-                <ul>
-                    <li><a href="/Company/About" class="footer-link">Sobre nós</a></li>
-                    <li><a href="/Testimonials" class="footer-link">Depoimentos</a></li>
-                    <li><a href="/Cases" class="footer-link">Cases de Sucesso</a></li>
+            <section class="footer-brand">
+                <a class="brand footer-logo" href="/" aria-label="Ir para Home">
+                    <img src="~/img/logo3.png" asp-append-version="true" alt="@app.CompanyName" />
+                    <span>@app.CompanyName</span>
+                </a>
+                <p>@(string.IsNullOrWhiteSpace(app.Tagline) ? "Solucoes digitais com foco em resultado, escala e confianca operacional." : app.Tagline)</p>
+            </section>
+
+            <section>
+                <h2 class="footer-title">Empresa</h2>
+                <ul class="footer-links">
+                    <li><a href="/Company/About">Sobre</a></li>
+                    <li><a href="/Cases">Cases</a></li>
+                    <li><a href="/Testimonials">Depoimentos</a></li>
+                    <li><a href="/Blog">Blog</a></li>
                 </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Legal</h4>
-                <ul>
-                    <li><a href="/Legal/Privacy" class="footer-link">Política de Privacidade</a></li>
-                    <li><a href="/Legal/Terms" class="footer-link">Termos de Uso</a></li>
+            </section>
+
+            <section>
+                <h2 class="footer-title">Solucoes</h2>
+                <ul class="footer-links">
+                    <li><a href="/Services/Software">Software sob medida</a></li>
+                    <li><a href="/Services/WebApps">Web apps</a></li>
+                    <li><a href="/Services/MobileApps">Aplicativos</a></li>
+                    <li><a href="/Services/Automations">Automacoes</a></li>
                 </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Contato</h4>
-                <ul>
-                    <li><a href="https://wa.me/" class="footer-link highlight" data-evt="cta_whatsapp" target="_blank" rel="noopener">Falar no WhatsApp</a></li>
-                    <li><a href="mailto:@AppOptions.Value.ContactEmail" class="footer-link">@AppOptions.Value.ContactEmail</a></li>
+            </section>
+
+            <section>
+                <h2 class="footer-title">Contato</h2>
+                <ul class="footer-links">
+                    @if (!string.IsNullOrWhiteSpace(app.ContactEmail))
+                    {
+                        <li><a href="mailto:@app.ContactEmail">@app.ContactEmail</a></li>
+                    }
+                    <li><a href="/Company/Contact">Solicitar proposta</a></li>
+                    @if (!string.IsNullOrWhiteSpace(whatsappHref))
+                    {
+                        <li><a href="@whatsappHref" target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a></li>
+                    }
+                    <li><a href="/Legal/Privacy">Privacidade</a></li>
                 </ul>
+            </section>
+        </div>
+        <div class="footer-bottom">
+            <div class="container footer-bottom-inner">
+                <p>&copy; @DateTime.UtcNow.Year @app.CompanyName. Todos os direitos reservados.</p>
+                <div class="footer-bottom-links">
+                    <a href="/Legal/Privacy">Politica de Privacidade</a>
+                    <a href="/Legal/Terms">Termos de Uso</a>
+                    <a href="/Home/Accessibility">Acessibilidade</a>
+                </div>
             </div>
         </div>
     </footer>
 
-    @RenderSection("Scripts", required: false)
+    @if (!string.IsNullOrWhiteSpace(whatsappHref))
+    {
+        <a class="float-whatsapp" href="@whatsappHref" target="_blank" rel="noopener noreferrer" aria-label="Falar no WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    }
 
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        
-        // --- 1. Lógica do Header e Menu Mobile ---
-        const header = document.getElementById('mainHeader');
-        const menuToggle = document.getElementById('menuToggle');
-        const mobileNav = document.getElementById('mobileNav');
+    @* <button id="chatWidget" class="chat-widget" type="button" aria-label="Abrir chat">IA</button>
+    <aside id="chatPanel" class="chat-panel" aria-label="Assistente virtual">
+        <div class="chat-header">
+            <strong>Assistente @app.CompanyName</strong>
+            <button id="chatClose" type="button" aria-label="Fechar chat">Fechar</button>
+        </div>
+        <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
+        <form id="chatForm" class="chat-form">
+            <input id="chatInput" type="text" placeholder="Digite sua mensagem..." maxlength="240" required />
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>s
+    </aside> *@
 
-        const checkScroll = () => {
-            if (window.scrollY > 50) header.classList.add('scrolled');
-            else header.classList.remove('scrolled');
-        };
-        
-        window.addEventListener('scroll', checkScroll, { passive: true });
-        checkScroll();
+    
 
-        menuToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-            menuToggle.setAttribute('aria-expanded', !isExpanded);
-            mobileNav.classList.toggle('active');
-            
-            // Trava o scroll do body quando o menu está aberto
-            document.body.style.overflow = !isExpanded ? 'hidden' : '';
-        });
-
-        // Fechar menu ao clicar em um link
-        document.querySelectorAll('.nav-link, .btn-primary').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileNav.classList.remove('active');
-                document.body.style.overflow = '';
-                menuToggle.setAttribute('aria-expanded', 'false');
-            });
-        });
-
-        // --- 2. Animação Premium do Canvas (Neural Network Suave) ---
-        const canvas = document.getElementById('bgCanvas');
-        if(!canvas) return; // Segurança
-        
-        const ctx = canvas.getContext('2d');
-        let particlesArray = [];
-        const colors = ['rgba(56, 189, 248, 0.3)', 'rgba(14, 165, 233, 0.2)', 'rgba(255, 255, 255, 0.05)'];
-        let mouse = { x: null, y: null, radius: 120 }; // Raio de interação ajustado
-
-        window.addEventListener('mousemove', (event) => {
-            mouse.x = event.x; mouse.y = event.y;
-        });
-        
-        window.addEventListener('mouseout', () => {
-            mouse.x = undefined; mouse.y = undefined;
-        });
-
-        function initCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            particlesArray = [];
-            // Densidade otimizada para melhor performance
-            let numberOfParticles = (canvas.width * canvas.height) / 15000; 
-            
-            for (let i = 0; i < numberOfParticles; i++) {
-                let size = (Math.random() * 2) + 0.5;
-                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
-                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-                let directionX = (Math.random() * 0.8) - 0.4; // Movimento mais suave
-                let directionY = (Math.random() * 0.8) - 0.4;
-                let color = colors[Math.floor(Math.random() * colors.length)];
-                
-                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
-            }
-        }
-
-        class Particle {
-            constructor(x, y, directionX, directionY, size, color) {
-                this.x = x; this.y = y;
-                this.directionX = directionX; this.directionY = directionY;
-                this.size = size; this.color = color;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-                ctx.fillStyle = this.color;
-                ctx.fill();
-            }
-            update() {
-                if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
-                if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
-
-                // Interação sutil com o mouse
-                if(mouse.x != null && mouse.y != null) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx*dx + dy*dy);
-                    if (distance < mouse.radius + this.size){
-                        if (mouse.x < this.x && this.x < canvas.width - this.size * 10) this.x += 0.5;
-                        if (mouse.x > this.x && this.x > this.size * 10) this.x -= 0.5;
-                        if (mouse.y < this.y && this.y < canvas.height - this.size * 10) this.y += 0.5;
-                        if (mouse.y > this.y && this.y > this.size * 10) this.y -= 0.5;
-                    }
-                }
-                
-                this.x += this.directionX;
-                this.y += this.directionY;
-                this.draw();
-            }
-        }
-
-        function connect() {
-            let opacityValue = 1;
-            for (let a = 0; a < particlesArray.length; a++) {
-                for (let b = a; b < particlesArray.length; b++) {
-                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
-                                 + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-                    
-                    if (distance < (canvas.width/8) * (canvas.height/8)) {
-                        opacityValue = 1 - (distance / 15000);
-                        ctx.strokeStyle = `rgba(56, 189, 248, ${opacityValue * 0.1})`; // Linhas mais delicadas
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            ctx.clearRect(0, 0, innerWidth, innerHeight);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-            }
-            connect();
-        }
-
-        let resizeTimeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => { initCanvas(); }, 200); // Debounce de resize
-        });
-
-        initCanvas();
-        animate();
-    });
-    </script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/chat.js" asp-append-version="true"></script>
+    <script src="~/js/theme.js" asp-append-version="true"></script>
+    <script src="~/js/consent.js" asp-append-version="true"></script>
+    <script src="~/js/analytics.js" asp-append-version="true"></script>
+    <script src="~/js/sw-register.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

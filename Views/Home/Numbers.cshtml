@@ -1,18 +1,45 @@
 @{
-    ViewData["Title"] = "Nossos Números — NexCore";
+    ViewData["Title"] = "Nossos Numeros - TechForce";
 }
-<section class="page-header container">
-  <h1>Nossos Números</h1>
-  <p>Indicadores com dados de exemplo para visualização.</p>
+<section class="page-shell module-page theme-web">
+    <div class="container">
+        <header class="page-hero" data-reveal>
+            <p class="eyebrow">Indicadores</p>
+            <h1>Painel executivo de desempenho e maturidade operacional</h1>
+            <p>Visao consolidada de entregas, satisfacao, produtividade e confiabilidade para acompanhamento continuo da evolucao digital.</p>
+        </header>
+
+        <section class="numbers-grid">
+            <article class="card metric-card" data-reveal data-hover-tilt>
+                <div class="metric-value" data-count-to="150" data-count-suffix="+">0</div>
+                <div class="metric-label">projetos entregues</div>
+            </article>
+            <article class="card metric-card" data-reveal data-delay="1" data-hover-tilt>
+                <div class="metric-value" data-count-to="99" data-count-suffix="%">0</div>
+                <div class="metric-label">satisfacao media</div>
+            </article>
+            <article class="card metric-card" data-reveal data-delay="2" data-hover-tilt>
+                <div class="metric-value" data-count-to="24" data-count-suffix="/7">0</div>
+                <div class="metric-label">suporte tecnico</div>
+            </article>
+            <article class="card metric-card" data-reveal data-delay="3" data-hover-tilt>
+                <div class="metric-value" data-count-to="34" data-count-suffix="%">0</div>
+                <div class="metric-label">ganho medio de eficiencia</div>
+            </article>
+        </section>
+
+        <section class="numbers-chart-grid section-spaced">
+            <article class="card chart-card" data-reveal><h3>Projetos entregues por mes</h3><canvas id="chartProjetos"></canvas></article>
+            <article class="card chart-card" data-reveal><h3>Servicos por mes</h3><canvas id="chartServicosMes"></canvas></article>
+            <article class="card chart-card" data-reveal><h3>NPS e satisfacao</h3><canvas id="chartNps"></canvas></article>
+            <article class="card chart-card" data-reveal><h3>Tempo medio de entrega</h3><canvas id="chartTempoEntrega"></canvas></article>
+            <article class="card chart-card" data-reveal><h3>Pedidos processados</h3><canvas id="chartPedidos"></canvas></article>
+            <article class="card chart-card" data-reveal><h3>Automacoes ativas</h3><canvas id="chartAutomacoes"></canvas></article>
+        </section>
+    </div>
 </section>
-<section class="container grid cols-2">
-  <canvas id="chartProjetos"></canvas>
-  <canvas id="chartServicosMes"></canvas>
-  <canvas id="chartNps"></canvas>
-  <canvas id="chartTempoEntrega"></canvas>
-  <canvas id="chartPedidos"></canvas>
-  <canvas id="chartAutomacoes"></canvas>
-</section>
-@section Scripts{
-  <script src="/js/charts.js"></script>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/charts.js" asp-append-version="true"></script>
 }

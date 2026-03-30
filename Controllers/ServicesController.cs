@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace NexCore.Web.Controllers;
+namespace TechForce.Web.Controllers;
 
 public class ServicesController : Controller
 {
     public IActionResult Index()
     {
-        ViewData["Title"] = "Serviços — NexCore";
-        ViewData["Description"] = "Desenvolvimento de software, web, aplicativos e automações (incluindo WhatsApp).";
+        ViewData["Title"] = "Servicos - TechForce";
+        ViewData["Description"] = "Desenvolvimento de software, web apps, aplicativos e automacoes para empresas.";
         return View();
     }
 

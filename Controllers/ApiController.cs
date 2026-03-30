@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace NexCore.Web.Controllers;
+namespace TechForce.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

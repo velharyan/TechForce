@@ -1,35 +1,110 @@
-// Dados de exemplo (mock) para gráficos
-(function(){
-  const ctx = (id)=>document.getElementById(id)?.getContext('2d');
-  const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+(function () {
+    "use strict";
 
-  if(ctx('chartProjetos')) new Chart(ctx('chartProjetos'), {
-    type: 'bar', data: { labels: months, datasets: [{ label: 'Projetos entregues', data: [2,3,5,4,6,8,7,9,10,8,6,12], backgroundColor: '#06b6d4' }] },
-    options: { responsive:true, plugins:{ legend:{labels:{color:'#9fb1c5'} }}, scales:{ x:{ticks:{color:'#9fb1c5'}}, y:{ticks:{color:'#9fb1c5'}} } }
-  });
+    if (typeof window.Chart === "undefined") return;
 
-  if(ctx('chartServicosMes')) new Chart(ctx('chartServicosMes'), {
-    type: 'line', data: { labels: months, datasets: [{ label: 'Serviços/mês (média móvel)', data: [5,6,7,7,8,9,10,12,13,11,12,14], borderColor: '#7c3aed' }] },
-    options: { responsive:true, plugins:{ legend:{labels:{color:'#9fb1c5'}}}, scales:{ x:{ticks:{color:'#9fb1c5'}}, y:{ticks:{color:'#9fb1c5'}} } }
-  });
+    const get = (id) => document.getElementById(id);
+    const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
-  if(ctx('chartNps')) new Chart(ctx('chartNps'), {
-    type: 'doughnut', data: { labels:['Promotores','Neutros','Detratores'], datasets:[{ data:[72,20,8], backgroundColor:['#22c55e','#eab308','#ef4444'] }] },
-    options: { plugins:{ legend:{labels:{color:'#9fb1c5'}} } }
-  });
+    const palette = {
+        cyan: "#33b6e8",
+        blue: "#4d95ff",
+        green: "#2db68a",
+        orange: "#f5a947",
+        red: "#ef5f5f",
+        violet: "#7d75ff",
+        text: "#9db4cf"
+    };
 
-  if(ctx('chartTempoEntrega')) new Chart(ctx('chartTempoEntrega'), {
-    type: 'line', data: { labels: months, datasets: [{ label: 'Tempo médio (dias)', data: [35,33,31,32,30,29,28,27,26,28,29,30], borderColor:'#06b6d4'}] },
-    options: { plugins:{ legend:{labels:{color:'#9fb1c5'}}}, scales:{ x:{ticks:{color:'#9fb1c5'}}, y:{ticks:{color:'#9fb1c5'}} } }
-  });
+    const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: { color: palette.text, font: { weight: "600" } }
+            }
+        },
+        scales: {
+            x: { ticks: { color: palette.text }, grid: { color: "rgba(157,180,207,0.12)" } },
+            y: { ticks: { color: palette.text }, grid: { color: "rgba(157,180,207,0.12)" } }
+        }
+    };
 
-  if(ctx('chartPedidos')) new Chart(ctx('chartPedidos'), {
-    type: 'bar', data: { labels: months, datasets: [{ label: 'Pedidos processados', data: [1000,1200,1400,1600,2000,2400,2600,3000,3200,3400,3600,4000], backgroundColor:'#22c55e'}] },
-    options: { plugins:{ legend:{labels:{color:'#9fb1c5'}}}, scales:{ x:{ticks:{color:'#9fb1c5'}}, y:{ticks:{color:'#9fb1c5'}} } }
-  });
+    const chartProjetos = get("chartProjetos");
+    if (chartProjetos) {
+        new Chart(chartProjetos, {
+            type: "bar",
+            data: {
+                labels: months,
+                datasets: [{ label: "Projetos entregues", data: [2, 3, 4, 5, 6, 7, 8, 8, 10, 9, 10, 12], backgroundColor: palette.cyan, borderRadius: 8 }]
+            },
+            options: commonOptions
+        });
+    }
 
-  if(ctx('chartAutomacoes')) new Chart(ctx('chartAutomacoes'), {
-    type: 'bar', data: { labels:['WhatsApp','Integrações','Rotinas'], datasets:[{label:'Ativas', data:[12,8,5], backgroundColor:['#10b981','#7c3aed','#06b6d4']}] },
-    options: { plugins:{ legend:{labels:{color:'#9fb1c5'}}}, scales:{ x:{ticks:{color:'#9fb1c5'}}, y:{ticks:{color:'#9fb1c5'}} } }
-  });
+    const chartServicosMes = get("chartServicosMes");
+    if (chartServicosMes) {
+        new Chart(chartServicosMes, {
+            type: "line",
+            data: {
+                labels: months,
+                datasets: [{ label: "Servicos por mes", data: [5, 6, 7, 8, 9, 10, 11, 12, 12, 13, 13, 14], borderColor: palette.blue, tension: 0.34, fill: false }]
+            },
+            options: commonOptions
+        });
+    }
+
+    const chartNps = get("chartNps");
+    if (chartNps) {
+        new Chart(chartNps, {
+            type: "doughnut",
+            data: {
+                labels: ["Promotores", "Neutros", "Detratores"],
+                datasets: [{ data: [72, 19, 9], backgroundColor: [palette.green, palette.orange, palette.red], borderWidth: 0 }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: palette.text, font: { weight: "600" } } }
+                }
+            }
+        });
+    }
+
+    const chartTempoEntrega = get("chartTempoEntrega");
+    if (chartTempoEntrega) {
+        new Chart(chartTempoEntrega, {
+            type: "line",
+            data: {
+                labels: months,
+                datasets: [{ label: "Tempo medio de entrega (dias)", data: [36, 35, 33, 32, 31, 30, 29, 28, 27, 27, 26, 25], borderColor: palette.green, tension: 0.3, fill: false }]
+            },
+            options: commonOptions
+        });
+    }
+
+    const chartPedidos = get("chartPedidos");
+    if (chartPedidos) {
+        new Chart(chartPedidos, {
+            type: "bar",
+            data: {
+                labels: months,
+                datasets: [{ label: "Pedidos processados", data: [980, 1100, 1300, 1500, 1800, 2200, 2500, 2700, 3000, 3200, 3400, 3700], backgroundColor: palette.violet, borderRadius: 8 }]
+            },
+            options: commonOptions
+        });
+    }
+
+    const chartAutomacoes = get("chartAutomacoes");
+    if (chartAutomacoes) {
+        new Chart(chartAutomacoes, {
+            type: "bar",
+            data: {
+                labels: ["Atendimento", "Integracoes", "Backoffice"],
+                datasets: [{ label: "Automacoes ativas", data: [12, 9, 6], backgroundColor: [palette.cyan, palette.green, palette.blue], borderRadius: 8 }]
+            },
+            options: commonOptions
+        });
+    }
 })();

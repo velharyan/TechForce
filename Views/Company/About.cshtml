@@ -1,21 +1,89 @@
-<section class="container narrow">
-  <h1>Sobre a NexCore</h1>
-  <p>Empresa de software especializada em soluções simples e eficientes para o dia a dia do negócio. Foco em PMEs e segmento de food service.</p>
-  <h2>Metodologia</h2>
-  <ol>
-    <li>Descoberta</li>
-    <li>Desenho</li>
-    <li>Desenvolvimento</li>
-    <li>Evolução</li>
-  </ol>
-  <h2>Valores</h2>
-  <ul>
-    <li>Simplicidade funcional</li>
-    <li>Resultado prático</li>
-    <li>Automação inteligente</li>
-    <li>Foco no cliente</li>
-    <li>Evolução contínua</li>
-  </ul>
-  <h2>Tecnologias</h2>
-  <p>.NET / Node / Python • React / Vue • Cloud • APIs • Automação</p>
+@inject Microsoft.Extensions.Options.IOptions<AppOptions> App
+<section class="page-shell module-page theme-mobile">
+    <div class="container">
+        <header class="page-hero" data-reveal>
+            <h1>@App.Value.CompanyName: engenharia de produto orientada a negocio</h1>
+            <p>Transformamos desafios operacionais em sistemas, automacoes e experiencias digitais com foco em resultado mensuravel.</p>
+        </header>
+
+        <section class="about-grid">
+            <article class="card module-card" data-reveal data-hover-tilt>
+                <h3>Como trabalhamos</h3>
+                <ul class="list-clean">
+                    <li>Diagnostico completo de processo, risco e oportunidade</li>
+                    <li>Arquitetura tecnica com priorizacao por impacto</li>
+                    <li>Entrega incremental com validacao no contexto real</li>
+                    <li>Evolucao orientada por indicadores de negocio</li>
+                </ul>
+                <div class="module-badges">
+                    <span class="module-badge">Discovery</span>
+                    <span class="module-badge">Arquitetura</span>
+                    <span class="module-badge">Entrega continua</span>
+                </div>
+            </article>
+
+            <article class="card module-card" data-reveal data-delay="1" data-hover-tilt>
+                <h3>Principios de execucao</h3>
+                <ul class="list-clean">
+                    <li>Simplicidade funcional para usuario final</li>
+                    <li>Codigo limpo e preparado para manutencao</li>
+                    <li>Comunicacao objetiva com stakeholders</li>
+                    <li>Transparencia de prazo, risco e custo</li>
+                </ul>
+                <table class="module-table" aria-label="Modelo de relacionamento">
+                    <thead>
+                        <tr>
+                            <th>Fase</th>
+                            <th>Entrega principal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Kickoff</td>
+                            <td>Plano tecnico e metas do projeto</td>
+                        </tr>
+                        <tr>
+                            <td>Sprints</td>
+                            <td>Incrementos validados com o time</td>
+                        </tr>
+                        <tr>
+                            <td>Escala</td>
+                            <td>Roadmap de evolucao por valor</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+        </section>
+
+        <section class="about-metrics section-spaced">
+            <article class="card metric-card" data-reveal>
+                <div class="metric-value" data-count-to="150" data-count-suffix="+">0</div>
+                <div class="metric-label">projetos entregues</div>
+            </article>
+            <article class="card metric-card" data-reveal data-delay="1">
+                <div class="metric-value" data-count-to="99" data-count-suffix="%">0</div>
+                <div class="metric-label">indice de satisfacao</div>
+            </article>
+            <article class="card metric-card" data-reveal data-delay="2">
+                <div class="metric-value" data-count-to="24" data-count-suffix="/7">0</div>
+                <div class="metric-label">suporte especializado</div>
+            </article>
+        </section>
+
+        <section class="card module-card section-spaced" data-reveal>
+            <h2>Stack e capacidade tecnica</h2>
+            <p>Atuamos com desenvolvimento web/mobile, APIs, automacoes, observabilidade e integracao de dados para ambientes de producao.</p>
+            <ul class="inline-list">
+                <li class="tag">.NET</li>
+                <li class="tag">Node.js</li>
+                <li class="tag">Python</li>
+                <li class="tag">Cloud</li>
+                <li class="tag">Data & BI</li>
+                <li class="tag">Automacao</li>
+            </ul>
+            <div class="module-actions">
+                <a class="btn btn-primary" href="/Company/Contact">Falar com nosso time</a>
+            </div>
+        </section>
+    </div>
 </section>

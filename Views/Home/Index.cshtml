@@ -1,694 +1,304 @@
-@* @inject Microsoft.Extensions.Options.IOptions<AppOptions> App
-
-<style>
-    /* Estilos Específicos da Home - Premium UI */
-    .nx-section { padding: 120px 0; position: relative; }
-    .nx-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; z-index: 2; position: relative; }
-    
-    /* Hero Section */
-    .nx-hero {
-        min-height: 90vh;
-        display: flex;
-        align-items: center;
-        background: radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 50%);
-        padding-top: 140px; /* Compensa o header */
-    }
-    .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
-    
-    .hero-text h1 {
-        font-size: 3.8rem;
-        font-weight: 800;
-        line-height: 1.1;
-        margin-bottom: 24px;
-        letter-spacing: -0.03em;
-        color: var(--text-light);
-    }
-    .hero-text h1 span {
-        background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        display: inline-block;
-    }
-    .lead { 
-        font-size: 1.25rem; 
-        color: var(--text-muted); 
-        line-height: 1.6; 
-        margin-bottom: 40px; 
-        max-width: 90%; 
-        font-weight: 400;
-    }
-    
-    .hero-actions { display: flex; gap: 16px; margin-bottom: 40px; flex-wrap: wrap; }
-    
-    .nx-btn {
-        padding: 14px 32px; 
-        border-radius: 999px; 
-        font-weight: 600; 
-        font-size: 1rem;
-        text-decoration: none; 
-        transition: var(--transition-smooth); 
-        display: inline-flex; 
-        align-items: center; 
-        justify-content: center;
-        cursor: pointer;
-    }
-    .nx-btn.primary {
-        background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
-        color: white; 
-        box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3);
-        border: 1px solid transparent;
-    }
-    .nx-btn.primary:hover { 
-        transform: translateY(-3px); 
-        box-shadow: 0 8px 30px rgba(14, 165, 233, 0.5); 
-    }
-    .nx-btn.outline {
-        background: transparent; 
-        border: 1px solid var(--glass-border); 
-        color: var(--text-light);
-    }
-    .nx-btn.outline:hover { 
-        background: var(--glass-bg); 
-        border-color: #38bdf8; 
-    }
-    
-    .hero-badge {
-        display: inline-flex; 
-        align-items: center;
-        padding: 8px 20px; 
-        background: rgba(56, 189, 248, 0.05);
-        border: 1px solid rgba(56, 189, 248, 0.2); 
-        border-radius: 100px;
-        font-size: 0.9rem; 
-        color: #bae6fd; 
-        font-weight: 500;
-        backdrop-filter: blur(10px);
-    }
-
-    /* Hero Visual - Premium Floating Panels */
-    /* Hero Visual - Premium Floating Panels */
-    .hero-visual {
-        position: relative;
-        height: 500px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    /* Base style for panels */
-    .glass-panel {
-        position: absolute;
-        background: rgba(15, 23, 42, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-radius: 24px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        background-size: cover;
-        background-position: center;
-        transition: transform 0.6s ease, opacity 0.6s ease;
-    }
-
-    /* Painel 1 - Programador interagindo */
-    /* Painel 1 - Design Principal */
-    .panel-1 {
-        width: 340px;
-        height: 300px;
-        z-index: 2;
-        background-image: url("/img/img2.png"); /* Caminho corrigido */
-        background-size: cover;
-        border-top: 1px solid rgba(56, 189, 248, 0.3);
-        animation: float 6s ease-in-out infinite;
-    }
-
-    /* Painel 2 - Código renderizando */
-    .panel-2 {
-        width: 340px;
-        height: 300px;
-        right: 0;
-        top: 20px;
-        z-index: 1;
-        background-image: url("/img/img3.png"); /* Caminho corrigido */
-        background-size: cover;
-        border: 1px solid rgba(129, 140, 248, 0.2);
-        animation: float 7s ease-in-out infinite reverse;
-    }
-
-    /* Painel 3 - Site final no monitor */
-    .panel-3 {
-        width: 340px;
-        height: 300px;
-        left: 0;
-        bottom: 4px;
-        z-index: 3;
-        background-image: url("/img/img1.png"); /* Caminho corrigido */
-        background-size: cover;
-        border: 1px solid rgba(56, 189, 248, 0.4);
-        box-shadow: 0 0 400px rgba(56, 189, 248, 0.2);
-        animation: float 5s ease-in-out infinite 1s;
-    }
-    /* Floating animation */
-    @@keyframes float {
-        0% {
-            transform: translateY(0px);
-        }
-
-        50% {
-            transform: translateY(-20px);
-        }
-
-        100% {
-            transform: translateY(0px);
-        }
-    }
-
-    /* Responsividade */
-   @@media(max - width: 1024px)
-
-    {
-        .hero-grid {
-            grid-template-columns: 1fr;
-            text-align: center;
-            gap: 40px;
-        }
-
-        .hero-actions {
-            justify-content: center;
-        }
-
-        .hero-visual {
-            height: 400px;
-        }
-
-        .grid-4, .grid-3, .grid-6, .testimonial-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-
-    /* Sessões Genéricas */
-    .section-title { font-size: 2.8rem; text-align: center; margin-bottom: 16px; font-weight: 800; letter-spacing: -0.02em; }
-    .section-subtitle { text-align: center; color: var(--text-muted); font-size: 1.15rem; margin-bottom: 60px; font-weight: 400; max-width: 600px; margin-inline: auto; }
-
-    /* Cards - Glassmorphism Refinado */
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-    
-    .nx-card, .service-card, .testimonial-card {
-        background: rgba(15, 23, 42, 0.4);
-        border: 1px solid var(--glass-border);
-        padding: 40px 32px;
-        border-radius: 20px;
-        transition: var(--transition-smooth);
-        text-decoration: none;
-        color: var(--text-light);
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .nx-card::before, .service-card::before {
-        content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(56, 189, 248, 0.06), transparent 40%);
-        opacity: 0; transition: opacity 0.3s; pointer-events: none;
-    }
-    
-    .nx-card:hover, .service-card:hover {
-        transform: translateY(-8px);
-        border-color: rgba(56, 189, 248, 0.3);
-        background: rgba(30, 41, 59, 0.6);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(56, 189, 248, 0.05);
-    }
-    .nx-card:hover::before, .service-card:hover::before { opacity: 1; }
-
-    .nx-card h3, .service-card h3 { font-size: 1.3rem; margin-bottom: 16px; font-weight: 700; color: #f8fafc; }
-    .nx-card p, .service-card p { color: var(--text-muted); line-height: 1.6; margin: 0; font-size: 0.95rem; }
-
-    /* KPIs */
-    .nx-kpis { background: linear-gradient(180deg, transparent, rgba(15, 23, 42, 0.8), transparent); }
-    .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px; text-align: center; }
-    .kpi { padding: 24px 0; }
-    .kpi .num {
-        display: block; font-size: 3.5rem; font-weight: 800;
-        background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px;
-        line-height: 1;
-    }
-    .kpi p { color: #38bdf8; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; }
-
-    /* Depoimentos */
-    .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-    .stars { color: #fbbf24; margin-bottom: 20px; font-size: 1.2rem; letter-spacing: 2px; }
-    .testimonial-card p { font-style: italic; margin-bottom: 24px; font-size: 1.05rem; line-height: 1.7; color: #e2e8f0; }
-    .testimonial-card span { display: block; font-size: 0.95rem; font-weight: 700; color: #38bdf8; border-top: 1px solid var(--glass-border); padding-top: 16px; }
-
-    /* CTA Final */
-    .nx-final-cta { text-align: center; margin-top: 40px; }
-    .cta-box {
-        background: radial-gradient(circle at center, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
-        border: 1px solid rgba(56, 189, 248, 0.2);
-        border-radius: 32px;
-        padding: 80px 40px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    }
-    .cta-box h2 { font-size: 3rem; margin-bottom: 24px; font-weight: 800; letter-spacing: -0.02em; }
-    .cta-box p { font-size: 1.25rem; color: var(--text-muted); margin-bottom: 40px; max-width: 600px; margin-inline: auto; }
-    .nx-btn.big { padding: 18px 48px; font-size: 1.15rem; }
-
-    /* Classes de Animação de Scroll (Reveal) */
-    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
-    .reveal.active { opacity: 1; transform: translateY(0); }
-    .delay-1 { transition-delay: 0.1s; }
-    .delay-2 { transition-delay: 0.2s; }
-    .delay-3 { transition-delay: 0.3s; }
-
-    /* Responsividade */
-    @@media(max-width: 1024px) {
-      /*   .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 40px; }
-        .hero-actions { justify-content: center; }
-        .hero-visual { height: 400px; } */
-        .grid-4, .grid-3, .grid-6, .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @@media(max-width: 768px) {
-        .grid-4, .grid-3, .grid-6, .testimonial-grid { grid-template-columns: 1fr; }
-        .hero-text h1 { font-size: 2.8rem; }
-        .nx-section { padding: 80px 0; }
-        .section-title { font-size: 2.2rem; }
-        .cta-box { padding: 40px 20px; }
-        .cta-box h2 { font-size: 2.2rem; }
-    }
-</style>
-
-<section class="nx-section nx-hero">
-    <div class="nx-container hero-grid">
-        <div class="hero-text reveal">
-            <div class="hero-badge" style="margin-bottom: 24px;  margin-top: 140px;">
-                ⚡ Transformação digital de ponta a ponta
-            </div>
-            <h1>Soluções em Software <span>Arquitetadas para Escalar</span></h1>
-            <p class="lead">
-                Desenvolvemos sistemas corporativos, automações e plataformas web sob medida. Reduza custos operacionais e eleve a eficiência da sua empresa com tecnologia de alto nível.
-            </p>
-            <div class="hero-actions">
-                <a class="nx-btn primary" href="https://wa.me/" target="_blank">
-                    Falar com Especialista
-                </a>
-                <a class="nx-btn outline" href="/Company/Contact">
-                    Explorar Nossas Soluções
-                </a>
-            </div>
-        </div>
-
-        <div class="hero-visual reveal delay-2">
-            <div class="glass-panel panel-1"></div>
-            <div class="glass-panel panel-2"></div>
-            <div class="glass-panel panel-3"></div>
-        </div>
-
-    </div>
-</section>
-
-<section class="nx-section nx-benefits">
-    <div class="nx-container grid-4">
-        <div class="nx-card reveal">
-            <h3>📊 Controle Total</h3>
-            <p>Sistemas personalizados projetados especificamente para a realidade e complexidade da sua operação.</p>
-        </div>
-        <div class="nx-card reveal delay-1">
-            <h3>⚙️ Automação Inteligente</h3>
-            <p>Elimine tarefas manuais repetitivas, minimize erros humanos e ganhe velocidade de execução.</p>
-        </div>
-        <div class="nx-card reveal delay-2">
-            <h3>🚀 Performance Extrema</h3>
-            <p>Aplicações com arquitetura moderna, ultrarrápidas e preparadas para alto volume de acessos.</p>
-        </div>
-        <div class="nx-card reveal delay-3">
-            <h3>🧩 Integração Simples</h3>
-            <p>Conectamos seu novo software às ferramentas que você já usa através de APIs robustas e seguras.</p>
-        </div>
-    </div>
-</section>
-
-<section class="nx-section nx-services">
-    <div class="nx-container">
-        <h2 class="section-title reveal">Nossa Expertise Técnica</h2>
-        <p class="section-subtitle reveal">Engenharia de software focada em resolver gargalos reais de negócios complexos.</p>
-
-        <div class="grid-3">
-            <a class="service-card reveal" href="/Services/Software">
-                <h3>💻 Software Sob Medida</h3>
-                <p>Arquitetura e desenvolvimento de sistemas internos, ERPs customizados, painéis de gestão de dados e plataformas SaaS escaláveis.</p>
-            </a>
-            <a class="service-card reveal delay-1" href="/Services/WebApps">
-                <h3>🌐 Web Apps & Portais</h3>
-                <p>Presença digital premium com interfaces responsivas, design focado em UX/UI e aplicações progressivas otimizadas para conversão.</p>
-            </a>
-            <a class="service-card reveal delay-2" href="/Services/Automations">
-                <h3>🤖 Automações & APIs</h3>
-                <p>Criação de robôs de atendimento integrados ao WhatsApp, orquestração de microsserviços e automação completa de fluxos de trabalho.</p>
-            </a>
-        </div>
-    </div>
-</section>
-
-<section class="nx-section nx-kpis">
-    <div class="nx-container">
-        <div class="grid-6 counters">
-            <div class="kpi reveal">
-                <span class="num" data-target="128">0</span>
-                <p>Projetos Entregues</p>
-            </div>
-            <div class="kpi reveal delay-1">
-                <span class="num" data-target="98" data-suffix="%">0</span>
-                <p>Taxa de Retenção</p>
-            </div>
-            <div class="kpi reveal delay-2">
-                <span class="num" data-target="45000" data-suffix="+">0</span>
-                <p>Transações/Dia</p>
-            </div>
-            <div class="kpi reveal delay-3">
-                <span class="num" data-target="24" data-suffix="/7">0</span>
-                <p>Suporte Técnico</p>
-            </div>
-            <div class="kpi reveal delay-1">
-                <span class="num" data-target="30" data-suffix="ms">0</span>
-                <p>Latência Média</p>
-            </div>
-            <div class="kpi reveal delay-2">
-                <span class="num" data-target="99" data-suffix="%">0</span>
-                <p>Uptime Garantido</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="nx-section nx-testimonials">
-    <div class="nx-container">
-        <h2 class="section-title reveal">Quem confia na NexCore</h2>
-        <p class="section-subtitle reveal">Resultados reais medidos pelos líderes que utilizam nossa tecnologia.</p>
-
-        <div class="testimonial-grid">
-            <div class="testimonial-card reveal">
-                <div class="stars">★★★★★</div>
-                <p>"A arquitetura do novo sistema reduziu em 40% nosso tempo operacional. A estabilidade da plataforma mesmo em picos de acesso é impressionante."</p>
-                <span>Carla Mendes — Diretora de Operações</span>
-            </div>
-            <div class="testimonial-card reveal delay-1">
-                <div class="stars">★★★★★</div>
-                <p>"A integração de APIs que a NexCore construiu entre nosso ERP e o WhatsApp praticamente zerou nossos erros de faturamento."</p>
-                <span>João Pedro — Head de Tecnologia</span>
-            </div>
-            <div class="testimonial-card reveal delay-2">
-                <div class="stars">★★★★★</div>
-                <p>"Código limpo, entregas no prazo e um time técnico que realmente entende de regras de negócios complexas. Recomendo de olhos fechados."</p>
-                <span>Ana Beatriz — CEO, TechLogistics</span>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="nx-section nx-final-cta reveal">
-    <div class="nx-container">
-        <div class="cta-box">
-            <h2>Pronto para escalar com a tecnologia certa?</h2>
-            <p>Agende uma reunião técnica com nossos arquitetos de software e descubra como podemos acelerar o crescimento da sua operação.</p>
-            <a class="nx-btn primary big" href="/Company/Contact">
-                Solicitar Diagnóstico Técnico Integrado
-            </a>
-        </div>
-    </div>
-</section>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        
-        // --- 1. Animação de Surgimento (Reveal no Scroll) ---
-        const reveals = document.querySelectorAll('.reveal');
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    revealObserver.unobserve(entry.target); // Anima só uma vez
-                }
-            });
-        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
-
-        reveals.forEach(reveal => revealObserver.observe(reveal));
-
-        // --- 2. Contador de KPIs (Suave e com formatação pt-BR) ---
-        const counters = document.querySelectorAll(".num");
-        const counterObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    const counter = entry.target;
-                    const target = +counter.getAttribute("data-target");
-                    const suffix = counter.getAttribute("data-suffix") || "";
-                    const duration = 2500; // 2.5 segundos de animação
-                    let startTimestamp = null;
-
-                    const step = (timestamp) => {
-                        if (!startTimestamp) startTimestamp = timestamp;
-                        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                        
-                        // Easing (easeOutExpo) para desacelerar no final
-                        const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-                        const current = Math.floor(easeProgress * target);
-                        
-                        // Formata o número (ex: 45000 -> 45.000)
-                        counter.innerText = current.toLocaleString('pt-BR') + suffix;
-
-                        if (progress < 1) {
-                            window.requestAnimationFrame(step);
-                        } else {
-                            counter.innerText = target.toLocaleString('pt-BR') + suffix; // Garante o final exato
-                        }
-                    };
-                    window.requestAnimationFrame(step);
-                    counterObserver.unobserve(counter);
-                }
-            });
-        }, { threshold: 0.5 });
-
-        counters.forEach(counter => counterObserver.observe(counter));
-    });
-</script> *@
-
 @inject Microsoft.Extensions.Options.IOptions<AppOptions> App
+@{
+    var appOptions = App.Value;
+    var companyName = string.IsNullOrWhiteSpace(appOptions.CompanyName) ? "TechForce" : appOptions.CompanyName;
+    var tagline = string.IsNullOrWhiteSpace(appOptions.Tagline)
+        ? "Software, automacao e dados para empresas que precisam crescer com previsibilidade."
+        : appOptions.Tagline;
+    var subhead = string.IsNullOrWhiteSpace(appOptions.Subhead)
+        ? "Projetamos sistemas robustos e operacoes digitais para times que buscam escala e resultado."
+        : appOptions.Subhead;
+    var normalizedWhatsApp = System.Text.RegularExpressions.Regex.Replace(appOptions.WhatsAppNumber ?? string.Empty, "[^0-9]", string.Empty);
+    var fallbackContact = Url.Action("Contact", "Company") ?? "/Company/Contact";
+    var specialistHref = string.IsNullOrWhiteSpace(normalizedWhatsApp) ? fallbackContact : $"https://wa.me/{normalizedWhatsApp}";
+    var specialistIsExternal = !string.IsNullOrWhiteSpace(normalizedWhatsApp);
+
+    string IconSvg(string key) => key switch
+    {
+        "spark" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M12 3l1.9 4.8L19 10l-5.1 2.2L12 17l-1.9-4.8L5 10l5.1-2.2L12 3z'/></svg>",
+        "stack" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M12 4l8 4-8 4-8-4 8-4z'/><path d='M4 12l8 4 8-4'/><path d='M4 16l8 4 8-4'/></svg>",
+        "mobile" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><rect x='7' y='2.8' width='10' height='18.4' rx='2.3'/><path d='M10 5.5h4'/><circle cx='12' cy='17.8' r='0.9'/></svg>",
+        "flow" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><circle cx='6' cy='6' r='2.5'/><circle cx='18' cy='6' r='2.5'/><circle cx='12' cy='18' r='2.5'/><path d='M8.5 6h7'/><path d='M7.8 8.1l2.8 6.3'/><path d='M16.2 8.1l-2.8 6.3'/></svg>",
+        "chart" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M4 19h16'/><path d='M7 16V9'/><path d='M12 16V5'/><path d='M17 16v-4'/></svg>",
+        "shield" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6l7-3z'/><path d='M9.5 12.2l1.8 1.8 3.4-3.8'/></svg>",
+        "rocket" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M14 4c3 0 5 2 5 5-2.5 1.6-4.6 3.7-6.2 6.2-3 0-5-2-5-5C9.4 6 11.5 4 14 4z'/><path d='M9 15l-3 3'/><path d='M12 18l-1.5 3'/></svg>",
+        "target" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><circle cx='12' cy='12' r='8'/><circle cx='12' cy='12' r='4'/><path d='M12 4v2'/><path d='M20 12h-2'/><path d='M12 20v-2'/><path d='M4 12h2'/></svg>",
+        _ => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><rect x='4' y='4' width='16' height='16' rx='3'/></svg>"
+    };
+}
 
 <style>
-    /* Estilos Premium Reutilizados */
-    .nx-section {
-        padding: 120px 0;
-        position: relative;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .nx-container {
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 0 24px;
-        z-index: 2;
-        position: relative;
-    }
-
-    /* Background e Efeitos */
-    body {
-        background-color: #0f172a;
-        margin: 0;
-        overflow-x: hidden;
-    }
-
-    .bg-gradient {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    /* Hero Centralizado para Atualização */
-    .hero-maintenance {
-        text-align: center;
-        max-width: 800px;
-        margin: 0 auto;
-    }
-
-        .hero-maintenance h1 {
-            font-size: 4rem;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            letter-spacing: -0.03em;
-            color: var(--text-light, #f8fafc);
-        }
-
-            .hero-maintenance h1 span {
-                background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
-
-    .lead-maintenance {
-        font-size: 1.5rem;
-        color: #94a3b8;
-        line-height: 1.6;
-        margin-bottom: 40px;
-    }
-
-    /* Badge de Status Animado */
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 8px 20px;
-        background: rgba(56, 189, 248, 0.1);
-        border: 1px solid rgba(56, 189, 248, 0.3);
-        border-radius: 100px;
-        font-size: 0.9rem;
-        color: #38bdf8;
-        font-weight: 600;
-        margin-bottom: 30px;
-        animation: pulse 2s infinite;
-    }
-
-    @@keyframes pulse {
-        0% {
-            opacity: 0.6;
-        }
-
-        50% {
-            opacity: 1;
-        }
-
-        100% {
-            opacity: 0.6;
-        }
-    }
-
-    /* Botões */
-    .hero-actions {
-        display: flex;
-        gap: 16px;
-        justify-content: center;
-    }
-
-    .nx-btn {
-        padding: 14px 32px;
-        border-radius: 999px;
-        font-weight: 600;
-        font-size: 1rem;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-    }
-
-        .nx-btn.primary {
-            background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
-            color: white;
-            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3);
-        }
-
-            .nx-btn.primary:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 8px 30px rgba(14, 165, 233, 0.5);
-            }
-
-    /* Floating Visual Panels (Mantidos do seu original) */
-    .hero-visual-maintenance {
-        position: relative;
-        height: 300px;
-        margin-top: 60px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .glass-panel {
-        position: absolute;
-        background: rgba(15, 23, 42, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(16px);
-        border-radius: 24px;
-        width: 280px;
-        height: 180px;
-        background-size: cover;
-        background-position: center;
-        animation: float 6s ease-in-out infinite;
-    }
-
-    .panel-1 {
-        background-image: url("/img/img1.png");
-        left: 10%;
-        transform: rotate(-5deg);
-    }
-
-    .panel-2 {
-        background-image: url("/img/img2.png");
-        right: 20%;
-        animation-delay: 1s;
-        transform: rotate(5deg);
-    }
-
-    @@keyframes float {
-        0%, 100% {
-            transform: translateY(0px) rotate(-5deg);
-        }
-
-        50% {
-            transform: translateY(-20px) rotate(-2deg);
-        }
-    }
-
-    /* Reveal Animation */
-    .reveal {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: all 1s ease;
-    }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .hm-home { position: relative; color: #f5f8ff; isolation: isolate; overflow: clip; }
+    .hm-home::before, .hm-home::after { content: ""; position: absolute; border-radius: 999px; filter: blur(90px); z-index: -1; pointer-events: none; }
+    .hm-home::before { width: 420px; height: 420px; top: -150px; right: -120px; background: rgba(54, 183, 232, 0.14); }
+    .hm-home::after { width: 360px; height: 360px; left: -110px; top: 35%; background: rgba(72, 192, 143, 0.08); }
+    .hm-wrap { width: min(1280px, 100%); margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
+    .hm-section { padding: 104px 0; }
+    .hm-hero { padding-top: 156px; padding-bottom: 104px; }
+    .hm-grid { display: grid; grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr); gap: 46px; align-items: start; }
+    .hm-badge { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(54,183,232,.34); background: rgba(54,183,232,.1); color: #d9f6ff; font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 18px; }
+    .hm-badge svg, .hm-icon svg, .hm-btn svg { width: 16px; height: 16px; }
+    .hm-title { margin: 0 0 16px; font-size: clamp(2.3rem, 5vw, 4.1rem); line-height: .98; letter-spacing: -.04em; max-width: 12ch; }
+    .hm-title span { color: #78d8ff; }
+    .hm-lead { margin: 0 0 26px; color: #a8bdd6; font-size: clamp(1rem, 2vw, 1.14rem); line-height: 1.72; max-width: 58ch; }
+    .hm-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+    .hm-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 14px; padding: 14px 20px; font-size: .94rem; font-weight: 800; border: 1px solid transparent; transition: transform .24s ease, border-color .24s ease; }
+    .hm-btn:hover { transform: translateY(-2px); }
+    .hm-btn.primary { color: #031220; background: linear-gradient(135deg, #78d8ff 0%, #36b7e8 100%); box-shadow: 0 14px 34px rgba(54,183,232,.3); }
+    .hm-btn.secondary { color: #f5f8ff; border-color: rgba(148,163,184,.18); background: rgba(12,22,39,.58); }
+    .hm-points { display: grid; grid-template-columns: 1fr; gap: 14px; max-width: 580px; }
+    .hm-point, .hm-card, .hm-example, .hm-quote, .hm-step { border: 1px solid rgba(148,163,184,.18); border-radius: 22px; background: linear-gradient(180deg, rgba(13,25,43,.92) 0%, rgba(9,18,31,.92) 100%); box-shadow: 0 16px 30px rgba(2,8,22,.18); }
+    .hm-point { display: grid; grid-template-columns: auto 1fr; gap: 12px; padding: 16px; }
+    .hm-icon { width: 42px; height: 42px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; background: rgba(54,183,232,.14); color: #dff7ff; border: 1px solid rgba(54,183,232,.18); }
+    .hm-point strong, .hm-card h3, .hm-example h3, .hm-step h3 { display: block; margin: 0 0 6px; }
+    .hm-point p, .hm-card p, .hm-head p, .hm-example p, .hm-step p, .hm-quote blockquote, .hm-cta p { margin: 0; color: #a8bdd6; line-height: 1.62; }
+    .hm-stage { position: relative; border: 1px solid rgba(96,153,209,.18); border-radius: 28px; background: radial-gradient(circle at top left, rgba(54,183,232,.16) 0%, rgba(7,14,27,0) 42%), linear-gradient(180deg, rgba(10,19,34,.95) 0%, rgba(7,14,27,.98) 100%); padding: 24px; box-shadow: 0 24px 56px rgba(2,8,22,.34); overflow: hidden; }
+    .hm-stage::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(180deg, transparent 0%, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 28px 28px; opacity: .12; }
+    .hm-stage-inner { position: relative; z-index: 1; display: grid; gap: 14px; }
+    .hm-stage-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .hm-stage-head strong { display: block; font-size: .98rem; }
+    .hm-stage-head span { color: #a8bdd6; font-size: .78rem; }
+    .hm-status { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 8px 12px; background: rgba(72,192,143,.1); border: 1px solid rgba(72,192,143,.2); color: #d7fff0; font-size: .76rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+    .hm-status i { width: 8px; height: 8px; border-radius: 999px; background: #63d9a8; box-shadow: 0 0 0 6px rgba(99,217,168,.12); animation: hmPulse 1.8s ease-in-out infinite; }
+    .hm-stage-grid { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr); gap: 16px; }
+    .hm-panel, .hm-feed, .hm-kpis, .hm-bars { border: 1px solid rgba(148,163,184,.14); border-radius: 20px; background: rgba(11,20,36,.84); padding: 16px; backdrop-filter: blur(10px); }
+    .hm-panel { display: grid; gap: 10px; }
+    .hm-flow { display: grid; gap: 10px; }
+    .hm-flow article { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 12px; border-radius: 16px; border: 1px solid rgba(148,163,184,.14); background: rgba(255,255,255,.03); }
+    .hm-flow article strong { display: block; margin-bottom: 2px; font-size: .86rem; }
+    .hm-flow article span { color: #a8bdd6; font-size: .74rem; }
+    .hm-pill { border-radius: 999px; padding: 5px 8px; font-size: .68rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .hm-pill.ok { color: #d7fff0; background: rgba(72,192,143,.12); border: 1px solid rgba(72,192,143,.2); }
+    .hm-pill.warn { color: #fff0d6; background: rgba(240,169,78,.12); border: 1px solid rgba(240,169,78,.2); }
+    .hm-kpis { display: grid; gap: 10px; }
+    .hm-kpis article, .hm-metric { padding: 12px; border-radius: 16px; border: 1px solid rgba(148,163,184,.14); background: rgba(255,255,255,.03); }
+    .hm-kpis strong { display: block; font-size: 1.22rem; margin-bottom: 4px; }
+    .hm-kpis span, .hm-metric span { color: #a8bdd6; font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+    .hm-feed ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+    .hm-feed li { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; padding: 10px; border-radius: 14px; background: rgba(255,255,255,.03); transition: transform .32s ease, border-color .32s ease, background-color .32s ease; border: 1px solid transparent; }
+    .hm-feed li.is-active { transform: translateX(6px); border-color: rgba(54,183,232,.2); background: rgba(54,183,232,.08); }
+    .hm-time { width: 44px; height: 44px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; background: rgba(54,183,232,.12); color: #dcf6ff; font-size: .76rem; font-weight: 800; }
+    .hm-feed strong { display: block; margin-bottom: 2px; }
+    .hm-feed span { color: #a8bdd6; font-size: .78rem; }
+    .hm-bars { display: grid; gap: 10px; }
+    .hm-bar { display: grid; gap: 6px; }
+    .hm-bar-head { display: flex; justify-content: space-between; gap: 10px; color: #a8bdd6; font-size: .76rem; }
+    .hm-track { height: 9px; border-radius: 999px; overflow: hidden; background: rgba(148,163,184,.14); }
+    .hm-track i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #36b7e8 0%, #6fdcff 100%); width: var(--width, 50%); transition: width .6s ease; }
+    .hm-head { text-align: center; display: grid; gap: 10px; margin: 0 auto 40px; max-width: 760px; }
+    .hm-head h2, .hm-cta h2 { margin: 0; font-size: clamp(1.8rem, 3vw, 3rem); letter-spacing: -.03em; }
+    .hm-head p { max-width: 64ch; margin: 0 auto; }
+    .hm-cards, .hm-examples { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .hm-quotes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; max-width: 1120px; margin: 0 auto; }
+    .hm-card, .hm-example, .hm-quote { padding: 22px; }
+    .hm-card-top, .hm-example-top { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+    .hm-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .hm-tag { display: inline-flex; align-items: center; padding: 6px 10px; border-radius: 999px; font-size: .72rem; color: #a8bdd6; border: 1px solid rgba(148,163,184,.18); background: rgba(255,255,255,.03); font-weight: 700; }
+    .hm-steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; max-width: 1080px; margin: 0 auto; }
+    .hm-step { padding: 20px; }
+    .hm-step-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .hm-step-id { width: 46px; height: 46px; border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; background: rgba(54,183,232,.12); color: #dff7ff; border: 1px solid rgba(54,183,232,.18); font-size: .82rem; font-weight: 900; }
+    .hm-example ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+    .hm-example li { position: relative; padding-left: 16px; color: #a8bdd6; font-size: .86rem; }
+    .hm-example li::before { content: ""; position: absolute; left: 0; top: .58em; width: 7px; height: 7px; border-radius: 999px; background: #36b7e8; }
+    .hm-metrics { border-top: 1px solid rgba(148,163,184,.14); border-bottom: 1px solid rgba(148,163,184,.14); background: linear-gradient(180deg, rgba(11,20,36,.48) 0%, rgba(7,13,24,.2) 100%); }
+    .hm-metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 920px; margin: 0 auto; }
+    .hm-metric { text-align: center; padding: 32px 12px; }
+    .hm-metric strong { display: block; font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1; margin-bottom: 8px; }
+    .hm-quote blockquote { font-size: .98rem; }
+    .hm-author { display: flex; align-items: center; gap: 12px; padding-top: 14px; margin-top: 16px; border-top: 1px solid rgba(148,163,184,.14); }
+    .hm-avatar { width: 46px; height: 46px; border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; background: rgba(54,183,232,.14); color: #def8ff; font-weight: 900; letter-spacing: .08em; }
+    .hm-author strong { display: block; margin-bottom: 2px; }
+    .hm-author span { color: #a8bdd6; font-size: .8rem; }
+    .hm-cta { text-align: center; border: 1px solid rgba(54,183,232,.28); border-radius: 28px; padding: clamp(28px, 5vw, 52px); background: radial-gradient(circle at 50% 0%, rgba(54,183,232,.18) 0%, rgba(8,16,29,0) 48%), linear-gradient(180deg, rgba(13,25,43,.96) 0%, rgba(7,14,27,.98) 100%); box-shadow: 0 26px 70px rgba(2,8,22,.42); max-width: 1040px; margin: 0 auto; }
+    .hm-cta p { max-width: 62ch; margin: 0 auto 22px; }
+    .hm-cta-actions { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+    @@keyframes hmPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.12); opacity: .82; } }
+    @@media (min-width: 1121px) { .hm-home > .hm-section:not(.hm-hero) .hm-wrap { width: min(1140px, 100%); } .hm-hero .hm-grid > :first-child { max-width: 580px; } .hm-stage { max-width: 700px; margin-left: auto; } .hm-cards .hm-card:first-child, .hm-examples .hm-example:first-child { grid-column: 1 / -1; } .hm-cards .hm-card:first-child .hm-card-top, .hm-examples .hm-example:first-child .hm-example-top { max-width: 720px; margin-bottom: 18px; } .hm-examples .hm-example:first-child ul { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 18px; } }
+    @@media (max-width: 1120px) { .hm-grid, .hm-stage-grid, .hm-cards, .hm-examples, .hm-quotes { grid-template-columns: 1fr; } .hm-steps, .hm-metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: none; } .hm-points { grid-template-columns: 1fr; max-width: none; } .hm-quotes { max-width: none; } }
+    @@media (max-width: 760px) { .hm-wrap { padding: 0 16px; } .hm-section { padding: 72px 0; } .hm-hero { padding-top: 122px; padding-bottom: 72px; } .hm-title { max-width: none; font-size: clamp(2.1rem, 12vw, 3.2rem); } .hm-actions, .hm-cta-actions { flex-direction: column; } .hm-btn { width: 100%; } .hm-stage, .hm-card, .hm-example, .hm-quote, .hm-step, .hm-point { padding: 16px; border-radius: 20px; } .hm-stage-head, .hm-card-top, .hm-example-top { flex-direction: column; align-items: flex-start; } .hm-flow article { grid-template-columns: 1fr; } .hm-steps, .hm-metric-grid { grid-template-columns: 1fr; } .hm-time { width: 40px; height: 40px; border-radius: 12px; } }
+    @@media (prefers-reduced-motion: reduce) { .hm-status i { animation: none !important; } }
 </style>
 
-<div class="bg-gradient"></div>
-
-<section class="nx-section">
-    <div class="nx-container">
-        <div class="hero-maintenance reveal active">
-            <div class="status-badge">
-                🛠️ ESTAMOS EM ATUALIZAÇÃO
+<div class="hm-home">
+    <section class="hm-section hm-hero">
+        <div class="hm-wrap hm-grid">
+            <div data-reveal>
+                <p class="hm-badge">@Html.Raw(IconSvg("spark"))<span>@companyName | software, automacao e dados</span></p>
+                <h1 class="hm-title">Projetos digitais com <span>cara de produto pronto</span> desde a primeira entrega.</h1>
+                <p class="hm-lead">@tagline @subhead Entregamos algo que precisa vender bem, operar bem e continuar bonito no mobile.</p>
+                <div class="hm-actions">
+                    @if (specialistIsExternal)
+                    {
+                        <a class="hm-btn primary" href="@specialistHref" target="_blank" rel="noopener noreferrer">@Html.Raw(IconSvg("rocket"))<span>Falar com especialista</span></a>
+                    }
+                    else
+                    {
+                        <a class="hm-btn primary" href="@specialistHref">@Html.Raw(IconSvg("rocket"))<span>Falar com especialista</span></a>
+                    }
+                    <a class="hm-btn secondary" href="#solucoes">@Html.Raw(IconSvg("stack"))<span>Ver solucoes</span></a>
+                    <a class="hm-btn secondary" href="#exemplos">@Html.Raw(IconSvg("mobile"))<span>Ver exemplos</span></a>
+                </div>
+                <div class="hm-points">
+                    <article class="hm-point" data-reveal data-hover-tilt><span class="hm-icon">@Html.Raw(IconSvg("target"))</span><div><strong>Diagnostico com profundidade</strong><p>Mapeamos objetivo, gargalo, risco e KPI antes de implementar.</p></div></article>
+                    <article class="hm-point" data-reveal data-delay="1" data-hover-tilt><span class="hm-icon">@Html.Raw(IconSvg("mobile"))</span><div><strong>Experiencia pronta para mobile</strong><p>Interface pensada para uso real em celular, tablet e desktop.</p></div></article>
+                    <article class="hm-point" data-reveal data-delay="2" data-hover-tilt><span class="hm-icon">@Html.Raw(IconSvg("shield"))</span><div><strong>Evolucao com governanca</strong><p>Arquitetura, monitoramento e roadmap para crescer sem bagunca.</p></div></article>
+                </div>
             </div>
-            <h1>NexCore <span>Elevando o Nível</span></h1>
-            <p class="lead-maintenance">
-                Estamos arquitetando uma nova experiência digital. Em breve, você terá acesso a soluções em software ainda mais robustas e escaláveis.
-            </p>
 
-            <div class="hero-actions">
-                <a class="nx-btn primary" href="https://wa.me/SEUNUMERO" target="_blank">
-                    Falar via WhatsApp
-                </a>
-            </div>
-
-            <div class="hero-visual-maintenance reveal active" style="transition-delay: 0.5s">
-                <div class="glass-panel panel-1"></div>
-                <div class="glass-panel panel-2"></div>
+            <div class="hm-stage" data-reveal data-delay="1">
+                <div class="hm-stage-inner">
+                    <div class="hm-stage-head">
+                        <div><strong>Nucleo de operacao integrada</strong><span>Painel conceitual de uma entrega com UX, automacao e dados conectados.</span></div>
+                        <div class="hm-status"><i></i><span>deploy estavel</span></div>
+                    </div>
+                    <div class="hm-stage-grid">
+                        <section class="hm-panel">
+                            <div class="hm-flow">
+                                <article><span class="hm-icon">@Html.Raw(IconSvg("target"))</span><div><strong>Captacao e qualificacao</strong><span>Leads entram, passam por regra de prioridade e seguem para comercial.</span></div><span class="hm-pill ok">3.9% conv</span></article>
+                                <article><span class="hm-icon">@Html.Raw(IconSvg("flow"))</span><div><strong>Workflow operacional</strong><span>Tarefas, aprovacoes e excecoes sao tratadas por fila e SLA.</span></div><span class="hm-pill warn">12 min sla</span></article>
+                                <article><span class="hm-icon">@Html.Raw(IconSvg("chart"))</span><div><strong>Painel executivo</strong><span>Diretoria acompanha meta, gargalo e produtividade com clareza.</span></div><span class="hm-pill ok">52 KPI</span></article>
+                            </div>
+                        </section>
+                        <div style="display:grid; gap:14px">
+                            <section class="hm-kpis">
+                                <article><strong data-count-to="218">0</strong><span>leads qualificados</span></article>
+                                <article><strong data-count-to="34" data-count-suffix="%">0</strong><span>ganho medio de eficiencia</span></article>
+                                <article><strong data-count-to="99" data-count-suffix="%">0</strong><span>disponibilidade alvo</span></article>
+                            </section>
+                            <section class="hm-feed">
+                                <ul id="homeFeed">
+                                    <li class="is-active" data-home-log><span class="hm-time">09:12</span><div><strong>Landing aprovada</strong><span>Campanha B2B liberada com CRM e analytics conectados.</span></div></li>
+                                    <li data-home-log><span class="hm-time">10:04</span><div><strong>Workflow sincronizado</strong><span>Financeiro, estoque e atendimento refletindo a mesma base de dados.</span></div></li>
+                                    <li data-home-log><span class="hm-time">11:26</span><div><strong>Indicador em alerta</strong><span>Painel apontou fila acima do limite e equipe reagiu em minutos.</span></div></li>
+                                </ul>
+                            </section>
+                            <section class="hm-bars">
+                                <div class="hm-bar"><div class="hm-bar-head"><span>Conversao comercial</span><strong id="homeBarValueA">68%</strong></div><div class="hm-track"><i id="homeBarA" style="--width:68%"></i></div></div>
+                                <div class="hm-bar"><div class="hm-bar-head"><span>Automacao de rotina</span><strong id="homeBarValueB">74%</strong></div><div class="hm-track"><i id="homeBarB" style="--width:74%"></i></div></div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
+    <section class="hm-section" id="solucoes">
+        <div class="hm-wrap">
+            <header class="hm-head" data-reveal>
+                <h2>Solucoes completas para vender melhor e operar com ordem</h2>
+                <p>Da camada comercial ate a operacao interna, tudo precisa ter leitura forte, conteudo convincente e uso consistente no celular.</p>
+            </header>
+            <div class="hm-cards">
+                <article class="hm-card" data-reveal data-hover-tilt><div class="hm-card-top"><span class="hm-icon">@Html.Raw(IconSvg("stack"))</span><div><h3>Plataformas web e portais</h3><p>Sites, portais e areas logadas com UX forte, SEO tecnico e foco em conversao.</p></div></div><div class="hm-tags"><span class="hm-tag">UX</span><span class="hm-tag">SEO</span><span class="hm-tag">Conversao</span></div></article>
+                <article class="hm-card" data-reveal data-delay="1" data-hover-tilt><div class="hm-card-top"><span class="hm-icon">@Html.Raw(IconSvg("mobile"))</span><div><h3>Apps para operacao e campo</h3><p>Aplicativos para checklist, atendimento, aprovacao e produtividade operacional.</p></div></div><div class="hm-tags"><span class="hm-tag">Android</span><span class="hm-tag">iOS</span><span class="hm-tag">Offline</span></div></article>
+                <article class="hm-card" data-reveal data-delay="2" data-hover-tilt><div class="hm-card-top"><span class="hm-icon">@Html.Raw(IconSvg("flow"))</span><div><h3>Automacao de processos</h3><p>Esteiras para atendimento, backoffice e integracoes com menos retrabalho manual.</p></div></div><div class="hm-tags"><span class="hm-tag">Workflow</span><span class="hm-tag">SLA</span><span class="hm-tag">Escala</span></div></article>
+                <article class="hm-card" data-reveal data-hover-tilt><div class="hm-card-top"><span class="hm-icon">@Html.Raw(IconSvg("chart"))</span><div><h3>Dados, BI e dashboards</h3><p>Indicadores claros para lideranca enxergar gargalo, margem e performance em tempo real.</p></div></div><div class="hm-tags"><span class="hm-tag">KPI</span><span class="hm-tag">Alertas</span><span class="hm-tag">Forecast</span></div></article>
+                <article class="hm-card" data-reveal data-delay="1" data-hover-tilt><div class="hm-card-top"><span class="hm-icon">@Html.Raw(IconSvg("shield"))</span><div><h3>Software sob medida</h3><p>Sistemas desenhados no processo real da operacao, com perfis, regras e governanca.</p></div></div><div class="hm-tags"><span class="hm-tag">ERP</span><span class="hm-tag">CRM</span><span class="hm-tag">Backoffice</span></div></article>
+                <article class="hm-card" data-reveal data-delay="2" data-hover-tilt><div class="hm-card-top"><span class="hm-icon">@Html.Raw(IconSvg("rocket"))</span><div><h3>Suporte e evolucao</h3><p>Go-live assistido, monitoramento e melhorias priorizadas por impacto de negocio.</p></div></div><div class="hm-tags"><span class="hm-tag">Roadmap</span><span class="hm-tag">QA</span><span class="hm-tag">Suporte</span></div></article>
+            </div>
+        </div>
+    </section>
+
+    <section class="hm-section">
+        <div class="hm-wrap">
+            <header class="hm-head" data-reveal>
+                <h2>Metodo de entrega para projeto com cara de empresa grande</h2>
+                <p>O objetivo nao e apenas uma tela bonita. E colocar no ar algo coerente, confiavel, rastreavel e preparado para continuar crescendo.</p>
+            </header>
+            <div class="hm-steps">
+                <article class="hm-step" data-reveal data-hover-tilt><div class="hm-step-head"><span class="hm-step-id">01</span><span class="hm-icon">@Html.Raw(IconSvg("target"))</span></div><h3>Diagnostico</h3><p>Levantamento do cenario, objetivo principal e pontos de ruptura da operacao.</p></article>
+                <article class="hm-step" data-reveal data-delay="1" data-hover-tilt><div class="hm-step-head"><span class="hm-step-id">02</span><span class="hm-icon">@Html.Raw(IconSvg("stack"))</span></div><h3>Arquitetura</h3><p>Definimos stack, integracoes, jornadas e estrutura de entrega por sprint.</p></article>
+                <article class="hm-step" data-reveal data-delay="2" data-hover-tilt><div class="hm-step-head"><span class="hm-step-id">03</span><span class="hm-icon">@Html.Raw(IconSvg("rocket"))</span></div><h3>Entrega guiada por valor</h3><p>Colocamos em producao o que gera retorno mais rapido, sem perder qualidade.</p></article>
+                <article class="hm-step" data-reveal data-delay="3" data-hover-tilt><div class="hm-step-head"><span class="hm-step-id">04</span><span class="hm-icon">@Html.Raw(IconSvg("shield"))</span></div><h3>Escala e governanca</h3><p>Monitoramos, ajustamos e expandimos com dados, estabilidade e previsibilidade.</p></article>
+            </div>
+        </div>
+    </section>
+
+    <section class="hm-section" id="exemplos">
+        <div class="hm-wrap">
+            <header class="hm-head" data-reveal>
+                <h2>Exemplos funcionais com identidade propria por modulo</h2>
+                <p>Cada demo representa um tipo de entrega diferente, com tema, acao principal e leitura mais clara para celular e desktop.</p>
+            </header>
+            <div class="hm-examples">
+                <article class="hm-example" data-reveal data-hover-tilt><div class="hm-example-top"><span class="hm-icon">@Html.Raw(IconSvg("stack"))</span><div><h3>Site institucional premium</h3><p>Captacao de leads com narrativa comercial, prova social e funnel integrado.</p></div></div><ul><li>Home orientada a conversao</li><li>Formulario inteligente</li><li>CRM conectado</li></ul><div style="margin-top:14px"><a class="hm-btn secondary" href="/Products/Example/site">Abrir exemplo</a></div></article>
+                <article class="hm-example" data-reveal data-delay="1" data-hover-tilt><div class="hm-example-top"><span class="hm-icon">@Html.Raw(IconSvg("rocket"))</span><div><h3>Landing de campanha</h3><p>Estrutura de midia paga com teste A/B, verba e leitura de ROI.</p></div></div><ul><li>Experimentos reais</li><li>Heatmap de horario</li><li>Canal por CPL</li></ul><div style="margin-top:14px"><a class="hm-btn secondary" href="/Products/Example/landing">Abrir exemplo</a></div></article>
+                <article class="hm-example" data-reveal data-delay="2" data-hover-tilt><div class="hm-example-top"><span class="hm-icon">@Html.Raw(IconSvg("mobile"))</span><div><h3>App de operacao</h3><p>Checklist, apontamento e acompanhamento de equipe em ambiente de campo.</p></div></div><ul><li>Fluxo mobile-first</li><li>Status por equipe</li><li>Checklist acionavel</li></ul><div style="margin-top:14px"><a class="hm-btn secondary" href="/Products/Example/app">Abrir exemplo</a></div></article>
+                <article class="hm-example" data-reveal data-hover-tilt><div class="hm-example-top"><span class="hm-icon">@Html.Raw(IconSvg("flow"))</span><div><h3>Automacao com SLA</h3><p>Workflow com fila, regras, telemetria e escalonamento operacional.</p></div></div><ul><li>Fila operacional</li><li>Logs de execucao</li><li>Tratamento de excecao</li></ul><div style="margin-top:14px"><a class="hm-btn secondary" href="/Products/Example/automation">Abrir exemplo</a></div></article>
+                <article class="hm-example" data-reveal data-delay="1" data-hover-tilt><div class="hm-example-top"><span class="hm-icon">@Html.Raw(IconSvg("chart"))</span><div><h3>Dashboard executivo</h3><p>Leitura de meta, alerta de desvio e comparativo por periodo.</p></div></div><ul><li>KPI em tempo real</li><li>Analise temporal</li><li>Alertas de meta</li></ul><div style="margin-top:14px"><a class="hm-btn secondary" href="/Products/Example/dashboard">Abrir exemplo</a></div></article>
+                <article class="hm-example" data-reveal data-delay="2" data-hover-tilt><div class="hm-example-top"><span class="hm-icon">@Html.Raw(IconSvg("shield"))</span><div><h3>ERP Lite e integracoes</h3><p>Pedidos, estoque, financeiro e rotinas administrativas organizadas.</p></div></div><ul><li>Pedidos e estoque</li><li>Financeiro base</li><li>Governanca de processo</li></ul><div style="margin-top:14px"><a class="hm-btn secondary" href="/Products/Example/erp-lite">Abrir exemplo</a></div></article>
+            </div>
+        </div>
+    </section>
+
+    <section class="hm-section hm-metrics">
+        <div class="hm-wrap">
+            <div class="hm-metric-grid">
+                <article class="hm-metric" data-reveal><strong data-count-to="150" data-count-suffix="+">0</strong><span>entregas estruturadas</span></article>
+                <article class="hm-metric" data-reveal data-delay="1"><strong data-count-to="99" data-count-suffix="%">0</strong><span>satisfacao media</span></article>
+                <article class="hm-metric" data-reveal data-delay="2"><strong data-count-to="24" data-count-suffix="/7">0</strong><span>suporte especializado</span></article>
+                <article class="hm-metric" data-reveal data-delay="3"><strong data-count-to="40" data-count-suffix="%">0</strong><span>ganho medio operacional</span></article>
+            </div>
+        </div>
+    </section>
+
+    <section class="hm-section">
+        <div class="hm-wrap">
+            <header class="hm-head" data-reveal>
+                <h2>Percepcao de quem passou a operar com mais clareza</h2>
+                <p>Quando a interface melhora, o processo encaixa e os dados ficam visiveis, a sensacao de organizacao muda rapido.</p>
+            </header>
+            <div class="hm-quotes">
+                <figure class="hm-quote" data-reveal data-hover-tilt><blockquote>"Nossa estrutura digital deixou de parecer improvisada. Hoje o comercial opera com clareza e prioridade real."</blockquote><figcaption class="hm-author"><span class="hm-avatar">CE</span><div><strong>Carlos E.</strong><span>Diretor Comercial</span></div></figcaption></figure>
+                <figure class="hm-quote" data-reveal data-delay="1" data-hover-tilt><blockquote>"Conectamos processos que estavam espalhados. O time ganhou ritmo, e a lideranca passou a decidir com dados."</blockquote><figcaption class="hm-author"><span class="hm-avatar">ML</span><div><strong>Mariana L.</strong><span>Gerente de Operacoes</span></div></figcaption></figure>
+                <figure class="hm-quote" data-reveal data-delay="2" data-hover-tilt><blockquote>"Recebemos algo com cara de produto pronto: boa interface, logica consistente e espaco para evolucao."</blockquote><figcaption class="hm-author"><span class="hm-avatar">RA</span><div><strong>Roberto A.</strong><span>CEO</span></div></figcaption></figure>
+            </div>
+        </div>
+    </section>
+
+    <section class="hm-section">
+        <div class="hm-wrap">
+            <div class="hm-cta" data-reveal>
+                <h2>Se a empresa precisa parecer pronta, a entrega tambem precisa nascer pronta</h2>
+                <p>Visual profissional, experiencia consistente, logica de negocio e foco em uso real. O resultado precisa vender bem e operar bem ao mesmo tempo.</p>
+                <div class="hm-cta-actions">
+                    <a class="hm-btn primary" href="/Company/Contact">@Html.Raw(IconSvg("rocket"))<span>Solicitar proposta</span></a>
+                    <a class="hm-btn secondary" href="/Products">@Html.Raw(IconSvg("stack"))<span>Ver portifolio</span></a>
+                    <a class="hm-btn secondary" href="/Company/Chat">@Html.Raw(IconSvg("spark"))<span>Converse com a IA</span></a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const reveals = document.querySelectorAll('.reveal');
-        setTimeout(() => {
-            reveals.forEach(el => el.classList.add('active'));
-        }, 100);
+    document.addEventListener("DOMContentLoaded", function () {
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reducedMotion) return;
+
+        const feedItems = Array.from(document.querySelectorAll("[data-home-log]"));
+        const barA = document.getElementById("homeBarA");
+        const barB = document.getElementById("homeBarB");
+        const barValueA = document.getElementById("homeBarValueA");
+        const barValueB = document.getElementById("homeBarValueB");
+        const states = [{ a: 68, b: 74 }, { a: 72, b: 79 }, { a: 76, b: 82 }, { a: 81, b: 87 }];
+        let index = 0;
+
+        window.setInterval(function () {
+            if (feedItems.length > 0) {
+                feedItems.forEach(function (item, itemIndex) {
+                    item.classList.toggle("is-active", itemIndex === index % feedItems.length);
+                });
+            }
+
+            const state = states[index % states.length];
+            if (barA) barA.style.setProperty("--width", state.a + "%");
+            if (barB) barB.style.setProperty("--width", state.b + "%");
+            if (barValueA) barValueA.textContent = state.a + "%";
+            if (barValueB) barValueB.textContent = state.b + "%";
+            index += 1;
+        }, 2600);
     });
 </script>

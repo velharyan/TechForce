@@ -1,0 +1,3459 @@
+﻿
+@model TechForce.Web.Controllers.ProductItem
+@{
+    var productKey = (Model.Slug ?? string.Empty).ToLowerInvariant();
+
+    string IconSvg(string key) => key switch
+    {
+        "spark" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M12 3l1.9 4.8L19 10l-5.1 2.2L12 17l-1.9-4.8L5 10l5.1-2.2L12 3z'/></svg>",
+        "stack" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M12 4l8 4-8 4-8-4 8-4z'/><path d='M4 12l8 4 8-4'/><path d='M4 16l8 4 8-4'/></svg>",
+        "mobile" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><rect x='7' y='2.8' width='10' height='18.4' rx='2.3'/><path d='M10 5.5h4'/><circle cx='12' cy='17.8' r='0.9'/></svg>",
+        "flow" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><circle cx='6' cy='6' r='2.5'/><circle cx='18' cy='6' r='2.5'/><circle cx='12' cy='18' r='2.5'/><path d='M8.5 6h7'/><path d='M7.8 8.1l2.8 6.3'/><path d='M16.2 8.1l-2.8 6.3'/></svg>",
+        "chart" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M4 19h16'/><path d='M7 16V9'/><path d='M12 16V5'/><path d='M17 16v-4'/></svg>",
+        "shield" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6l7-3z'/><path d='M9.5 12.2l1.8 1.8 3.4-3.8'/></svg>",
+        "rocket" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M14 4c3 0 5 2 5 5-2.5 1.6-4.6 3.7-6.2 6.2-3 0-5-2-5-5C9.4 6 11.5 4 14 4z'/><path d='M9 15l-3 3'/><path d='M12 18l-1.5 3'/></svg>",
+        "target" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><circle cx='12' cy='12' r='8'/><circle cx='12' cy='12' r='4'/><path d='M12 4v2'/><path d='M20 12h-2'/><path d='M12 20v-2'/><path d='M4 12h2'/></svg>",
+        "users" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M16.5 20v-1.2a4 4 0 0 0-4-4H8.8a4 4 0 0 0-4 4V20'/><circle cx='10.7' cy='8.2' r='3.1'/><path d='M18.5 20v-1.2a3.4 3.4 0 0 0-2.7-3.4'/><path d='M15 5.6a3 3 0 0 1 0 5.2'/></svg>",
+        _ => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><rect x='4' y='4' width='16' height='16' rx='3'/></svg>"
+    };
+
+    var demoUrl = productKey switch
+    {
+        "site" => "https://www.seunegocio.com.br",
+        "landing" => "https://campanha.seunegocio.com.br",
+        "ecommerce" => "https://loja.seunegocio.com.br",
+        "app" => "https://operacao.seunegocio.com.br/app",
+        "crm" => "https://crm.seunegocio.com.br",
+        "api" => "https://api.seunegocio.com.br/v1",
+        "automation" => "https://ops.seunegocio.com.br/automacoes",
+        "dashboard" => "https://bi.seunegocio.com.br",
+        "portal" => "https://cliente.seunegocio.com.br",
+        _ => "https://erp.seunegocio.com.br"
+    };
+
+    var heroLabel = productKey switch
+    {
+        "site" => "Site institucional focado em captacao e qualificacao comercial.",
+        "landing" => "Pagina de campanha com experimentos de conversao.",
+        "ecommerce" => "Loja digital com checkout, cupom e controle comercial.",
+        "app" => "App operacional para equipe em campo e rotina diaria.",
+        "crm" => "Pipeline completo com follow-up e previsibilidade de receita.",
+        "api" => "Plataforma de integracoes com observabilidade tecnica.",
+        "automation" => "Esteira automatizada com SLA e governanca de fila.",
+        "dashboard" => "Painel executivo para decisao em tempo real.",
+        "portal" => "Portal de cliente com suporte, historico e autosservico.",
+        _ => "ERP modular para pedidos, estoque e financeiro."
+    };
+
+    var heroStats = productKey switch
+    {
+        "site" => new (string Label, string Value)[]
+        {
+            ("Leads qualificados", "218"),
+            ("Conversao", "4.1%"),
+            ("Resposta media", "14 min"),
+            ("Crescimento", "+28%")
+        },
+        "landing" => new (string Label, string Value)[]
+        {
+            ("Leads captados", "462"),
+            ("Conversao", "8.1%"),
+            ("CPL medio", "R$ 26"),
+            ("ROI", "4.2x")
+        },
+        "ecommerce" => new (string Label, string Value)[]
+        {
+            ("Pedidos dia", "137"),
+            ("Ticket medio", "R$ 286"),
+            ("Checkout aprovado", "91%"),
+            ("Ruptura", "2.1%")
+        },
+        "app" => new (string Label, string Value)[]
+        {
+            ("Tarefas dia", "94"),
+            ("Checklist", "86%"),
+            ("Equipe ativa", "17"),
+            ("Tempo ganho", "+36%")
+        },
+        "crm" => new (string Label, string Value)[]
+        {
+            ("Leads no funil", "189"),
+            ("Ganho", "31%"),
+            ("Ciclo medio", "24 dias"),
+            ("Forecast", "R$ 1.2M")
+        },
+        "api" => new (string Label, string Value)[]
+        {
+            ("Disponibilidade", "99.94%"),
+            ("Latencia", "182 ms"),
+            ("Integracoes", "43"),
+            ("Erro medio", "1.2%")
+        },
+        "automation" => new (string Label, string Value)[]
+        {
+            ("Fluxos", "7.842"),
+            ("SLA", "96%"),
+            ("Reprocesso", "1.7%"),
+            ("Horas poupadas", "420h")
+        },
+        "dashboard" => new (string Label, string Value)[]
+        {
+            ("KPIs", "52"),
+            ("Alertas", "17"),
+            ("Atualizacao", "5 min"),
+            ("Cobertura", "100%")
+        },
+        "portal" => new (string Label, string Value)[]
+        {
+            ("Chamados", "53"),
+            ("Primeira resposta", "11 min"),
+            ("SLA no prazo", "93%"),
+            ("Autosservico", "61%")
+        },
+        _ => new (string Label, string Value)[]
+        {
+            ("Pedidos", "1.942"),
+            ("Itens em estoque", "2.8k"),
+            ("Conferencia", "98%"),
+            ("Margem", "21%")
+        }
+    };
+
+    var deliveryItems = productKey switch
+    {
+        "site" => new[] { "Paginas comerciais e SEO", "Formulario inteligente", "Integracao com CRM", "Painel de funil" },
+        "landing" => new[] { "Estrutura de campanha", "Teste A/B", "Pixel e eventos", "Analise de ROI" },
+        "ecommerce" => new[] { "Catalogo e estoque", "Carrinho e checkout", "Promocoes e cupom", "Painel de pedidos" },
+        "app" => new[] { "Kanban operacional", "Checklist de rota", "Status da equipe", "Historico de campo" },
+        "crm" => new[] { "Funil por etapa", "Score de oportunidade", "Cadencia de follow-up", "Forecast por carteira" },
+        "api" => new[] { "Gateway e endpoints", "Log de request", "Health check", "Rate limit e retry" },
+        "automation" => new[] { "Fila de workflow", "SLA por prioridade", "Escalonamento", "Telemetria operacional" },
+        "dashboard" => new[] { "Modelo de KPI", "Alerta por limite", "Analise temporal", "Visao executiva" },
+        "portal" => new[] { "Gestao de chamados", "Timeline de suporte", "Base de conhecimento", "SLA por prioridade" },
+        _ => new[] { "Pedidos e faturamento", "Estoque e reposicao", "Contas e conciliacao", "Governanca de processo" }
+    };
+
+    var architectureItems = productKey switch
+    {
+        "site" or "landing" => new[] { "Frontend responsivo", "Camada de analytics", "Integracao comercial", "Monitoramento" },
+        "ecommerce" => new[] { "Servico de catalogo", "Checkout com antifraude", "Sync de estoque", "Leitura de conversao" },
+        "app" => new[] { "Sync mobile", "API de tarefas", "Permissao por perfil", "Eventos criticos" },
+        "crm" => new[] { "Pipeline customizavel", "Playbook comercial", "Forecast continuo", "Historico de atividade" },
+        "api" => new[] { "Gateway seguro", "Versionamento", "Retry controlado", "Auditoria tecnica" },
+        "automation" => new[] { "Orquestrador de filas", "Retentativa", "Dead-letter", "Metrica de throughput" },
+        "dashboard" => new[] { "Camada semantica", "Carga validada", "Threshold de alerta", "Permissao por area" },
+        "portal" => new[] { "Dominio de ticket", "Matriz de SLA", "Knowledge base", "Escalonamento" },
+        _ => new[] { "Dominios de pedido", "Regras de reposicao", "Conferencia diaria", "Aprovacao por alcada" }
+    };
+
+    var footerNotes = productKey switch
+    {
+        "site" => new (string Title, string Text)[]
+        {
+            ("Comercial", "Jornada com CTA e resposta rapida para aumentar oportunidade."),
+            ("Marketing", "Canal, custo e conversao monitorados por campanha."),
+            ("Escala", "Estrutura pronta para novos produtos e segmentos.")
+        },
+        "landing" => new (string Title, string Text)[]
+        {
+            ("Campanha", "Experimentacao continua para reduzir CPL e ampliar ROI."),
+            ("Metrica", "Decisao orientada por taxa de conversao e qualidade."),
+            ("Escala", "Modelo replicavel para multiplos canais e ofertas.")
+        },
+        "ecommerce" => new (string Title, string Text)[]
+        {
+            ("Comercial", "Checkout simplificado com menos friccao e mais aprovacao."),
+            ("Operacao", "Ruptura monitorada com gatilho de reposicao."),
+            ("Financeiro", "Receita, ticket e margem em leitura unificada.")
+        },
+        "app" => new (string Title, string Text)[]
+        {
+            ("Campo", "Tarefa e checklist centralizados em uma rotina unica."),
+            ("Equipe", "Status em tempo real para coordenacao da operacao."),
+            ("Gestao", "Acompanhamento de produtividade por periodo e regiao.")
+        },
+        "crm" => new (string Title, string Text)[]
+        {
+            ("Pipeline", "Etapas claras para previsibilidade de fechamento."),
+            ("Cadencia", "Follow-up padronizado por owner e prioridade."),
+            ("Forecast", "Previsao baseada em historico e tendencia real.")
+        },
+        "api" => new (string Title, string Text)[]
+        {
+            ("Confianca", "Latencia, erro e disponibilidade com monitoramento ativo."),
+            ("Seguranca", "Politica de acesso, limite e auditoria de trafego."),
+            ("Escala", "Infra pronta para aumento de integracoes e volume.")
+        },
+        "automation" => new (string Title, string Text)[]
+        {
+            ("Produtividade", "Rotinas repetitivas convertidas em fluxo automatizado."),
+            ("SLA", "Prioridade e escalonamento para manter prazo."),
+            ("Controle", "Telemetria de fila para detectar gargalo rapido.")
+        },
+        "dashboard" => new (string Title, string Text)[]
+        {
+            ("Diretoria", "Indicadores estrategicos em uma visao objetiva."),
+            ("Risco", "Alerta de desvio antes do impacto no negocio."),
+            ("Governanca", "Regra de acesso e trilha de atualizacao de dado.")
+        },
+        "portal" => new (string Title, string Text)[]
+        {
+            ("Cliente", "Acompanhamento transparente do chamado."),
+            ("Suporte", "Historico consolidado para resposta consistente."),
+            ("SLA", "Prioridade e prazo com governanca de atendimento.")
+        },
+        _ => new (string Title, string Text)[]
+        {
+            ("Backoffice", "Pedido, estoque e financeiro conectados."),
+            ("Gestao", "Conferencia e alerta para acao rapida."),
+            ("Escala", "Processo padronizado para crescimento seguro.")
+        }
+    };
+
+    var moduleIconKey = productKey switch
+    {
+        "site" => "stack",
+        "landing" => "rocket",
+        "ecommerce" => "flow",
+        "app" => "mobile",
+        "crm" => "users",
+        "api" => "shield",
+        "automation" => "flow",
+        "dashboard" => "chart",
+        "portal" => "users",
+        _ => "stack"
+    };
+
+    var contextCards = productKey switch
+    {
+        "site" => new (string Icon, string Label, string Value, string Text)[] {
+            ("target", "Objetivo", "Captacao de leads", "Estruturar autoridade, pagina principal e funil comercial."),
+            ("users", "Publico", "Marketing e vendas", "Times que precisam transformar visita em oportunidade qualificada."),
+            ("rocket", "Primeira entrega", "Site + CRM base", "Publicacao com formulario, tracking e pipeline inicial.")
+        },
+        "landing" => new (string Icon, string Label, string Value, string Text)[] {
+            ("target", "Objetivo", "Campanha com ROI", "Subir oferta, testar mensagem e baixar custo por lead."),
+            ("users", "Publico", "Midia e growth", "Operacao de lancamento, lead gen e campanhas segmentadas."),
+            ("rocket", "Primeira entrega", "Pagina + experimento", "Versoes A/B, eventos e leitura por canal.")
+        },
+        "ecommerce" => new (string Icon, string Label, string Value, string Text)[] {
+            ("target", "Objetivo", "Checkout mais fluido", "Vender com menos friccao e mais previsibilidade de estoque."),
+            ("users", "Publico", "Varejo e operacao", "Times que precisam conciliar catalogo, pedido e margem."),
+            ("rocket", "Primeira entrega", "Catalogo + carrinho", "Base comercial com pedido, cupom e visao operacional.")
+        },
+        "app" => new (string Icon, string Label, string Value, string Text)[] {
+            ("target", "Objetivo", "Rotina em campo", "Dar velocidade para equipe, checklist e apontamento."),
+            ("users", "Publico", "Operacao distribuida", "Supervisores, tecnicos e times que dependem de mobilidade."),
+            ("rocket", "Primeira entrega", "Fluxo principal mobile", "Tela de tarefas, status e sincronizacao inicial.")
+        },
+        "crm" => new (string Icon, string Label, string Value, string Text)[] {
+            ("target", "Objetivo", "Previsibilidade comercial", "Organizar pipeline, follow-up e valor por carteira."),
+            ("users", "Publico", "SDR e executivos", "Time comercial que precisa enxergar proximo passo com clareza."),
+            ("rocket", "Primeira entrega", "Funil ativo", "Etapas, owners, cadencia e forecast inicial.")
+        },
+        "api" => new (string Icon, string Label, string Value, string Text)[] {
+            ("target", "Objetivo", "Sistemas conectados", "Sincronizar dados com seguranca, log e observabilidade."),
+            ("users", "Publico", "TI e operacao", "Ambientes com ERP, CRM e modulos que precisam conversar."),
+            ("rocket", "Primeira entrega", "Gateway e logs", "Endpoints criticos com health check e monitoramento.")
+        },
+        "automation" => new (string Icon, string Label, string Value, string Text)[] {
+            ("target", "Objetivo", "Menos rotina manual", "Criar fila, regra e escalonamento para responder mais rapido."),
+            ("users", "Publico", "Backoffice e atendimento", "Times com tarefas repetitivas e volume operacional alto."),
+            ("rocket", "Primeira entrega", "Workflow ativo", "Triggers, SLA e telemetria basica em producao.")
+        },
+        "dashboard" => new (string Icon, string Label, string Value, string Text)[] {
+            ("target", "Objetivo", "Decisao por KPI", "Dar leitura executiva para meta, risco e tendencia de resultado."),
+            ("users", "Publico", "Gestao e diretoria", "Liderancas que precisam agir cedo diante de desvios."),
+            ("rocket", "Primeira entrega", "Painel com alertas", "Metrica principal, threshold e destinatarios base.")
+        },
+        "portal" => new (string Icon, string Label, string Value, string Text)[] {
+            ("target", "Objetivo", "Autosservico com SLA", "Organizar suporte, documentos e historico do cliente."),
+            ("users", "Publico", "Cliente e suporte", "Times que precisam reduzir atrito no relacionamento recorrente."),
+            ("rocket", "Primeira entrega", "Fila de chamados", "Chamado, timeline e knowledge base inicial.")
+        },
+        _ => new (string Icon, string Label, string Value, string Text)[] {
+            ("target", "Objetivo", "Controle da operacao", "Unificar pedido, estoque, financeiro e governanca."),
+            ("users", "Publico", "Gestao e backoffice", "Equipe administrativa que precisa de visao consolidada."),
+            ("rocket", "Primeira entrega", "Pedidos + estoque", "Fluxo principal da operacao com financeiro base.")
+        }
+    };
+}
+
+<section class="page-shell compact proex-page" data-product="@productKey">
+    <div class="container">
+        <nav class="breadcrumb"><a href="/">Home</a> / <a href="/Products">Produtos</a> / <span>@Model.Name</span></nav>
+
+        <header class="proex-hero" data-reveal>
+            <div class="proex-hero-head">
+                <div>
+                    <div class="proex-hero-mark">
+                        <span class="proex-hero-icon">@Html.Raw(IconSvg(moduleIconKey))</span>
+                        <p class="eyebrow">Demo profissional por modulo</p>
+                    </div>
+                    <h1>@Model.Name</h1>
+                    <p>@Model.Summary</p>
+                    <p class="proex-hero-note">@heroLabel</p>
+                    <div class="proex-hero-tags">
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <span>@tag</span>
+                        }
+                    </div>
+                </div>
+                <div class="proex-hero-actions">
+                    <a class="btn btn-primary" href="/Company/Contact">Quero este projeto na minha empresa</a>
+                    <a class="btn btn-outline" href="@demoUrl" target="_blank" rel="noopener noreferrer">Dominio de referencia</a>
+                </div>
+            </div>
+            <div class="proex-hero-stats">
+                @foreach (var item in heroStats)
+                {
+                    <article>
+                        <strong>@item.Value</strong>
+                        <span>@item.Label</span>
+                    </article>
+                }
+            </div>
+        </header>
+
+        <section class="proex-context-grid" data-reveal>
+            @foreach (var item in contextCards)
+            {
+                <article class="card proex-context-card" data-hover-tilt>
+                    <div class="proex-context-head">
+                        <span class="proex-context-icon">@Html.Raw(IconSvg(item.Icon))</span>
+                        <div>
+                            <small>@item.Label</small>
+                            <strong>@item.Value</strong>
+                        </div>
+                    </div>
+                    <p>@item.Text</p>
+                </article>
+            }
+        </section>
+
+        <div class="proex-grid">
+            <article class="card proex-demo" data-reveal>
+                <div class="proex-browser">
+                    <div class="proex-browser-top">
+                        <div class="proex-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+                        <p class="proex-url">@demoUrl</p>
+                        <span class="proex-env">homolog</span>
+                    </div>
+
+                    <section class="proex-app" id="proexApp" data-product="@productKey">
+                        <header class="proex-header">
+                            <div class="proex-brand">
+                                <span class="proex-brand-dot" aria-hidden="true"></span>
+                                <div>
+                                    <strong>@Model.Name</strong>
+                                    <small>Demo completo com menu e operacao real</small>
+                                </div>
+                            </div>
+
+                            <nav class="proex-nav" aria-label="Menu interno do modulo">
+                                <button class="active" type="button" data-view="overview">Visao geral</button>
+                                <button type="button" data-view="operations">Operacao</button>
+                                <button type="button" data-view="analytics">Analytics</button>
+                                <button type="button" data-view="settings">Configuracoes</button>
+                            </nav>
+
+                            <div class="proex-actions">
+                                <span class="proex-pill">producao-ready</span>
+                                <button id="runPrimaryAction" class="proex-btn proex-btn-primary" type="button">Executar acao</button>
+                            </div>
+                        </header>
+
+                        <main class="proex-main">
+                            <section class="proex-view is-active" data-view-panel="overview"></section>
+                            <section class="proex-view" data-view-panel="operations"></section>
+                            <section class="proex-view" data-view-panel="analytics"></section>
+                            <section class="proex-view" data-view-panel="settings"></section>
+                        </main>
+
+                        <footer class="proex-footer">
+                            @foreach (var note in footerNotes)
+                            {
+                                <article>
+                                    <h3>@note.Title</h3>
+                                    <p>@note.Text</p>
+                                </article>
+                            }
+                        </footer>
+                    </section>
+                </div>
+            </article>
+
+            <aside class="proex-sidebar" data-reveal>
+                <section class="card proex-side-card">
+                    <h2><span class="proex-side-icon">@Html.Raw(IconSvg("stack"))</span><span>Escopo de entrega</span></h2>
+                    <ul class="proex-clean-list">
+                        @foreach (var item in deliveryItems)
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+                </section>
+
+                <section class="card proex-side-card">
+                    <h2><span class="proex-side-icon">@Html.Raw(IconSvg("shield"))</span><span>Arquitetura aplicada</span></h2>
+                    <ul class="proex-clean-list">
+                        @foreach (var item in architectureItems)
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+                </section>
+
+                <section class="card proex-side-card">
+                    <h2><span class="proex-side-icon">@Html.Raw(IconSvg("rocket"))</span><span>Checklist de go-live</span></h2>
+                    <ul class="proex-check-list">
+                        <li><label><input type="checkbox" data-go-live checked /> Observabilidade ativa</label></li>
+                        <li><label><input type="checkbox" data-go-live checked /> Perfil e permissao revisados</label></li>
+                        <li><label><input type="checkbox" data-go-live /> Alertas de erro configurados</label></li>
+                        <li><label><input type="checkbox" data-go-live /> Treinamento do time concluido</label></li>
+                        <li><label><input type="checkbox" data-go-live /> Plano de rollback validado</label></li>
+                    </ul>
+                    <p id="goLiveProgress" class="proex-side-note"></p>
+                    <button id="finishGoLive" class="btn btn-outline btn-block" type="button">Finalizar checklist automaticamente</button>
+                </section>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<style>
+    .proex-page {
+        position: relative;
+        isolation: isolate;
+        --proex-halo-a: rgba(56, 189, 248, 0.18);
+        --proex-halo-b: rgba(31, 157, 210, 0.1);
+    }
+
+    .proex-page::before,
+    .proex-page::after {
+        content: "";
+        position: absolute;
+        pointer-events: none;
+        z-index: -1;
+        border-radius: 999px;
+        filter: blur(72px);
+        animation: proex-float 18s ease-in-out infinite alternate;
+    }
+
+    .proex-page::before {
+        width: 320px;
+        height: 320px;
+        top: 14px;
+        right: -110px;
+        background: var(--proex-halo-a);
+    }
+
+    .proex-page::after {
+        width: 280px;
+        height: 280px;
+        left: -110px;
+        top: 38%;
+        background: var(--proex-halo-b);
+        animation-duration: 22s;
+    }
+
+    @@keyframes proex-float {
+        from { transform: translate3d(0, 0, 0) scale(1); }
+        to { transform: translate3d(16px, -14px, 0) scale(1.05); }
+    }
+
+    .proex-page[data-product="site"] { --proex-halo-a: rgba(31, 157, 210, 0.2); --proex-halo-b: rgba(76, 137, 236, 0.14); }
+    .proex-page[data-product="landing"] { --proex-halo-a: rgba(235, 129, 94, 0.22); --proex-halo-b: rgba(251, 171, 146, 0.16); }
+    .proex-page[data-product="ecommerce"] { --proex-halo-a: rgba(241, 164, 66, 0.22); --proex-halo-b: rgba(242, 196, 113, 0.16); }
+    .proex-page[data-product="app"] { --proex-halo-a: rgba(45, 182, 138, 0.22); --proex-halo-b: rgba(109, 204, 171, 0.16); }
+    .proex-page[data-product="crm"] { --proex-halo-a: rgba(42, 156, 192, 0.22); --proex-halo-b: rgba(109, 188, 216, 0.16); }
+    .proex-page[data-product="api"] { --proex-halo-a: rgba(76, 119, 231, 0.2); --proex-halo-b: rgba(128, 156, 238, 0.15); }
+    .proex-page[data-product="automation"] { --proex-halo-a: rgba(233, 170, 75, 0.22); --proex-halo-b: rgba(242, 202, 132, 0.16); }
+    .proex-page[data-product="dashboard"] { --proex-halo-a: rgba(72, 119, 226, 0.2); --proex-halo-b: rgba(132, 162, 238, 0.16); }
+    .proex-page[data-product="portal"] { --proex-halo-a: rgba(89, 126, 192, 0.2); --proex-halo-b: rgba(136, 162, 211, 0.16); }
+    .proex-page[data-product="erp-lite"] { --proex-halo-a: rgba(116, 160, 68, 0.2); --proex-halo-b: rgba(168, 197, 124, 0.16); }
+
+    @@media (prefers-reduced-motion: reduce) {
+        .proex-page::before,
+        .proex-page::after {
+            animation: none;
+        }
+    }
+
+    .proex-hero {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px;
+        margin-bottom: 14px;
+        background: linear-gradient(160deg, rgba(8, 18, 34, 0.88), rgba(7, 14, 27, 0.64));
+    }
+
+    .proex-page[data-product="site"] .proex-hero {
+        background: linear-gradient(155deg, rgba(16, 39, 73, 0.88), rgba(8, 17, 35, 0.72));
+    }
+
+    .proex-page[data-product="landing"] .proex-hero {
+        background: linear-gradient(155deg, rgba(86, 37, 25, 0.88), rgba(34, 14, 10, 0.72));
+    }
+
+    .proex-page[data-product="ecommerce"] .proex-hero {
+        background: linear-gradient(155deg, rgba(88, 50, 13, 0.88), rgba(34, 20, 8, 0.72));
+    }
+
+    .proex-page[data-product="app"] .proex-hero {
+        background: linear-gradient(155deg, rgba(21, 67, 48, 0.88), rgba(10, 31, 22, 0.72));
+    }
+
+    .proex-page[data-product="crm"] .proex-hero {
+        background: linear-gradient(155deg, rgba(17, 58, 74, 0.88), rgba(7, 23, 30, 0.72));
+    }
+
+    .proex-page[data-product="api"] .proex-hero {
+        background: linear-gradient(155deg, rgba(20, 39, 92, 0.88), rgba(9, 17, 42, 0.72));
+    }
+
+    .proex-page[data-product="automation"] .proex-hero {
+        background: linear-gradient(155deg, rgba(79, 57, 20, 0.88), rgba(34, 24, 9, 0.72));
+    }
+
+    .proex-page[data-product="dashboard"] .proex-hero {
+        background: linear-gradient(155deg, rgba(31, 49, 97, 0.88), rgba(12, 21, 44, 0.72));
+    }
+
+    .proex-page[data-product="portal"] .proex-hero {
+        background: linear-gradient(155deg, rgba(37, 54, 92, 0.88), rgba(15, 22, 41, 0.72));
+    }
+
+    .proex-page[data-product="erp-lite"] .proex-hero {
+        background: linear-gradient(155deg, rgba(43, 67, 26, 0.88), rgba(19, 30, 11, 0.72));
+    }
+
+    .proex-hero-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .proex-hero-mark {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 10px;
+    }
+
+    .proex-hero-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #eef8ff;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .proex-hero-icon svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .proex-hero h1 {
+        margin: 0 0 7px;
+    }
+
+    .proex-hero p {
+        margin: 0;
+    }
+
+    .proex-hero-note {
+        margin-top: 7px !important;
+        color: #d6e8ff;
+    }
+
+    .proex-hero-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+    }
+
+    .proex-hero-tags span {
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.08);
+        color: #e9f6ff;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        padding: 7px 10px;
+    }
+
+    .proex-hero-actions {
+        display: grid;
+        gap: 8px;
+        min-width: 250px;
+    }
+
+    .proex-hero-stats {
+        margin-top: 12px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .proex-hero-stats article {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(148, 163, 184, 0.12);
+        padding: 10px;
+    }
+
+    .proex-hero-stats strong {
+        display: block;
+        font-size: 1.02rem;
+    }
+
+    .proex-hero-stats span {
+        color: var(--muted);
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 700;
+    }
+
+    .proex-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.22fr) minmax(300px, 0.78fr);
+        gap: 12px;
+    }
+
+    .proex-context-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .proex-context-card {
+        display: grid;
+        gap: 12px;
+    }
+
+    .proex-context-head {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .proex-context-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--brand);
+        background: rgba(55, 180, 230, 0.12);
+        border: 1px solid rgba(55, 180, 230, 0.16);
+    }
+
+    .proex-context-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .proex-context-head small {
+        display: block;
+        margin-bottom: 3px;
+        color: var(--muted);
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-weight: 700;
+    }
+
+    .proex-context-head strong {
+        display: block;
+        font-size: 0.96rem;
+    }
+
+    .proex-context-card p {
+        margin: 0;
+        color: var(--muted);
+    }
+
+    .proex-demo {
+        padding: 10px;
+        border-radius: 16px;
+    }
+
+    .proex-page[data-product="site"] .proex-demo { background: radial-gradient(circle at 15% 14%, #d7e9ff 0%, #ecf4ff 44%, #f8fbff 100%); }
+    .proex-page[data-product="landing"] .proex-demo { background: radial-gradient(circle at 15% 14%, #ffe1d7 0%, #fff1eb 44%, #fff8f5 100%); }
+    .proex-page[data-product="ecommerce"] .proex-demo { background: radial-gradient(circle at 15% 14%, #ffe8ce 0%, #fff3e7 44%, #fffbf7 100%); }
+    .proex-page[data-product="app"] .proex-demo { background: radial-gradient(circle at 15% 14%, #daf2e5 0%, #edf9f2 44%, #f9fcfa 100%); }
+    .proex-page[data-product="crm"] .proex-demo { background: radial-gradient(circle at 15% 14%, #d8edf8 0%, #ecf7fc 44%, #f8fcfe 100%); }
+    .proex-page[data-product="api"] .proex-demo { background: radial-gradient(circle at 15% 14%, #dce7fd 0%, #edf3ff 44%, #f8faff 100%); }
+    .proex-page[data-product="automation"] .proex-demo { background: radial-gradient(circle at 15% 14%, #f9edd8 0%, #fcf5e9 44%, #fffcf7 100%); }
+    .proex-page[data-product="dashboard"] .proex-demo { background: radial-gradient(circle at 15% 14%, #dbe7ff 0%, #edf2ff 44%, #f8faff 100%); }
+    .proex-page[data-product="portal"] .proex-demo { background: radial-gradient(circle at 15% 14%, #e2e9f8 0%, #eef3fb 44%, #f9fbfe 100%); }
+    .proex-page[data-product="erp-lite"] .proex-demo { background: radial-gradient(circle at 15% 14%, #e6efda 0%, #f1f6e9 44%, #fbfdf8 100%); }
+
+    .proex-browser {
+        border: 1px solid #cad8eb;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 18px 40px rgba(12, 26, 43, 0.2);
+    }
+
+    .proex-browser-top {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 10px;
+        border-bottom: 1px solid #d7e2f1;
+        background: #ecf2fa;
+    }
+
+    .proex-dots {
+        display: inline-flex;
+        gap: 5px;
+    }
+
+    .proex-dots i {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        display: block;
+        background: #8ba4c7;
+    }
+
+    .proex-url {
+        margin: 0;
+        border: 1px solid #c9d6e8;
+        border-radius: 999px;
+        padding: 5px 10px;
+        background: #f8fbff;
+        color: #4f6c90;
+        font-size: 0.74rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .proex-env {
+        border: 1px solid #c9d6e8;
+        border-radius: 999px;
+        padding: 5px 9px;
+        background: #f8fbff;
+        color: #4f6c90;
+        font-size: 0.68rem;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+
+    .proex-app {
+        --accent: #258be6;
+        --accent-soft: #eaf3ff;
+        --line-soft: #d2ddec;
+        --ink: #17324e;
+        --muted-ink: #607ea3;
+        --bg-soft: #f8fbff;
+        color: var(--ink);
+    }
+
+    .proex-page[data-product="landing"] .proex-app { --accent: #d46745; --accent-soft: #fff0eb; }
+    .proex-page[data-product="ecommerce"] .proex-app { --accent: #cf7a24; --accent-soft: #fff4e9; }
+    .proex-page[data-product="app"] .proex-app { --accent: #2d9866; --accent-soft: #ecf8f2; }
+    .proex-page[data-product="crm"] .proex-app { --accent: #258cae; --accent-soft: #ebf8fc; }
+    .proex-page[data-product="api"] .proex-app { --accent: #2f68e3; --accent-soft: #edf2ff; }
+    .proex-page[data-product="automation"] .proex-app { --accent: #ba8733; --accent-soft: #fff8eb; }
+    .proex-page[data-product="dashboard"] .proex-app { --accent: #3c67d1; --accent-soft: #edf1ff; }
+    .proex-page[data-product="portal"] .proex-app { --accent: #4d73a7; --accent-soft: #eef3fa; }
+    .proex-page[data-product="erp-lite"] .proex-app { --accent: #5f8d2e; --accent-soft: #f1f8e9; }
+
+    .proex-header {
+        border-bottom: 1px solid var(--line-soft);
+        background: #fff;
+        padding: 11px 13px;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 10px;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 3;
+    }
+
+    .proex-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .proex-brand-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: var(--accent);
+        box-shadow: 0 0 0 4px rgba(39, 139, 230, 0.15);
+    }
+
+    .proex-brand strong {
+        display: block;
+        font-size: 0.86rem;
+    }
+
+    .proex-brand small {
+        display: block;
+        color: var(--muted-ink);
+        font-size: 0.71rem;
+    }
+
+    .proex-nav {
+        display: inline-flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .proex-nav button {
+        border: none;
+        border-radius: 8px;
+        background: transparent;
+        color: #4f6a8c;
+        font-size: 0.74rem;
+        font-weight: 700;
+        padding: 6px 8px;
+        cursor: pointer;
+    }
+
+    .proex-nav button::before {
+        content: "";
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        margin-right: 6px;
+        border-radius: 999px;
+        background: currentColor;
+        opacity: 0.24;
+        vertical-align: -1px;
+    }
+
+    .proex-nav button.active {
+        color: var(--accent);
+        background: var(--accent-soft);
+    }
+
+    .proex-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .proex-pill {
+        border: 1px solid var(--line-soft);
+        border-radius: 999px;
+        background: var(--bg-soft);
+        color: var(--muted-ink);
+        font-size: 0.66rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-weight: 700;
+        padding: 5px 8px;
+    }
+
+    .proex-btn {
+        border: 1px solid var(--line-soft);
+        border-radius: 9px;
+        background: #fff;
+        color: var(--ink);
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 7px 10px;
+        cursor: pointer;
+    }
+
+    .proex-btn-primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+    }
+
+    .proex-main {
+        background: #f8fbff;
+        padding: 12px;
+    }
+
+    .proex-view {
+        display: none;
+    }
+
+    .proex-view.is-active {
+        display: grid;
+        gap: 10px;
+    }
+
+    .exm-stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .exm-stat {
+        border: 1px solid var(--line-soft);
+        border-radius: 10px;
+        background: #fff;
+        padding: 9px;
+        min-height: 72px;
+    }
+
+    .exm-stat strong {
+        display: block;
+        font-size: 0.98rem;
+    }
+
+    .exm-stat span {
+        display: block;
+        color: var(--muted-ink);
+        font-size: 0.67rem;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-weight: 700;
+        margin-top: 3px;
+    }
+
+    .exm-grid {
+        display: grid;
+        gap: 10px;
+    }
+
+    .exm-grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .exm-grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .exm-card {
+        border: 1px solid var(--line-soft);
+        border-radius: 11px;
+        background: #fff;
+        padding: 12px;
+        box-shadow: 0 12px 26px rgba(22, 44, 78, 0.07);
+    }
+
+    .exm-card h3,
+    .exm-card h4 {
+        margin: 0 0 8px;
+        font-size: 0.84rem;
+    }
+
+    .exm-card p {
+        margin: 0;
+        color: var(--muted-ink);
+        font-size: 0.76rem;
+        line-height: 1.45;
+    }
+
+    .exm-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .exm-table-wrap {
+        overflow-x: auto;
+        margin: -2px;
+        padding: 2px;
+    }
+
+    .exm-table th,
+    .exm-table td {
+        border-bottom: 1px solid #e0e9f5;
+        padding: 7px;
+        text-align: left;
+        font-size: 0.73rem;
+        color: #26415f;
+    }
+
+    .exm-table th {
+        font-size: 0.66rem;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: #627f9f;
+    }
+
+    .exm-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 6px;
+    }
+
+    .exm-list li {
+        border: 1px solid var(--line-soft);
+        border-radius: 8px;
+        background: var(--bg-soft);
+        padding: 8px;
+        color: #4f6b8f;
+        font-size: 0.74rem;
+    }
+
+    .exm-form {
+        display: grid;
+        gap: 8px;
+    }
+
+    .exm-form-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .exm-input,
+    .exm-select,
+    .exm-textarea,
+    .exm-range {
+        width: 100%;
+        border: 1px solid var(--line-soft);
+        border-radius: 10px;
+        background: #fff;
+        color: var(--ink);
+        font: inherit;
+        font-size: 0.76rem;
+        padding: 8px 10px;
+    }
+
+    .exm-textarea {
+        min-height: 98px;
+        resize: vertical;
+    }
+
+    .exm-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .exm-progress {
+        height: 9px;
+        border-radius: 999px;
+        background: #deebfa;
+        overflow: hidden;
+    }
+
+    .exm-progress i {
+        display: block;
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), #64b5ff);
+    }
+
+    .exm-badge {
+        border: 1px solid #ccdaeb;
+        border-radius: 999px;
+        padding: 3px 7px;
+        font-size: 0.63rem;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: #5d7b9f;
+        background: #f8fbff;
+        font-weight: 700;
+    }
+
+    .exm-badge.ok { border-color: #8dcfb5; color: #1d7653; background: #eefaf4; }
+    .exm-badge.warn { border-color: #eccf95; color: #94671b; background: #fff8ec; }
+    .exm-badge.err { border-color: #e7a2a2; color: #9c3e3e; background: #fff1f1; }
+    .exm-badge.info { border-color: #9ec2e8; color: #2a668f; background: #edf6ff; }
+
+    .exm-board {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .exm-col {
+        border: 1px solid var(--line-soft);
+        border-radius: 10px;
+        background: #fff;
+        padding: 8px;
+        display: grid;
+        gap: 7px;
+        align-content: start;
+        min-height: 180px;
+    }
+
+    .exm-col h4 {
+        margin: 0;
+        font-size: 0.69rem;
+        color: #607ea3;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+    }
+
+    .exm-item {
+        border: 1px solid var(--line-soft);
+        border-radius: 8px;
+        background: var(--bg-soft);
+        padding: 7px;
+        display: grid;
+        gap: 6px;
+    }
+
+    .exm-item strong {
+        font-size: 0.74rem;
+    }
+
+    .exm-item p {
+        margin: 0;
+        font-size: 0.71rem;
+        color: #5b799e;
+    }
+
+    .exm-item-actions {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .exm-log {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 6px;
+        max-height: 220px;
+        overflow: auto;
+    }
+
+    .exm-log li {
+        border: 1px solid var(--line-soft);
+        border-radius: 8px;
+        background: var(--bg-soft);
+        padding: 8px;
+        color: #4f6b8f;
+        font-size: 0.73rem;
+    }
+
+    .exm-heatmap {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .exm-heat {
+        border: 1px solid var(--line-soft);
+        border-radius: 8px;
+        padding: 6px;
+        font-size: 0.69rem;
+        text-align: center;
+        background: #fff;
+    }
+
+    .exm-heat.lv1 { background: #f4f8ff; }
+    .exm-heat.lv2 { background: #e6f1ff; }
+    .exm-heat.lv3 { background: #d7e9ff; }
+    .exm-heat.lv4 { background: #c8e0ff; }
+
+    .exm-bar-row {
+        display: grid;
+        gap: 5px;
+        margin-bottom: 8px;
+    }
+
+    .exm-bar-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 0.72rem;
+        color: #537193;
+    }
+
+    .proex-footer {
+        border-top: 1px solid var(--line-soft);
+        background: #f7faff;
+        padding: 11px 13px;
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .proex-footer h3 {
+        margin: 0 0 4px;
+        font-size: 0.75rem;
+    }
+
+    .proex-footer p {
+        margin: 0;
+        color: var(--muted-ink);
+        font-size: 0.7rem;
+        line-height: 1.45;
+    }
+
+    .proex-sidebar {
+        display: grid;
+        gap: 10px;
+        align-content: start;
+        position: sticky;
+        top: 106px;
+        align-self: start;
+    }
+
+    .proex-side-card {
+        display: grid;
+        gap: 10px;
+    }
+
+    .proex-side-card h2 {
+        margin: 0;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .proex-side-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--brand);
+        background: rgba(55, 180, 230, 0.12);
+        border: 1px solid rgba(55, 180, 230, 0.16);
+    }
+
+    .proex-side-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .exm-card-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .exm-card-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        background: var(--accent-soft);
+        border: 1px solid rgba(37, 139, 230, 0.12);
+        flex: 0 0 auto;
+    }
+
+    .exm-card-icon svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .exm-card-head h3,
+    .exm-card-head h4 {
+        margin: 0;
+    }
+
+    .proex-clean-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 8px;
+    }
+
+    .proex-clean-list li {
+        position: relative;
+        padding-left: 15px;
+        color: var(--muted);
+        font-size: 0.9rem;
+    }
+
+    .proex-clean-list li::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: var(--brand);
+        position: absolute;
+        left: 0;
+        top: 0.53em;
+    }
+
+    .proex-check-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 8px;
+    }
+
+    .proex-check-list label {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.88rem;
+        color: var(--muted);
+    }
+
+    .proex-check-list input {
+        width: auto;
+    }
+
+    .proex-side-note {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.84rem;
+        font-weight: 700;
+    }
+
+    @@media (max-width: 1180px) {
+        .proex-context-grid,
+        .proex-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .proex-sidebar {
+            position: static;
+        }
+    }
+
+    @@media (max-width: 980px) {
+        .proex-header {
+            grid-template-columns: 1fr;
+            align-items: flex-start;
+        }
+
+        .proex-nav {
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+        }
+
+        .proex-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .proex-actions {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .proex-footer,
+        .exm-grid.two,
+        .exm-grid.three,
+        .exm-board,
+        .exm-stats,
+        .proex-hero-stats {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 760px) {
+        .proex-hero-mark {
+            align-items: flex-start;
+        }
+
+        .proex-hero-icon {
+            width: 46px;
+            height: 46px;
+        }
+
+        .proex-hero-actions {
+            width: 100%;
+        }
+
+        .proex-hero-actions .btn {
+            width: 100%;
+        }
+
+        .exm-form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .proex-browser-top {
+            grid-template-columns: auto 1fr;
+        }
+
+        .proex-env {
+            display: none;
+        }
+
+        .proex-actions {
+            display: grid;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .proex-pill,
+        .proex-btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        .exm-heatmap {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .proex-main {
+            padding: 8px;
+        }
+
+        .proex-side-card,
+        .proex-context-card {
+            padding: 16px;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const app = document.getElementById("proexApp");
+        if (!app) return;
+
+        const productKey = app.getAttribute("data-product") || "erp-lite";
+        const views = {
+            overview: app.querySelector('[data-view-panel="overview"]'),
+            operations: app.querySelector('[data-view-panel="operations"]'),
+            analytics: app.querySelector('[data-view-panel="analytics"]'),
+            settings: app.querySelector('[data-view-panel="settings"]')
+        };
+
+        const navButtons = Array.from(app.querySelectorAll("[data-view]"));
+        const primaryActionButton = document.getElementById("runPrimaryAction");
+        const goLiveBoxes = Array.from(document.querySelectorAll("[data-go-live]"));
+        const goLiveProgress = document.getElementById("goLiveProgress");
+        const goLiveFinish = document.getElementById("finishGoLive");
+
+        const intFmt = new Intl.NumberFormat("pt-BR");
+        const moneyFmt = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+        const randomBetween = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+        const statusClass = (status) => {
+            const value = (status || "").toLowerCase();
+            if (value.includes("ok") || value.includes("estavel") || value.includes("concl") || value.includes("resol")) return "ok";
+            if (value.includes("crit") || value.includes("erro") || value.includes("falha") || value.includes("bloq")) return "err";
+            if (value.includes("aten") || value.includes("pend") || value.includes("analise") || value.includes("esc")) return "warn";
+            return "info";
+        };
+
+        const percent = (part, total) => total > 0 ? `${Math.round((part / total) * 100)}%` : "0%";
+        const money = (value) => moneyFmt.format(value);
+        const count = (value) => intFmt.format(value);
+
+        const setView = (viewName) => {
+            Object.keys(views).forEach((name) => {
+                const panel = views[name];
+                if (!panel) return;
+                panel.classList.toggle("is-active", name === viewName);
+            });
+            navButtons.forEach((button) => {
+                button.classList.toggle("active", button.getAttribute("data-view") === viewName);
+            });
+        };
+
+        navButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const viewName = button.getAttribute("data-view") || "overview";
+                setView(viewName);
+            });
+        });
+
+        const updateGoLive = () => {
+            const done = goLiveBoxes.filter((box) => box.checked).length;
+            if (goLiveProgress) goLiveProgress.textContent = `${done} de ${goLiveBoxes.length} itens concluidos`;
+        };
+
+        goLiveBoxes.forEach((box) => box.addEventListener("change", updateGoLive));
+        goLiveFinish?.addEventListener("click", () => {
+            goLiveBoxes.forEach((box) => {
+                box.checked = true;
+            });
+            updateGoLive();
+        });
+
+        updateGoLive();
+
+        const setPrimaryAction = (label, handler) => {
+            if (!primaryActionButton) return;
+            primaryActionButton.textContent = label;
+            primaryActionButton.onclick = handler;
+        };
+
+        const renderBadge = (status) => `<span class="exm-badge ${statusClass(status)}">${status}</span>`;
+        const renderLog = (logs, limit = 10) => `<ul class="exm-log">${logs.slice(0, limit).map((entry) => `<li>${entry}</li>`).join("")}</ul>`;
+
+        const iconForTitle = (title) => {
+            const value = (title || "").toLowerCase();
+            if (/lead|funil|pipeline|campanha|marketing|comercial|cadencia/.test(value)) {
+                return "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M4 19h16'/><path d='M7 16V9'/><path d='M12 16V5'/><path d='M17 16v-4'/></svg>";
+            }
+            if (/estoque|pedido|checkout|catalogo|financeiro|erp/.test(value)) {
+                return "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M12 4l8 4-8 4-8-4 8-4z'/><path d='M4 12l8 4 8-4'/><path d='M4 16l8 4 8-4'/></svg>";
+            }
+            if (/app|mobile|equipe|rota|checklist/.test(value)) {
+                return "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><rect x='7' y='2.8' width='10' height='18.4' rx='2.3'/><path d='M10 5.5h4'/><circle cx='12' cy='17.8' r='0.9'/></svg>";
+            }
+            if (/kpi|dashboard|meta|tendencia|analytics|indicador/.test(value)) {
+                return "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M4 19h16'/><path d='M7 16V9'/><path d='M12 16V5'/><path d='M17 16v-4'/></svg>";
+            }
+            if (/workflow|fila|sla|retentativa|escalonamento|throughput/.test(value)) {
+                return "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><circle cx='6' cy='6' r='2.5'/><circle cx='18' cy='6' r='2.5'/><circle cx='12' cy='18' r='2.5'/><path d='M8.5 6h7'/><path d='M7.8 8.1l2.8 6.3'/><path d='M16.2 8.1l-2.8 6.3'/></svg>";
+            }
+            if (/segur|govern|api|gateway|portal|permiss|ticket/.test(value)) {
+                return "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6l7-3z'/><path d='M9.5 12.2l1.8 1.8 3.4-3.8'/></svg>";
+            }
+            return "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><rect x='4' y='4' width='16' height='16' rx='3'/></svg>";
+        };
+
+        const decoratePanels = () => {
+            Object.values(views).forEach((panel) => {
+                if (!(panel instanceof HTMLElement)) return;
+
+                panel.querySelectorAll(".exm-card").forEach((card) => {
+                    if (!(card instanceof HTMLElement)) return;
+                    const heading = card.querySelector("h3, h4");
+                    if (heading instanceof HTMLElement && !card.querySelector(".exm-card-head")) {
+                        const head = document.createElement("div");
+                        head.className = "exm-card-head";
+                        const icon = document.createElement("span");
+                        icon.className = "exm-card-icon";
+                        icon.innerHTML = iconForTitle(heading.textContent || "");
+                        heading.parentNode?.insertBefore(head, heading);
+                        head.appendChild(icon);
+                        head.appendChild(heading);
+                    }
+
+                    card.querySelectorAll(".exm-table").forEach((table) => {
+                        if (!(table instanceof HTMLTableElement)) return;
+                        if (table.parentElement?.classList.contains("exm-table-wrap")) return;
+                        const wrap = document.createElement("div");
+                        wrap.className = "exm-table-wrap";
+                        table.parentNode?.insertBefore(wrap, table);
+                        wrap.appendChild(table);
+                    });
+                });
+            });
+        };
+
+        const panelObserver = "MutationObserver" in window
+            ? new MutationObserver(() => decoratePanels())
+            : null;
+
+        Object.values(views).forEach((panel) => {
+            if (panelObserver && panel instanceof HTMLElement) {
+                panelObserver.observe(panel, { childList: true, subtree: true });
+            }
+        });
+
+        const createSiteController = () => {
+            const state = {
+                visits: 6200,
+                leads: 248,
+                meetings: 64,
+                wins: 22,
+                responseSla: 15,
+                seoScore: 87,
+                pipeline: [
+                    { company: "Grupo Atlas", channel: "Google Ads", budget: 58000, status: "Qualificado", owner: "Alice" },
+                    { company: "Clinica Prime", channel: "SEO", budget: 41000, status: "Contato", owner: "Bruno" },
+                    { company: "Rede Delta", channel: "Outbound", budget: 72000, status: "Novo", owner: "Carla" }
+                ],
+                channels: [
+                    { name: "Google Ads", spend: 12600, leads: 122 },
+                    { name: "SEO", spend: 2900, leads: 58 },
+                    { name: "Meta Ads", spend: 7400, leads: 51 },
+                    { name: "Outbound", spend: 4100, leads: 17 }
+                ],
+                pages: [
+                    { name: "Home", conv: 3.8, dwell: "2m 18s", status: "ok" },
+                    { name: "Cases", conv: 4.5, dwell: "3m 06s", status: "ok" },
+                    { name: "Contato", conv: 2.2, dwell: "1m 11s", status: "warn" }
+                ],
+                logs: ["Site carregado com funil comercial inicial."]
+            };
+
+            const renderOverview = () => {
+                views.overview.innerHTML = `
+                    <section class="exm-stats">
+                        <article class="exm-stat"><strong>${count(state.visits)}</strong><span>Visitas qualificadas</span></article>
+                        <article class="exm-stat"><strong>${count(state.leads)}</strong><span>Leads</span></article>
+                        <article class="exm-stat"><strong>${percent(state.meetings, state.leads)}</strong><span>Lead para reuniao</span></article>
+                        <article class="exm-stat"><strong>${percent(state.wins, state.meetings)}</strong><span>Ganho comercial</span></article>
+                    </section>
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Funil institucional</h3>
+                            <div class="exm-bar-row"><div class="exm-bar-head"><span>Visitas</span><strong>${count(state.visits)}</strong></div><div class="exm-progress"><i style="width:100%"></i></div></div>
+                            <div class="exm-bar-row"><div class="exm-bar-head"><span>Leads</span><strong>${count(state.leads)}</strong></div><div class="exm-progress"><i style="width:${(state.leads / state.visits) * 100}%"></i></div></div>
+                            <div class="exm-bar-row"><div class="exm-bar-head"><span>Reunioes</span><strong>${count(state.meetings)}</strong></div><div class="exm-progress"><i style="width:${(state.meetings / state.leads) * 100}%"></i></div></div>
+                            <div class="exm-bar-row"><div class="exm-bar-head"><span>Fechamentos</span><strong>${count(state.wins)}</strong></div><div class="exm-progress"><i style="width:${(state.wins / state.meetings) * 100}%"></i></div></div>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Canal de aquisicao</h3>
+                            <table class="exm-table">
+                                <thead><tr><th>Canal</th><th>Leads</th><th>Invest.</th><th>CPL</th></tr></thead>
+                                <tbody>
+                                    ${state.channels.map((channel) => `<tr><td>${channel.name}</td><td>${count(channel.leads)}</td><td>${money(channel.spend)}</td><td>${money(Math.round(channel.spend / Math.max(1, channel.leads)))}</td></tr>`).join("")}
+                                </tbody>
+                            </table>
+                        </article>
+                    </section>
+                `;
+            };
+
+            const renderOperations = () => {
+                views.operations.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Novo lead</h3>
+                            <form id="siteLeadForm" class="exm-form">
+                                <div class="exm-form-row">
+                                    <input id="siteCompany" class="exm-input" placeholder="Empresa" required />
+                                    <select id="siteChannel" class="exm-select">${state.channels.map((channel) => `<option>${channel.name}</option>`).join("")}</select>
+                                </div>
+                                <div class="exm-form-row">
+                                    <input id="siteBudget" class="exm-input" type="number" min="5000" value="35000" />
+                                    <input id="siteOwner" class="exm-input" placeholder="Responsavel" value="SDR Time" />
+                                </div>
+                                <div class="exm-actions">
+                                    <button class="proex-btn proex-btn-primary" type="submit">Adicionar lead</button>
+                                    <button class="proex-btn" type="button" id="siteAutoQualify">Qualificar top leads</button>
+                                </div>
+                            </form>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Pipeline</h3>
+                            <table class="exm-table">
+                                <thead><tr><th>Empresa</th><th>Canal</th><th>Status</th><th>Potencial</th></tr></thead>
+                                <tbody>${state.pipeline.map((lead) => `<tr><td>${lead.company}</td><td>${lead.channel}</td><td>${renderBadge(lead.status)}</td><td>${money(lead.budget)}</td></tr>`).join("")}</tbody>
+                            </table>
+                        </article>
+                    </section>
+                `;
+
+                views.operations.querySelector("#siteLeadForm")?.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const companyInput = views.operations.querySelector("#siteCompany");
+                    const channelInput = views.operations.querySelector("#siteChannel");
+                    const budgetInput = views.operations.querySelector("#siteBudget");
+                    const ownerInput = views.operations.querySelector("#siteOwner");
+                    if (!(companyInput instanceof HTMLInputElement) || !(channelInput instanceof HTMLSelectElement) || !(budgetInput instanceof HTMLInputElement) || !(ownerInput instanceof HTMLInputElement)) return;
+                    const company = companyInput.value.trim();
+                    if (!company) return;
+                    state.pipeline.unshift({ company, channel: channelInput.value, budget: Math.max(5000, Number(budgetInput.value || "0")), status: "Novo", owner: ownerInput.value.trim() || "SDR" });
+                    state.leads += 1;
+                    state.logs.unshift(`Lead adicionado: ${company}.`);
+                    companyInput.value = "";
+                    budgetInput.value = "35000";
+                    renderAll();
+                });
+
+                views.operations.querySelector("#siteAutoQualify")?.addEventListener("click", () => {
+                    let qualified = 0;
+                    state.pipeline.forEach((lead) => {
+                        if (lead.status === "Novo" && lead.budget >= 30000) {
+                            lead.status = "Qualificado";
+                            qualified += 1;
+                        }
+                    });
+                    if (qualified > 0) {
+                        state.meetings += qualified;
+                        state.logs.unshift(`${qualified} lead(s) qualificados automaticamente.`);
+                    }
+                    renderAll();
+                });
+            };
+
+            const renderAnalytics = () => {
+                views.analytics.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Performance de paginas</h3>
+                            <table class="exm-table">
+                                <thead><tr><th>Pagina</th><th>Conversao</th><th>Tempo</th><th>Status</th></tr></thead>
+                                <tbody>${state.pages.map((page) => `<tr><td>${page.name}</td><td>${page.conv}%</td><td>${page.dwell}</td><td>${renderBadge(page.status)}</td></tr>`).join("")}</tbody>
+                            </table>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Log de marketing</h3>
+                            ${renderLog(state.logs)}
+                        </article>
+                    </section>
+                `;
+            };
+
+            const renderSettings = () => {
+                views.settings.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Configuracoes</h3>
+                            <ul class="exm-list">
+                                <li><label><input id="siteSeo" type="checkbox" ${state.seoScore >= 80 ? "checked" : ""} /> SEO tecnico monitorado</label></li>
+                                <li><label><input id="siteChat" type="checkbox" checked /> Chat de captura ativo</label></li>
+                                <li><label><input id="siteAb" type="checkbox" /> Teste de headline em home</label></li>
+                            </ul>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Parametros</h3>
+                            <div class="exm-form">
+                                <label>SLA de resposta comercial (${state.responseSla} min)</label>
+                                <input id="siteSla" class="exm-range" type="range" min="5" max="45" value="${state.responseSla}" />
+                                <label>Score de SEO (${state.seoScore})</label>
+                                <input id="siteSeoScore" class="exm-range" type="range" min="60" max="100" value="${state.seoScore}" />
+                                <button id="siteSaveConfig" class="proex-btn proex-btn-primary" type="button">Salvar configuracoes</button>
+                            </div>
+                        </article>
+                    </section>
+                `;
+
+                views.settings.querySelector("#siteSaveConfig")?.addEventListener("click", () => {
+                    const slaInput = views.settings.querySelector("#siteSla");
+                    const scoreInput = views.settings.querySelector("#siteSeoScore");
+                    if (!(slaInput instanceof HTMLInputElement) || !(scoreInput instanceof HTMLInputElement)) return;
+                    state.responseSla = Number(slaInput.value);
+                    state.seoScore = Number(scoreInput.value);
+                    state.logs.unshift("Parametros de marketing salvos.");
+                    renderAll();
+                });
+            };
+
+            const runPrimary = () => {
+                const extraVisits = randomBetween(240, 540);
+                const extraLeads = randomBetween(16, 38);
+                state.visits += extraVisits;
+                state.leads += extraLeads;
+                state.meetings += Math.max(2, Math.round(extraLeads * 0.25));
+                state.wins += Math.max(1, Math.round(extraLeads * 0.08));
+                state.logs.unshift(`Sprint comercial concluido: +${extraVisits} visitas e +${extraLeads} leads.`);
+                renderAll();
+            };
+
+            const renderAll = () => {
+                renderOverview();
+                renderOperations();
+                renderAnalytics();
+                renderSettings();
+            };
+
+            return { primaryLabel: "Rodar sprint comercial", runPrimary, renderAll };
+        };
+
+        const createLandingController = () => {
+            const state = {
+                visitors: 8400,
+                leads: 638,
+                variants: [
+                    { id: "v1", name: "Oferta A", headline: "Consultoria com diagnostico gratis", cta: "Quero analisar agora", conv: 7.2, cpa: 34, winner: false },
+                    { id: "v2", name: "Oferta B", headline: "Projeto em 14 dias", cta: "Agendar reuniao", conv: 8.9, cpa: 27, winner: true },
+                    { id: "v3", name: "Oferta C", headline: "Equipe senior dedicada", cta: "Receber proposta", conv: 6.3, cpa: 39, winner: false }
+                ],
+                channels: [
+                    { name: "Google", spend: 14600, leads: 262 },
+                    { name: "Meta", spend: 9200, leads: 219 },
+                    { name: "LinkedIn", spend: 4800, leads: 81 },
+                    { name: "Email", spend: 1200, leads: 76 }
+                ],
+                budgetSplit: { google: 45, meta: 30, linkedin: 20, email: 5 },
+                heatmap: [1, 2, 2, 3, 4, 2, 1, 2, 3, 4, 3, 2],
+                logs: ["Landing iniciada com experimento ativo."]
+            };
+
+            const bestVariant = () => state.variants.reduce((best, current) => current.conv > best.conv ? current : best, state.variants[0]);
+
+            const renderOverview = () => {
+                const winner = bestVariant();
+                views.overview.innerHTML = `
+                    <section class="exm-stats">
+                        <article class="exm-stat"><strong>${count(state.visitors)}</strong><span>Visitas</span></article>
+                        <article class="exm-stat"><strong>${count(state.leads)}</strong><span>Leads</span></article>
+                        <article class="exm-stat"><strong>${percent(state.leads, state.visitors)}</strong><span>Conversao</span></article>
+                        <article class="exm-stat"><strong>${winner.name}</strong><span>Melhor variacao</span></article>
+                    </section>
+                    <section class="exm-grid three">
+                        ${state.variants.map((variant) => `
+                            <article class="exm-card">
+                                <h3>${variant.name} ${variant.winner ? '<span class="exm-badge ok">winner</span>' : ""}</h3>
+                                <p>${variant.headline}</p>
+                                <p style="margin-top:6px"><strong>${variant.conv}%</strong> conversao | <strong>${money(variant.cpa)}</strong> CPL</p>
+                                <p style="margin-top:4px">CTA: ${variant.cta}</p>
+                            </article>
+                        `).join("")}
+                    </section>
+                `;
+            };
+
+            const renderOperations = () => {
+                views.operations.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Criar variacao</h3>
+                            <form id="landingVariantForm" class="exm-form">
+                                <input id="landingName" class="exm-input" placeholder="Nome da variacao" required />
+                                <input id="landingHeadline" class="exm-input" placeholder="Headline" required />
+                                <input id="landingCta" class="exm-input" placeholder="CTA" required />
+                                <div class="exm-form-row">
+                                    <input id="landingConv" class="exm-input" type="number" min="1" max="20" step="0.1" value="7.5" />
+                                    <input id="landingCpa" class="exm-input" type="number" min="5" value="31" />
+                                </div>
+                                <button class="proex-btn proex-btn-primary" type="submit">Adicionar variacao</button>
+                            </form>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Gerenciar experimento</h3>
+                            <ul class="exm-list">
+                                ${state.variants.map((variant) => `
+                                    <li>
+                                        <strong>${variant.name}</strong><br/>
+                                        ${variant.headline}<br/>
+                                        Conv: ${variant.conv}% | CPL: ${money(variant.cpa)}
+                                        <div class="exm-actions" style="margin-top:6px">
+                                            <button class="proex-btn" type="button" data-winner="${variant.id}">Definir vencedora</button>
+                                        </div>
+                                    </li>
+                                `).join("")}
+                            </ul>
+                        </article>
+                    </section>
+                `;
+
+                views.operations.querySelector("#landingVariantForm")?.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const nameInput = views.operations.querySelector("#landingName");
+                    const headlineInput = views.operations.querySelector("#landingHeadline");
+                    const ctaInput = views.operations.querySelector("#landingCta");
+                    const convInput = views.operations.querySelector("#landingConv");
+                    const cpaInput = views.operations.querySelector("#landingCpa");
+                    if (!(nameInput instanceof HTMLInputElement) || !(headlineInput instanceof HTMLInputElement) || !(ctaInput instanceof HTMLInputElement) || !(convInput instanceof HTMLInputElement) || !(cpaInput instanceof HTMLInputElement)) return;
+                    const name = nameInput.value.trim();
+                    if (!name) return;
+                    state.variants.unshift({
+                        id: `v${Date.now()}`,
+                        name,
+                        headline: headlineInput.value.trim() || "Nova headline",
+                        cta: ctaInput.value.trim() || "Saiba mais",
+                        conv: Number(convInput.value || "7.0"),
+                        cpa: Number(cpaInput.value || "30"),
+                        winner: false
+                    });
+                    state.logs.unshift(`Nova variacao criada: ${name}.`);
+                    nameInput.value = "";
+                    headlineInput.value = "";
+                    ctaInput.value = "";
+                    renderAll();
+                });
+
+                views.operations.querySelectorAll("[data-winner]").forEach((button) => {
+                    button.addEventListener("click", () => {
+                        const id = button.getAttribute("data-winner") || "";
+                        state.variants.forEach((variant) => {
+                            variant.winner = variant.id === id;
+                        });
+                        const winner = state.variants.find((variant) => variant.id === id);
+                        if (winner) {
+                            state.logs.unshift(`Variacao vencedora definida: ${winner.name}.`);
+                        }
+                        renderAll();
+                    });
+                });
+            };
+
+            const renderAnalytics = () => {
+                views.analytics.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Performance por canal</h3>
+                            <table class="exm-table">
+                                <thead><tr><th>Canal</th><th>Leads</th><th>Invest.</th><th>CPL</th></tr></thead>
+                                <tbody>${state.channels.map((channel) => `<tr><td>${channel.name}</td><td>${count(channel.leads)}</td><td>${money(channel.spend)}</td><td>${money(Math.round(channel.spend / Math.max(1, channel.leads)))}</td></tr>`).join("")}</tbody>
+                            </table>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Heatmap de horario</h3>
+                            <div class="exm-heatmap">${state.heatmap.map((level, idx) => `<div class="exm-heat lv${Math.min(level, 4)}">H${8 + idx}<br/>${level}</div>`).join("")}</div>
+                            <div style="margin-top:8px">${renderLog(state.logs, 6)}</div>
+                        </article>
+                    </section>
+                `;
+            };
+
+            const renderSettings = () => {
+                const totalSplit = state.budgetSplit.google + state.budgetSplit.meta + state.budgetSplit.linkedin + state.budgetSplit.email;
+                views.settings.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Distribuicao de verba</h3>
+                            <div class="exm-form">
+                                <label>Google (${state.budgetSplit.google}%)</label>
+                                <input id="splitGoogle" class="exm-range" type="range" min="0" max="100" value="${state.budgetSplit.google}" />
+                                <label>Meta (${state.budgetSplit.meta}%)</label>
+                                <input id="splitMeta" class="exm-range" type="range" min="0" max="100" value="${state.budgetSplit.meta}" />
+                                <label>LinkedIn (${state.budgetSplit.linkedin}%)</label>
+                                <input id="splitLinkedin" class="exm-range" type="range" min="0" max="100" value="${state.budgetSplit.linkedin}" />
+                                <label>Email (${state.budgetSplit.email}%)</label>
+                                <input id="splitEmail" class="exm-range" type="range" min="0" max="100" value="${state.budgetSplit.email}" />
+                                <p>Total atual: <strong>${totalSplit}%</strong> ${totalSplit === 100 ? renderBadge("ok") : renderBadge("atencao")}</p>
+                                <button id="landingSave" class="proex-btn proex-btn-primary" type="button">Salvar distribuicao</button>
+                            </div>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Regras de experimento</h3>
+                            <ul class="exm-list">
+                                <li><label><input type="checkbox" checked /> Pausar variacao abaixo de 5% de conversao</label></li>
+                                <li><label><input type="checkbox" checked /> Priorizar fonte com CPL menor</label></li>
+                                <li><label><input type="checkbox" /> Notificar time a cada 500 visitas</label></li>
+                            </ul>
+                        </article>
+                    </section>
+                `;
+
+                views.settings.querySelector("#landingSave")?.addEventListener("click", () => {
+                    const g = views.settings.querySelector("#splitGoogle");
+                    const m = views.settings.querySelector("#splitMeta");
+                    const l = views.settings.querySelector("#splitLinkedin");
+                    const e = views.settings.querySelector("#splitEmail");
+                    if (!(g instanceof HTMLInputElement) || !(m instanceof HTMLInputElement) || !(l instanceof HTMLInputElement) || !(e instanceof HTMLInputElement)) return;
+                    state.budgetSplit.google = Number(g.value);
+                    state.budgetSplit.meta = Number(m.value);
+                    state.budgetSplit.linkedin = Number(l.value);
+                    state.budgetSplit.email = Number(e.value);
+                    state.logs.unshift("Distribuicao de verba atualizada.");
+                    renderAll();
+                });
+            };
+
+            const runPrimary = () => {
+                state.visitors += randomBetween(260, 620);
+                const generated = randomBetween(18, 45);
+                state.leads += generated;
+                state.variants.forEach((variant) => {
+                    variant.conv = Number(Math.max(3, Math.min(15, variant.conv + (Math.random() * 1.2 - 0.6))).toFixed(1));
+                    variant.cpa = Math.max(12, Math.round(variant.cpa + randomBetween(-3, 4)));
+                });
+                const winner = bestVariant();
+                state.variants.forEach((variant) => {
+                    variant.winner = variant.id === winner.id;
+                });
+                state.logs.unshift(`Rodada de experimento executada: +${generated} leads.`);
+                renderAll();
+            };
+
+            const renderAll = () => {
+                renderOverview();
+                renderOperations();
+                renderAnalytics();
+                renderSettings();
+            };
+
+            return { primaryLabel: "Rodar experimento de campanha", runPrimary, renderAll };
+        };
+
+        const createEcommerceController = () => {
+            const state = {
+                catalog: [
+                    { id: "p1", name: "Pacote Site Premium", price: 2490, stock: 16, sold: 42 },
+                    { id: "p2", name: "Plano App Operacao", price: 5190, stock: 9, sold: 27 },
+                    { id: "p3", name: "Kit CRM Comercial", price: 3890, stock: 12, sold: 31 },
+                    { id: "p4", name: "Modulo BI Executivo", price: 2990, stock: 8, sold: 22 }
+                ],
+                cart: [],
+                orders: 126,
+                approved: 114,
+                coupon: 0,
+                abandoned: 19,
+                logs: ["Loja inicializada com estoque sincronizado."]
+            };
+
+            const getProduct = (id) => state.catalog.find((product) => product.id === id);
+            const cartTotal = () => {
+                const subtotal = state.cart.reduce((sum, line) => {
+                    const product = getProduct(line.id);
+                    return sum + (product ? product.price * line.qty : 0);
+                }, 0);
+                return Math.max(0, subtotal * (1 - state.coupon));
+            };
+            const soldRevenue = () => state.catalog.reduce((sum, product) => sum + product.price * product.sold, 0);
+
+            const renderOverview = () => {
+                views.overview.innerHTML = `
+                    <section class="exm-stats">
+                        <article class="exm-stat"><strong>${money(soldRevenue())}</strong><span>Receita acumulada</span></article>
+                        <article class="exm-stat"><strong>${count(state.orders)}</strong><span>Pedidos</span></article>
+                        <article class="exm-stat"><strong>${percent(state.approved, state.orders)}</strong><span>Aprovacao checkout</span></article>
+                        <article class="exm-stat"><strong>${state.abandoned}</strong><span>Carrinhos abandonados</span></article>
+                    </section>
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Top produtos</h3>
+                            <table class="exm-table">
+                                <thead><tr><th>Produto</th><th>Vendidos</th><th>Estoque</th><th>Status</th></tr></thead>
+                                <tbody>${state.catalog.map((product) => `<tr><td>${product.name}</td><td>${product.sold}</td><td>${product.stock}</td><td>${renderBadge(product.stock <= 4 ? "atencao" : "ok")}</td></tr>`).join("")}</tbody>
+                            </table>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Resumo comercial</h3>
+                            <ul class="exm-list">
+                                <li>Ticket medio: ${money(Math.round(soldRevenue() / Math.max(1, state.approved)))}</li>
+                                <li>Cupom ativo: ${state.coupon > 0 ? `${state.coupon * 100}%` : "nenhum"}</li>
+                                <li>Ruptura de estoque: ${state.catalog.filter((product) => product.stock <= 3).length} item(ns)</li>
+                            </ul>
+                        </article>
+                    </section>
+                `;
+            };
+
+            const renderOperations = () => {
+                views.operations.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Catalogo</h3>
+                            <ul class="exm-list">
+                                ${state.catalog.map((product) => `
+                                    <li>
+                                        <strong>${product.name}</strong><br/>
+                                        ${money(product.price)} | Estoque ${product.stock}
+                                        <div class="exm-actions" style="margin-top:6px">
+                                            <button class="proex-btn" type="button" data-add-product="${product.id}">Adicionar ao carrinho</button>
+                                        </div>
+                                    </li>
+                                `).join("")}
+                            </ul>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Carrinho</h3>
+                            <table class="exm-table">
+                                <thead><tr><th>Item</th><th>Qtd</th><th>Total</th><th></th></tr></thead>
+                                <tbody>
+                                    ${state.cart.length === 0 ? '<tr><td colspan="4">Carrinho vazio.</td></tr>' : state.cart.map((line) => {
+                                        const product = getProduct(line.id);
+                                        if (!product) return "";
+                                        return `<tr><td>${product.name}</td><td>${line.qty}</td><td>${money(product.price * line.qty)}</td><td><button class="proex-btn" data-remove-product="${line.id}" type="button">Remover</button></td></tr>`;
+                                    }).join("")}
+                                </tbody>
+                            </table>
+                            <div class="exm-form-row" style="margin-top:8px">
+                                <input id="shopCoupon" class="exm-input" placeholder="Cupom (NEX10)" />
+                                <button id="shopApplyCoupon" class="proex-btn" type="button">Aplicar cupom</button>
+                            </div>
+                            <p style="margin-top:8px">Total: <strong>${money(cartTotal())}</strong></p>
+                            <button id="shopCheckout" class="proex-btn proex-btn-primary" type="button">Finalizar checkout</button>
+                        </article>
+                    </section>
+                `;
+
+                views.operations.querySelectorAll("[data-add-product]").forEach((button) => {
+                    button.addEventListener("click", () => {
+                        const id = button.getAttribute("data-add-product") || "";
+                        const product = getProduct(id);
+                        if (!product || product.stock <= 0) {
+                            state.logs.unshift("Produto indisponivel para compra.");
+                            renderAll();
+                            return;
+                        }
+                        const line = state.cart.find((item) => item.id === id);
+                        if (line) {
+                            line.qty += 1;
+                        } else {
+                            state.cart.push({ id, qty: 1 });
+                        }
+                        state.logs.unshift(`Item adicionado ao carrinho: ${product.name}.`);
+                        renderAll();
+                    });
+                });
+
+                views.operations.querySelectorAll("[data-remove-product]").forEach((button) => {
+                    button.addEventListener("click", () => {
+                        const id = button.getAttribute("data-remove-product") || "";
+                        state.cart = state.cart.filter((line) => line.id !== id);
+                        state.logs.unshift("Item removido do carrinho.");
+                        renderAll();
+                    });
+                });
+
+                views.operations.querySelector("#shopApplyCoupon")?.addEventListener("click", () => {
+                    const couponInput = views.operations.querySelector("#shopCoupon");
+                    if (!(couponInput instanceof HTMLInputElement)) return;
+                    const code = couponInput.value.trim().toUpperCase();
+                    if (code === "NEX10") {
+                        state.coupon = 0.1;
+                        state.logs.unshift("Cupom NEX10 aplicado.");
+                    } else {
+                        state.coupon = 0;
+                        state.logs.unshift("Cupom invalido.");
+                    }
+                    renderAll();
+                });
+
+                views.operations.querySelector("#shopCheckout")?.addEventListener("click", () => {
+                    if (state.cart.length === 0) {
+                        state.logs.unshift("Checkout bloqueado: carrinho vazio.");
+                        renderAll();
+                        return;
+                    }
+                    let approvedLines = 0;
+                    state.cart.forEach((line) => {
+                        const product = getProduct(line.id);
+                        if (!product) return;
+                        const qty = Math.min(line.qty, product.stock);
+                        if (qty <= 0) return;
+                        product.stock -= qty;
+                        product.sold += qty;
+                        approvedLines += 1;
+                    });
+                    state.orders += 1;
+                    if (approvedLines > 0) {
+                        state.approved += 1;
+                        state.logs.unshift(`Checkout finalizado com ${approvedLines} item(ns) aprovados.`);
+                    } else {
+                        state.abandoned += 1;
+                        state.logs.unshift("Checkout sem aprovacao por falta de estoque.");
+                    }
+                    state.cart = [];
+                    state.coupon = 0;
+                    renderAll();
+                });
+            };
+
+            const renderAnalytics = () => {
+                views.analytics.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Saude de estoque</h3>
+                            <table class="exm-table">
+                                <thead><tr><th>Produto</th><th>Disponivel</th><th>Status</th></tr></thead>
+                                <tbody>${state.catalog.map((product) => `<tr><td>${product.name}</td><td>${product.stock}</td><td>${renderBadge(product.stock <= 3 ? "critico" : product.stock <= 6 ? "atencao" : "ok")}</td></tr>`).join("")}</tbody>
+                            </table>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Eventos da loja</h3>
+                            ${renderLog(state.logs)}
+                        </article>
+                    </section>
+                `;
+            };
+
+            const renderSettings = () => {
+                views.settings.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Checkout e pagamento</h3>
+                            <ul class="exm-list">
+                                <li><label><input type="checkbox" checked /> Pix e cartao habilitados</label></li>
+                                <li><label><input type="checkbox" checked /> Antifraude por score</label></li>
+                                <li><label><input type="checkbox" /> Parcelamento acima de R$ 500</label></li>
+                            </ul>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Logistica</h3>
+                            <div class="exm-form">
+                                <input id="shopShipping" class="exm-input" type="number" value="350" />
+                                <button id="shopSaveSettings" class="proex-btn proex-btn-primary" type="button">Salvar limite de frete gratis</button>
+                            </div>
+                        </article>
+                    </section>
+                `;
+
+                views.settings.querySelector("#shopSaveSettings")?.addEventListener("click", () => {
+                    const shippingInput = views.settings.querySelector("#shopShipping");
+                    if (!(shippingInput instanceof HTMLInputElement)) return;
+                    state.logs.unshift(`Regra de frete atualizada para pedidos acima de ${money(Number(shippingInput.value || "0"))}.`);
+                    renderAll();
+                });
+            };
+
+            const runPrimary = () => {
+                const product = state.catalog[randomBetween(0, state.catalog.length - 1)];
+                const qty = Math.max(1, Math.min(product.stock, randomBetween(1, 4)));
+                if (qty <= 0) {
+                    state.logs.unshift("Flash sale executada sem vendas por estoque zero.");
+                    renderAll();
+                    return;
+                }
+                product.stock -= qty;
+                product.sold += qty;
+                state.orders += 1;
+                state.approved += 1;
+                state.logs.unshift(`Flash sale: ${qty} unidade(s) de ${product.name} vendidas.`);
+                renderAll();
+            };
+
+            const renderAll = () => {
+                renderOverview();
+                renderOperations();
+                renderAnalytics();
+                renderSettings();
+            };
+
+            return { primaryLabel: "Disparar flash sale", runPrimary, renderAll };
+        };
+
+        const createAppController = () => {
+            const state = {
+                backlog: [
+                    { id: "t1", title: "Checklist filial norte", owner: "Marina", eta: "09:40" },
+                    { id: "t2", title: "Integrar camera OCR", owner: "Paulo", eta: "10:20" }
+                ],
+                doing: [
+                    { id: "t3", title: "Treino equipe campo", owner: "Renata", eta: "08:55" }
+                ],
+                done: [
+                    { id: "t4", title: "Publicacao versao 2.4", owner: "Mateus", eta: "07:30" }
+                ],
+                checklist: [
+                    { id: "c1", label: "Check-in na unidade", done: true },
+                    { id: "c2", label: "Validar conectividade", done: false },
+                    { id: "c3", label: "Executar roteiro de homologacao", done: false },
+                    { id: "c4", label: "Coletar aceite", done: false }
+                ],
+                team: [
+                    { name: "Marina", status: "Em campo" },
+                    { name: "Paulo", status: "Disponivel" },
+                    { name: "Renata", status: "Deslocamento" }
+                ],
+                logs: ["App operacional iniciado."]
+            };
+
+            const totalTasks = () => state.backlog.length + state.doing.length + state.done.length;
+            const checklistDone = () => state.checklist.filter((item) => item.done).length;
+
+            const moveTask = (id, direction) => {
+                const sources = ["backlog", "doing", "done"];
+                const sourceIndex = sources.findIndex((name) => state[name].some((task) => task.id === id));
+                if (sourceIndex === -1) return;
+                const targetIndex = direction === "next" ? sourceIndex + 1 : sourceIndex - 1;
+                if (targetIndex < 0 || targetIndex >= sources.length) return;
+                const source = sources[sourceIndex];
+                const target = sources[targetIndex];
+                const idx = state[source].findIndex((task) => task.id === id);
+                if (idx < 0) return;
+                const [task] = state[source].splice(idx, 1);
+                state[target].unshift(task);
+                state.logs.unshift(`Tarefa movida para ${target}.`);
+            };
+
+            const renderTaskColumn = (title, key, isFirst, isLast) => `
+                <article class="exm-col">
+                    <h4>${title}</h4>
+                    ${state[key].map((task) => `
+                        <div class="exm-item" data-task-id="${task.id}">
+                            <strong>${task.title}</strong>
+                            <p>${task.owner} - ETA ${task.eta}</p>
+                            <div class="exm-item-actions">
+                                ${!isFirst ? '<button class="proex-btn" data-task-move="prev" type="button">Voltar</button>' : ""}
+                                ${!isLast ? '<button class="proex-btn" data-task-move="next" type="button">Avancar</button>' : ""}
+                            </div>
+                        </div>
+                    `).join("") || '<p class="exm-card">Sem tarefas.</p>'}
+                </article>
+            `;
+
+            const renderOverview = () => {
+                views.overview.innerHTML = `
+                    <section class="exm-stats">
+                        <article class="exm-stat"><strong>${state.backlog.length}</strong><span>Backlog</span></article>
+                        <article class="exm-stat"><strong>${state.doing.length}</strong><span>Em execucao</span></article>
+                        <article class="exm-stat"><strong>${state.done.length}</strong><span>Concluidas</span></article>
+                        <article class="exm-stat"><strong>${percent(checklistDone(), state.checklist.length)}</strong><span>Roteiro concluido</span></article>
+                    </section>
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Equipe</h3>
+                            <ul class="exm-list">${state.team.map((member) => `<li>${member.name} - ${renderBadge(member.status)}</li>`).join("")}</ul>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Produtividade</h3>
+                            <p>Total de tarefas: <strong>${totalTasks()}</strong></p>
+                            <p style="margin-top:6px">Checklist operacional:</p>
+                            <div class="exm-progress"><i style="width:${(checklistDone() / state.checklist.length) * 100}%"></i></div>
+                        </article>
+                    </section>
+                `;
+            };
+
+            const renderOperations = () => {
+                views.operations.innerHTML = `
+                    <section class="exm-board">
+                        ${renderTaskColumn("Backlog", "backlog", true, false)}
+                        ${renderTaskColumn("Em execucao", "doing", false, false)}
+                        ${renderTaskColumn("Concluidas", "done", false, true)}
+                    </section>
+                    <section class="exm-card">
+                        <h3>Nova tarefa</h3>
+                        <form id="appTaskForm" class="exm-form">
+                            <div class="exm-form-row">
+                                <input id="appTaskTitle" class="exm-input" placeholder="Descricao" required />
+                                <input id="appTaskOwner" class="exm-input" placeholder="Responsavel" required />
+                            </div>
+                            <button class="proex-btn proex-btn-primary" type="submit">Adicionar no backlog</button>
+                        </form>
+                    </section>
+                `;
+
+                views.operations.querySelectorAll("[data-task-move]").forEach((button) => {
+                    button.addEventListener("click", () => {
+                        const root = button.closest("[data-task-id]");
+                        if (!(root instanceof HTMLElement)) return;
+                        const id = root.getAttribute("data-task-id") || "";
+                        const direction = button.getAttribute("data-task-move") || "";
+                        moveTask(id, direction);
+                        renderAll();
+                    });
+                });
+
+                views.operations.querySelector("#appTaskForm")?.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const titleInput = views.operations.querySelector("#appTaskTitle");
+                    const ownerInput = views.operations.querySelector("#appTaskOwner");
+                    if (!(titleInput instanceof HTMLInputElement) || !(ownerInput instanceof HTMLInputElement)) return;
+                    const title = titleInput.value.trim();
+                    if (!title) return;
+                    state.backlog.unshift({ id: `t${Date.now()}`, title, owner: ownerInput.value.trim() || "Equipe", eta: "Hoje" });
+                    state.logs.unshift(`Nova tarefa criada: ${title}.`);
+                    titleInput.value = "";
+                    ownerInput.value = "";
+                    renderAll();
+                });
+            };
+
+            const renderAnalytics = () => {
+                views.analytics.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Checklist de rota</h3>
+                            <ul class="exm-list">
+                                ${state.checklist.map((item) => `<li><label><input type="checkbox" data-check-id="${item.id}" ${item.done ? "checked" : ""} /> ${item.label}</label></li>`).join("")}
+                            </ul>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Eventos operacionais</h3>
+                            ${renderLog(state.logs)}
+                        </article>
+                    </section>
+                `;
+
+                views.analytics.querySelectorAll("[data-check-id]").forEach((check) => {
+                    check.addEventListener("change", () => {
+                        if (!(check instanceof HTMLInputElement)) return;
+                        const id = check.getAttribute("data-check-id") || "";
+                        const item = state.checklist.find((entry) => entry.id === id);
+                        if (!item) return;
+                        item.done = check.checked;
+                        state.logs.unshift(`Checklist atualizado: ${item.label}.`);
+                        renderAll();
+                    });
+                });
+            };
+
+            const renderSettings = () => {
+                views.settings.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Parametros mobile</h3>
+                            <ul class="exm-list">
+                                <li><label><input type="checkbox" checked /> Push para tarefa critica</label></li>
+                                <li><label><input type="checkbox" checked /> Sincronizacao em background</label></li>
+                                <li><label><input type="checkbox" /> Modo offline em rede fraca</label></li>
+                            </ul>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Janelas de notificacao</h3>
+                            <div class="exm-form-row">
+                                <input class="exm-input" value="08:00" />
+                                <input class="exm-input" value="20:00" />
+                            </div>
+                            <button id="appSaveConfig" class="proex-btn proex-btn-primary" type="button" style="margin-top:8px">Salvar</button>
+                        </article>
+                    </section>
+                `;
+
+                views.settings.querySelector("#appSaveConfig")?.addEventListener("click", () => {
+                    state.logs.unshift("Configuracoes mobile atualizadas.");
+                    renderAll();
+                });
+            };
+
+            const runPrimary = () => {
+                const nextTask = state.backlog.shift();
+                if (nextTask) {
+                    state.doing.unshift(nextTask);
+                }
+                const pendingCheck = state.checklist.find((item) => !item.done);
+                if (pendingCheck) {
+                    pendingCheck.done = true;
+                }
+                state.logs.unshift("Redistribuicao automatica executada.");
+                renderAll();
+            };
+
+            const renderAll = () => {
+                renderOverview();
+                renderOperations();
+                renderAnalytics();
+                renderSettings();
+            };
+
+            return { primaryLabel: "Redistribuir tarefas", runPrimary, renderAll };
+        };
+
+        const createApiController = () => {
+            const state = {
+                endpoints: [
+                    { id: "e1", method: "GET", path: "/customers", latency: 168, error: 0.6, status: "estavel" },
+                    { id: "e2", method: "POST", path: "/orders", latency: 214, error: 1.2, status: "estavel" },
+                    { id: "e3", method: "POST", path: "/billing", latency: 292, error: 2.4, status: "atencao" },
+                    { id: "e4", method: "GET", path: "/stock", latency: 131, error: 0.4, status: "estavel" }
+                ],
+                rateLimit: 300,
+                timeout: 1200,
+                retries: 2,
+                logs: ["API hub inicializado com monitoramento ativo."]
+            };
+
+            const avgLatency = () => Math.round(state.endpoints.reduce((sum, endpoint) => sum + endpoint.latency, 0) / state.endpoints.length);
+            const avgError = () => (state.endpoints.reduce((sum, endpoint) => sum + endpoint.error, 0) / state.endpoints.length).toFixed(2);
+
+            const renderOverview = () => {
+                const uptime = `${(99.9 - state.endpoints.filter((endpoint) => endpoint.status !== "estavel").length * 0.14).toFixed(2)}%`;
+                views.overview.innerHTML = `
+                    <section class="exm-stats">
+                        <article class="exm-stat"><strong>${uptime}</strong><span>Disponibilidade</span></article>
+                        <article class="exm-stat"><strong>${avgLatency()} ms</strong><span>Latencia media</span></article>
+                        <article class="exm-stat"><strong>${state.rateLimit}</strong><span>Rate limit/min</span></article>
+                        <article class="exm-stat"><strong>${avgError()}%</strong><span>Erro medio</span></article>
+                    </section>
+                    <section class="exm-card">
+                        <h3>Saude dos endpoints</h3>
+                        <table class="exm-table">
+                            <thead><tr><th>Metodo</th><th>Endpoint</th><th>Latencia</th><th>Status</th></tr></thead>
+                            <tbody>${state.endpoints.map((endpoint) => `<tr><td>${endpoint.method}</td><td>${endpoint.path}</td><td>${endpoint.latency} ms</td><td>${renderBadge(endpoint.status)}</td></tr>`).join("")}</tbody>
+                        </table>
+                    </section>
+                `;
+            };
+
+            const renderOperations = () => {
+                views.operations.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Simulador de request</h3>
+                            <form id="apiRequestForm" class="exm-form">
+                                <div class="exm-form-row">
+                                    <select id="apiEndpoint" class="exm-select">${state.endpoints.map((endpoint) => `<option value="${endpoint.id}">${endpoint.method} ${endpoint.path}</option>`).join("")}</select>
+                                    <select id="apiEnv" class="exm-select"><option value="homolog">Homolog</option><option value="producao">Producao</option></select>
+                                </div>
+                                <textarea id="apiPayload" class="exm-textarea">{"clienteId":1024,"origem":"portal"}</textarea>
+                                <button class="proex-btn proex-btn-primary" type="submit">Enviar request</button>
+                            </form>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Auditoria recente</h3>
+                            ${renderLog(state.logs)}
+                        </article>
+                    </section>
+                `;
+
+                views.operations.querySelector("#apiRequestForm")?.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const endpointInput = views.operations.querySelector("#apiEndpoint");
+                    const envInput = views.operations.querySelector("#apiEnv");
+                    if (!(endpointInput instanceof HTMLSelectElement) || !(envInput instanceof HTMLSelectElement)) return;
+                    const endpoint = state.endpoints.find((item) => item.id === endpointInput.value);
+                    if (!endpoint) return;
+                    const jitter = randomBetween(-28, 40);
+                    const latency = Math.max(90, endpoint.latency + jitter);
+                    const failChance = endpoint.error + (envInput.value === "producao" ? 0.5 : 0);
+                    const failed = Math.random() * 100 < failChance;
+                    const code = failed ? 500 : endpoint.method === "POST" ? 201 : 200;
+                    endpoint.latency = latency;
+                    endpoint.error = Math.max(0.2, Math.min(8, endpoint.error + (failed ? 0.3 : -0.15)));
+                    endpoint.status = endpoint.error > 2.2 ? "atencao" : "estavel";
+                    state.logs.unshift(`${new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })} ${endpoint.path} -> ${code} (${latency}ms)`);
+                    renderAll();
+                });
+            };
+
+            const renderAnalytics = () => {
+                views.analytics.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Matriz de erro e latencia</h3>
+                            <table class="exm-table">
+                                <thead><tr><th>Endpoint</th><th>Erro</th><th>Latencia</th><th>Status</th></tr></thead>
+                                <tbody>${state.endpoints.map((endpoint) => `<tr><td>${endpoint.path}</td><td>${endpoint.error.toFixed(2)}%</td><td>${endpoint.latency} ms</td><td>${renderBadge(endpoint.status)}</td></tr>`).join("")}</tbody>
+                            </table>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Tendencia de latencia</h3>
+                            ${state.endpoints.map((endpoint) => `<div class="exm-bar-row"><div class="exm-bar-head"><span>${endpoint.path}</span><strong>${endpoint.latency} ms</strong></div><div class="exm-progress"><i style="width:${Math.min(100, endpoint.latency / 4)}%"></i></div></div>`).join("")}
+                        </article>
+                    </section>
+                `;
+            };
+
+            const renderSettings = () => {
+                views.settings.innerHTML = `
+                    <section class="exm-card">
+                        <h3>Politica de resiliencia</h3>
+                        <div class="exm-form-row">
+                            <input id="apiRate" class="exm-input" type="number" value="${state.rateLimit}" />
+                            <input id="apiTimeout" class="exm-input" type="number" value="${state.timeout}" />
+                            <input id="apiRetry" class="exm-input" type="number" value="${state.retries}" />
+                        </div>
+                        <button id="apiSave" class="proex-btn proex-btn-primary" type="button" style="margin-top:8px">Salvar parametros</button>
+                    </section>
+                `;
+
+                views.settings.querySelector("#apiSave")?.addEventListener("click", () => {
+                    const rate = views.settings.querySelector("#apiRate");
+                    const timeout = views.settings.querySelector("#apiTimeout");
+                    const retry = views.settings.querySelector("#apiRetry");
+                    if (!(rate instanceof HTMLInputElement) || !(timeout instanceof HTMLInputElement) || !(retry instanceof HTMLInputElement)) return;
+                    state.rateLimit = Math.max(50, Number(rate.value || "0"));
+                    state.timeout = Math.max(300, Number(timeout.value || "0"));
+                    state.retries = Math.max(0, Number(retry.value || "0"));
+                    state.logs.unshift("Politica tecnica atualizada.");
+                    renderAll();
+                });
+            };
+
+            const runPrimary = () => {
+                state.endpoints.forEach((endpoint) => {
+                    endpoint.latency = Math.max(90, endpoint.latency + randomBetween(-20, 35));
+                    endpoint.error = Math.max(0.2, Math.min(7.8, endpoint.error + randomBetween(-2, 3) * 0.1));
+                    endpoint.status = endpoint.error > 2.2 ? "atencao" : "estavel";
+                });
+                state.logs.unshift("Health check global executado.");
+                renderAll();
+            };
+
+            const renderAll = () => {
+                renderOverview();
+                renderOperations();
+                renderAnalytics();
+                renderSettings();
+            };
+
+            return { primaryLabel: "Executar health check", runPrimary, renderAll };
+        };
+
+        const createAutomationController = () => {
+            const state = {
+                queue: [
+                    { id: "wf-401", name: "Triagem lead inbound", owner: "Comercial", priority: "Alta", status: "Pendente", eta: 14 },
+                    { id: "wf-402", name: "Conciliacao pedido x financeiro", owner: "Backoffice", priority: "Critica", status: "Em analise", eta: 8 },
+                    { id: "wf-403", name: "Notificacao de renovacao", owner: "CS", priority: "Media", status: "Concluido", eta: 5 }
+                ],
+                throughput: [18, 22, 19, 26, 24, 28, 31, 27],
+                retries: 2,
+                window: "08:00-22:00",
+                logs: ["Esteira automatizada iniciada."]
+            };
+
+            const pendingCount = () => state.queue.filter((item) => item.status !== "Concluido").length;
+            const onTime = () => state.queue.filter((item) => item.eta <= 14).length;
+
+            const renderOverview = () => {
+                views.overview.innerHTML = `
+                    <section class="exm-stats">
+                        <article class="exm-stat"><strong>${state.queue.length}</strong><span>Fluxos monitorados</span></article>
+                        <article class="exm-stat"><strong>${pendingCount()}</strong><span>Pendentes</span></article>
+                        <article class="exm-stat"><strong>${percent(onTime(), state.queue.length)}</strong><span>SLA no prazo</span></article>
+                        <article class="exm-stat"><strong>${state.retries}</strong><span>Retentativas</span></article>
+                    </section>
+                    <section class="exm-card">
+                        <h3>Fila de workflow</h3>
+                        <table class="exm-table">
+                            <thead><tr><th>ID</th><th>Workflow</th><th>Prioridade</th><th>Status</th></tr></thead>
+                            <tbody>${state.queue.map((item) => `<tr><td>${item.id}</td><td>${item.name}</td><td>${renderBadge(item.priority)}</td><td>${renderBadge(item.status)}</td></tr>`).join("")}</tbody>
+                        </table>
+                    </section>
+                `;
+            };
+
+            const renderOperations = () => {
+                views.operations.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Gerenciar fila</h3>
+                            <table class="exm-table">
+                                <thead><tr><th>ID</th><th>Workflow</th><th>Status</th><th>Acao</th></tr></thead>
+                                <tbody>
+                                    ${state.queue.map((item) => `
+                                        <tr>
+                                            <td>${item.id}</td>
+                                            <td>${item.name}</td>
+                                            <td>${renderBadge(item.status)}</td>
+                                            <td>
+                                                <button class="proex-btn" data-flow-start="${item.id}" type="button">Iniciar</button>
+                                                <button class="proex-btn" data-flow-done="${item.id}" type="button">Concluir</button>
+                                            </td>
+                                        </tr>
+                                    `).join("")}
+                                </tbody>
+                            </table>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Novo workflow</h3>
+                            <form id="flowForm" class="exm-form">
+                                <input id="flowName" class="exm-input" placeholder="Nome do fluxo" required />
+                                <div class="exm-form-row">
+                                    <input id="flowOwner" class="exm-input" value="Operacao" />
+                                    <select id="flowPriority" class="exm-select"><option>Media</option><option>Alta</option><option>Critica</option></select>
+                                </div>
+                                <button class="proex-btn proex-btn-primary" type="submit">Adicionar fluxo</button>
+                            </form>
+                        </article>
+                    </section>
+                `;
+
+                views.operations.querySelectorAll("[data-flow-start]").forEach((button) => {
+                    button.addEventListener("click", () => {
+                        const id = button.getAttribute("data-flow-start") || "";
+                        const flow = state.queue.find((item) => item.id === id);
+                        if (!flow) return;
+                        flow.status = "Em analise";
+                        state.logs.unshift(`Workflow ${id} iniciado.`);
+                        renderAll();
+                    });
+                });
+
+                views.operations.querySelectorAll("[data-flow-done]").forEach((button) => {
+                    button.addEventListener("click", () => {
+                        const id = button.getAttribute("data-flow-done") || "";
+                        const flow = state.queue.find((item) => item.id === id);
+                        if (!flow) return;
+                        flow.status = "Concluido";
+                        state.logs.unshift(`Workflow ${id} concluido.`);
+                        renderAll();
+                    });
+                });
+
+                views.operations.querySelector("#flowForm")?.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const nameInput = views.operations.querySelector("#flowName");
+                    const ownerInput = views.operations.querySelector("#flowOwner");
+                    const priorityInput = views.operations.querySelector("#flowPriority");
+                    if (!(nameInput instanceof HTMLInputElement) || !(ownerInput instanceof HTMLInputElement) || !(priorityInput instanceof HTMLSelectElement)) return;
+                    const name = nameInput.value.trim();
+                    if (!name) return;
+                    const id = `wf-${randomBetween(500, 980)}`;
+                    state.queue.unshift({ id, name, owner: ownerInput.value.trim() || "Operacao", priority: priorityInput.value, status: "Pendente", eta: randomBetween(6, 24) });
+                    state.logs.unshift(`Workflow criado: ${id}.`);
+                    nameInput.value = "";
+                    renderAll();
+                });
+            };
+
+            const renderAnalytics = () => {
+                views.analytics.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Throughput por hora</h3>
+                            ${state.throughput.map((value, index) => `<div class="exm-bar-row"><div class="exm-bar-head"><span>${9 + index}h</span><strong>${value} exec.</strong></div><div class="exm-progress"><i style="width:${Math.min(100, value * 2.5)}%"></i></div></div>`).join("")}
+                        </article>
+                        <article class="exm-card">
+                            <h3>Log da esteira</h3>
+                            ${renderLog(state.logs)}
+                        </article>
+                    </section>
+                `;
+            };
+
+            const renderSettings = () => {
+                views.settings.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Politica de retentativa</h3>
+                            <div class="exm-form-row">
+                                <input id="flowRetries" class="exm-input" type="number" min="0" max="6" value="${state.retries}" />
+                                <input id="flowWindow" class="exm-input" value="${state.window}" />
+                            </div>
+                            <button id="flowSave" class="proex-btn proex-btn-primary" type="button" style="margin-top:8px">Salvar</button>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Escalonamento</h3>
+                            <ul class="exm-list">
+                                <li><label><input type="checkbox" checked /> Escalar workflow critico com atraso</label></li>
+                                <li><label><input type="checkbox" checked /> Notificar owner apos 2 falhas</label></li>
+                                <li><label><input type="checkbox" /> Abrir ticket automatico para N2</label></li>
+                            </ul>
+                        </article>
+                    </section>
+                `;
+
+                views.settings.querySelector("#flowSave")?.addEventListener("click", () => {
+                    const retryInput = views.settings.querySelector("#flowRetries");
+                    const windowInput = views.settings.querySelector("#flowWindow");
+                    if (!(retryInput instanceof HTMLInputElement) || !(windowInput instanceof HTMLInputElement)) return;
+                    state.retries = Number(retryInput.value || "2");
+                    state.window = windowInput.value.trim() || "08:00-22:00";
+                    state.logs.unshift("Parametros da esteira atualizados.");
+                    renderAll();
+                });
+            };
+
+            const runPrimary = () => {
+                const nextFlow = state.queue.find((item) => item.status !== "Concluido");
+                if (nextFlow) {
+                    nextFlow.status = "Concluido";
+                    state.logs.unshift(`Processamento automatico: ${nextFlow.id}.`);
+                } else {
+                    state.logs.unshift("Fila sem pendencias para processamento.");
+                }
+                renderAll();
+            };
+
+            const renderAll = () => {
+                renderOverview();
+                renderOperations();
+                renderAnalytics();
+                renderSettings();
+            };
+
+            return { primaryLabel: "Processar fila", runPrimary, renderAll };
+        };
+
+        const createDashboardController = () => {
+            const state = {
+                period: "30d",
+                metrics: {
+                    "30d": { revenue: 1260000, margin: 23, churn: 2.4, nps: 71, trend: [22, 24, 26, 25, 28, 29, 31] },
+                    "90d": { revenue: 3420000, margin: 21, churn: 2.8, nps: 69, trend: [18, 20, 22, 24, 23, 25, 27] },
+                    "12m": { revenue: 13700000, margin: 19, churn: 3.4, nps: 65, trend: [14, 15, 16, 17, 19, 20, 22] }
+                },
+                threshold: { revenueMin: 1100000, churnMax: 3.0 },
+                recipients: ["diretoria@@empresa.com", "operacao@@empresa.com"],
+                logs: ["Dashboard executivo carregado."]
+            };
+
+            const current = () => state.metrics[state.period];
+
+            const renderOverview = () => {
+                const m = current();
+                views.overview.innerHTML = `
+                    <section class="exm-actions">
+                        <button class="proex-btn" data-period="30d" type="button">30 dias</button>
+                        <button class="proex-btn" data-period="90d" type="button">90 dias</button>
+                        <button class="proex-btn" data-period="12m" type="button">12 meses</button>
+                    </section>
+                    <section class="exm-stats">
+                        <article class="exm-stat"><strong>${money(m.revenue)}</strong><span>Receita (${state.period})</span></article>
+                        <article class="exm-stat"><strong>${m.margin}%</strong><span>Margem</span></article>
+                        <article class="exm-stat"><strong>${m.churn}%</strong><span>Churn</span></article>
+                        <article class="exm-stat"><strong>${m.nps}</strong><span>NPS</span></article>
+                    </section>
+                    <section class="exm-card">
+                        <h3>Tendencia semanal</h3>
+                        ${m.trend.map((point, index) => `<div class="exm-bar-row"><div class="exm-bar-head"><span>Semana ${index + 1}</span><strong>${point}</strong></div><div class="exm-progress"><i style="width:${Math.min(100, point * 2.8)}%"></i></div></div>`).join("")}
+                    </section>
+                `;
+
+                views.overview.querySelectorAll("[data-period]").forEach((button) => {
+                    button.addEventListener("click", () => {
+                        const period = button.getAttribute("data-period") || "30d";
+                        if (!state.metrics[period]) return;
+                        state.period = period;
+                        state.logs.unshift(`Periodo alterado para ${period}.`);
+                        renderAll();
+                    });
+                });
+            };
+
+            const renderOperations = () => {
+                const m = current();
+                views.operations.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Limiar de alerta</h3>
+                            <form id="dashThresholdForm" class="exm-form">
+                                <input id="dashRevenueMin" class="exm-input" type="number" value="${state.threshold.revenueMin}" />
+                                <input id="dashChurnMax" class="exm-input" type="number" step="0.1" value="${state.threshold.churnMax}" />
+                                <button class="proex-btn proex-btn-primary" type="submit">Atualizar limiares</button>
+                            </form>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Status automatico</h3>
+                            <ul class="exm-list">
+                                <li>Receita: ${renderBadge(m.revenue >= state.threshold.revenueMin ? "ok" : "atencao")}</li>
+                                <li>Churn: ${renderBadge(m.churn <= state.threshold.churnMax ? "ok" : "atencao")}</li>
+                                <li>NPS: ${renderBadge(m.nps >= 70 ? "ok" : "info")}</li>
+                            </ul>
+                        </article>
+                    </section>
+                `;
+
+                views.operations.querySelector("#dashThresholdForm")?.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const revInput = views.operations.querySelector("#dashRevenueMin");
+                    const churnInput = views.operations.querySelector("#dashChurnMax");
+                    if (!(revInput instanceof HTMLInputElement) || !(churnInput instanceof HTMLInputElement)) return;
+                    state.threshold.revenueMin = Number(revInput.value || "0");
+                    state.threshold.churnMax = Number(churnInput.value || "0");
+                    state.logs.unshift("Limiar de alerta atualizado.");
+                    renderAll();
+                });
+            };
+
+            const renderAnalytics = () => {
+                const areas = [
+                    { area: "Comercial", target: 100, actual: 108 },
+                    { area: "Operacao", target: 100, actual: 96 },
+                    { area: "Produto", target: 100, actual: 104 },
+                    { area: "Suporte", target: 100, actual: 102 }
+                ];
+
+                views.analytics.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Meta por area</h3>
+                            <table class="exm-table">
+                                <thead><tr><th>Area</th><th>Meta</th><th>Real</th><th>Status</th></tr></thead>
+                                <tbody>${areas.map((area) => `<tr><td>${area.area}</td><td>${area.target}%</td><td>${area.actual}%</td><td>${renderBadge(area.actual >= 100 ? "ok" : "atencao")}</td></tr>`).join("")}</tbody>
+                            </table>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Log executivo</h3>
+                            ${renderLog(state.logs)}
+                        </article>
+                    </section>
+                `;
+            };
+
+            const renderSettings = () => {
+                views.settings.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Destinatarios</h3>
+                            <ul class="exm-list">${state.recipients.map((recipient) => `<li>${recipient}</li>`).join("")}</ul>
+                            <div class="exm-form-row" style="margin-top:8px">
+                                <input id="dashRecipient" class="exm-input" placeholder="novo-email@@empresa.com" />
+                                <button id="dashAddRecipient" class="proex-btn" type="button">Adicionar</button>
+                            </div>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Notificacoes</h3>
+                            <ul class="exm-list">
+                                <li><label><input type="checkbox" checked /> Alertar diretoria para queda de receita</label></li>
+                                <li><label><input type="checkbox" checked /> Alertar operacao para churn alto</label></li>
+                                <li><label><input type="checkbox" /> Silenciar fora do horario comercial</label></li>
+                            </ul>
+                        </article>
+                    </section>
+                `;
+
+                views.settings.querySelector("#dashAddRecipient")?.addEventListener("click", () => {
+                    const input = views.settings.querySelector("#dashRecipient");
+                    if (!(input instanceof HTMLInputElement)) return;
+                    const email = input.value.trim();
+                    if (!email || !email.includes("@@")) return;
+                    state.recipients.push(email);
+                    state.logs.unshift(`Destinatario adicionado: ${email}.`);
+                    input.value = "";
+                    renderAll();
+                });
+            };
+
+            const runPrimary = () => {
+                const m = current();
+                m.revenue = Math.max(500000, m.revenue + randomBetween(-80000, 160000));
+                m.margin = Math.max(10, Math.min(35, m.margin + randomBetween(-2, 3)));
+                m.churn = Math.max(0.5, Math.min(7, Number((m.churn + randomBetween(-1, 2) * 0.2).toFixed(1))));
+                m.nps = Math.max(40, Math.min(90, m.nps + randomBetween(-2, 3)));
+                state.logs.unshift("Atualizacao automatica de KPI executada.");
+                renderAll();
+            };
+
+            const renderAll = () => {
+                renderOverview();
+                renderOperations();
+                renderAnalytics();
+                renderSettings();
+            };
+
+            return { primaryLabel: "Atualizar indicadores", runPrimary, renderAll };
+        };
+
+        const createCrmController = () => {
+            const stages = ["Novo", "Qualificado", "Proposta", "Negociacao", "Fechado"];
+            const state = {
+                leads: [
+                    { id: "l1", company: "Grupo Vertex", owner: "Alice", value: 112000, stage: 1 },
+                    { id: "l2", company: "Clinica Prime", owner: "Bruno", value: 48000, stage: 2 },
+                    { id: "l3", company: "Metal Sigma", owner: "Carla", value: 76000, stage: 0 },
+                    { id: "l4", company: "Rede Atlas", owner: "Diego", value: 93000, stage: 4 }
+                ],
+                cadence: "14 dias",
+                logs: ["CRM iniciado com pipeline ativo."]
+            };
+
+            const pipelineValue = () => state.leads.reduce((sum, lead) => sum + lead.value, 0);
+            const winValue = () => state.leads.filter((lead) => lead.stage === 4).reduce((sum, lead) => sum + lead.value, 0);
+
+            const moveLead = (id, direction) => {
+                const lead = state.leads.find((item) => item.id === id);
+                if (!lead) return;
+                lead.stage = direction === "next" ? Math.min(stages.length - 1, lead.stage + 1) : Math.max(0, lead.stage - 1);
+                state.logs.unshift(`Lead ${lead.company} movido para ${stages[lead.stage]}.`);
+            };
+
+            const boardMarkup = () => `
+                <section class="exm-board">
+                    ${stages.map((stage, index) => `
+                        <article class="exm-col">
+                            <h4>${stage}</h4>
+                            ${state.leads.filter((lead) => lead.stage === index).map((lead) => `
+                                <div class="exm-item" data-lead-id="${lead.id}">
+                                    <strong>${lead.company}</strong>
+                                    <p>${lead.owner} - ${money(lead.value)}</p>
+                                    <div class="exm-item-actions">
+                                        ${index > 0 ? '<button class="proex-btn" data-lead-move="prev" type="button">Voltar</button>' : ""}
+                                        ${index < stages.length - 1 ? '<button class="proex-btn" data-lead-move="next" type="button">Avancar</button>' : ""}
+                                    </div>
+                                </div>
+                            `).join("") || '<p class="exm-card">Sem leads.</p>'}
+                        </article>
+                    `).join("")}
+                </section>
+            `;
+
+            const renderOverview = () => {
+                const qualified = state.leads.filter((lead) => lead.stage >= 1).length;
+                const won = state.leads.filter((lead) => lead.stage === 4).length;
+                views.overview.innerHTML = `
+                    <section class="exm-stats">
+                        <article class="exm-stat"><strong>${state.leads.length}</strong><span>Leads no funil</span></article>
+                        <article class="exm-stat"><strong>${money(pipelineValue())}</strong><span>Valor pipeline</span></article>
+                        <article class="exm-stat"><strong>${percent(won, qualified)}</strong><span>Taxa de ganho</span></article>
+                        <article class="exm-stat"><strong>${money(winValue())}</strong><span>Receita fechada</span></article>
+                    </section>
+                    <section class="exm-card">
+                        <h3>Distribuicao por etapa</h3>
+                        ${stages.map((stage, index) => `<div class="exm-bar-row"><div class="exm-bar-head"><span>${stage}</span><strong>${state.leads.filter((lead) => lead.stage === index).length}</strong></div><div class="exm-progress"><i style="width:${(state.leads.filter((lead) => lead.stage === index).length / Math.max(1, state.leads.length)) * 100}%"></i></div></div>`).join("")}
+                    </section>
+                `;
+            };
+
+            const renderOperations = () => {
+                views.operations.innerHTML = `
+                    ${boardMarkup()}
+                    <section class="exm-card">
+                        <h3>Novo lead</h3>
+                        <form id="crmLeadForm" class="exm-form">
+                            <div class="exm-form-row">
+                                <input id="crmCompany" class="exm-input" placeholder="Empresa" required />
+                                <input id="crmOwner" class="exm-input" placeholder="Owner" required />
+                            </div>
+                            <input id="crmValue" class="exm-input" type="number" min="5000" value="45000" />
+                            <button class="proex-btn proex-btn-primary" type="submit">Adicionar lead</button>
+                        </form>
+                    </section>
+                `;
+
+                views.operations.querySelectorAll("[data-lead-move]").forEach((button) => {
+                    button.addEventListener("click", () => {
+                        const root = button.closest("[data-lead-id]");
+                        if (!(root instanceof HTMLElement)) return;
+                        const id = root.getAttribute("data-lead-id") || "";
+                        const direction = button.getAttribute("data-lead-move") || "";
+                        moveLead(id, direction);
+                        renderAll();
+                    });
+                });
+
+                views.operations.querySelector("#crmLeadForm")?.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const companyInput = views.operations.querySelector("#crmCompany");
+                    const ownerInput = views.operations.querySelector("#crmOwner");
+                    const valueInput = views.operations.querySelector("#crmValue");
+                    if (!(companyInput instanceof HTMLInputElement) || !(ownerInput instanceof HTMLInputElement) || !(valueInput instanceof HTMLInputElement)) return;
+                    const company = companyInput.value.trim();
+                    if (!company) return;
+                    state.leads.unshift({ id: `l${Date.now()}`, company, owner: ownerInput.value.trim() || "SDR", value: Math.max(5000, Number(valueInput.value || "0")), stage: 0 });
+                    state.logs.unshift(`Lead criado: ${company}.`);
+                    companyInput.value = "";
+                    ownerInput.value = "";
+                    valueInput.value = "45000";
+                    renderAll();
+                });
+            };
+
+            const renderAnalytics = () => {
+                const owners = new Map();
+                state.leads.forEach((lead) => {
+                    const data = owners.get(lead.owner) || { count: 0, value: 0 };
+                    data.count += 1;
+                    data.value += lead.value;
+                    owners.set(lead.owner, data);
+                });
+
+                views.analytics.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Performance por owner</h3>
+                            <table class="exm-table">
+                                <thead><tr><th>Owner</th><th>Leads</th><th>Valor</th></tr></thead>
+                                <tbody>${Array.from(owners.entries()).map(([owner, data]) => `<tr><td>${owner}</td><td>${data.count}</td><td>${money(data.value)}</td></tr>`).join("")}</tbody>
+                            </table>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Log comercial</h3>
+                            ${renderLog(state.logs)}
+                        </article>
+                    </section>
+                `;
+            };
+
+            const renderSettings = () => {
+                views.settings.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Cadencia de follow-up</h3>
+                            <div class="exm-form-row">
+                                <input id="crmCadence" class="exm-input" value="${state.cadence}" />
+                                <select id="crmChannel" class="exm-select"><option>WhatsApp</option><option>Email</option><option>Telefone</option></select>
+                            </div>
+                            <button id="crmSave" class="proex-btn proex-btn-primary" type="button" style="margin-top:8px">Salvar rotina</button>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Automacoes</h3>
+                            <ul class="exm-list">
+                                <li><label><input type="checkbox" checked /> Lembrete para lead sem atividade</label></li>
+                                <li><label><input type="checkbox" checked /> Escalar proposta acima de R$ 70k</label></li>
+                                <li><label><input type="checkbox" /> Criar tarefa para gerente em atraso</label></li>
+                            </ul>
+                        </article>
+                    </section>
+                `;
+
+                views.settings.querySelector("#crmSave")?.addEventListener("click", () => {
+                    const cadenceInput = views.settings.querySelector("#crmCadence");
+                    if (!(cadenceInput instanceof HTMLInputElement)) return;
+                    state.cadence = cadenceInput.value.trim() || "14 dias";
+                    state.logs.unshift(`Cadencia ajustada para ${state.cadence}.`);
+                    renderAll();
+                });
+            };
+
+            const runPrimary = () => {
+                const candidate = state.leads.find((lead) => lead.stage < stages.length - 1);
+                if (candidate) {
+                    candidate.stage += 1;
+                    state.logs.unshift(`Follow-up executado para ${candidate.company}.`);
+                } else {
+                    state.logs.unshift("Sem leads para follow-up automatico.");
+                }
+                renderAll();
+            };
+
+            const renderAll = () => {
+                renderOverview();
+                renderOperations();
+                renderAnalytics();
+                renderSettings();
+            };
+
+            return { primaryLabel: "Rodar follow-up", runPrimary, renderAll };
+        };
+
+        const createPortalController = () => {
+            const state = {
+                selectedId: "t1",
+                tickets: [
+                    {
+                        id: "t1",
+                        title: "Acesso ao portal bloqueado",
+                        desc: "Usuario principal sem permissao para documentos.",
+                        priority: "Alta",
+                        status: "Em analise",
+                        firstResponse: 12,
+                        timeline: ["Chamado aberto.", "Log coletado.", "Analise de permissao."]
+                    },
+                    {
+                        id: "t2",
+                        title: "Segunda via de boleto",
+                        desc: "Solicitacao para faturamento de marco.",
+                        priority: "Media",
+                        status: "Resolvido",
+                        firstResponse: 8,
+                        timeline: ["Chamado aberto.", "Financeiro acionado.", "Cliente confirmou recebimento."]
+                    },
+                    {
+                        id: "t3",
+                        title: "Oscilacao em endpoint de consulta",
+                        desc: "Pico de erro em horario comercial.",
+                        priority: "Critica",
+                        status: "Escalonado",
+                        firstResponse: 6,
+                        timeline: ["Alerta automatico disparado.", "Ticket escalonado para N2.", "Mitigacao parcial aplicada."]
+                    }
+                ],
+                knowledge: [
+                    "Como recuperar acesso ao portal",
+                    "Fluxo de abertura de chamado",
+                    "Politica de faturamento",
+                    "Guia de integracao API"
+                ],
+                logs: ["Portal de suporte inicializado."]
+            };
+
+            const selectedTicket = () => state.tickets.find((ticket) => ticket.id === state.selectedId) || state.tickets[0];
+
+            const renderOverview = () => {
+                const open = state.tickets.filter((ticket) => ticket.status !== "Resolvido").length;
+                const avgResponse = Math.round(state.tickets.reduce((sum, ticket) => sum + ticket.firstResponse, 0) / state.tickets.length);
+                views.overview.innerHTML = `
+                    <section class="exm-stats">
+                        <article class="exm-stat"><strong>${open}</strong><span>Chamados abertos</span></article>
+                        <article class="exm-stat"><strong>${avgResponse} min</strong><span>Primeira resposta</span></article>
+                        <article class="exm-stat"><strong>${percent(state.tickets.filter((ticket) => ticket.firstResponse <= 15).length, state.tickets.length)}</strong><span>SLA no prazo</span></article>
+                        <article class="exm-stat"><strong>${percent(state.knowledge.length, 6)}</strong><span>Cobertura knowledge</span></article>
+                    </section>
+                    <section class="exm-card">
+                        <h3>Fila de atendimento</h3>
+                        <table class="exm-table">
+                            <thead><tr><th>Ticket</th><th>Prioridade</th><th>Status</th></tr></thead>
+                            <tbody>${state.tickets.map((ticket) => `<tr><td>${ticket.id}</td><td>${renderBadge(ticket.priority)}</td><td>${renderBadge(ticket.status)}</td></tr>`).join("")}</tbody>
+                        </table>
+                    </section>
+                `;
+            };
+
+            const renderOperations = () => {
+                const ticket = selectedTicket();
+                views.operations.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Chamados</h3>
+                            <ul class="exm-list">
+                                ${state.tickets.map((item) => `<li data-ticket-id="${item.id}" style="cursor:pointer; border-color:${item.id === ticket.id ? "#9ec2e8" : "#d2ddec"}"><strong>${item.title}</strong><br/>${item.desc}<br/>${renderBadge(item.priority)} ${renderBadge(item.status)}</li>`).join("")}
+                            </ul>
+                        </article>
+                        <article class="exm-card">
+                            <h3>${ticket.title}</h3>
+                            <p>${ticket.desc}</p>
+                            <ul class="exm-log" style="margin-top:8px">${ticket.timeline.map((item) => `<li>${item}</li>`).join("")}</ul>
+                            <textarea id="portalReply" class="exm-textarea" placeholder="Responder cliente" style="margin-top:8px"></textarea>
+                            <button id="portalReplySend" class="proex-btn proex-btn-primary" type="button">Enviar resposta</button>
+                        </article>
+                    </section>
+                `;
+
+                views.operations.querySelectorAll("[data-ticket-id]").forEach((item) => {
+                    item.addEventListener("click", () => {
+                        const id = item.getAttribute("data-ticket-id") || state.selectedId;
+                        state.selectedId = id;
+                        renderAll();
+                    });
+                });
+
+                views.operations.querySelector("#portalReplySend")?.addEventListener("click", () => {
+                    const input = views.operations.querySelector("#portalReply");
+                    if (!(input instanceof HTMLTextAreaElement)) return;
+                    const message = input.value.trim();
+                    if (!message) return;
+                    const current = selectedTicket();
+                    current.timeline.unshift(`Resposta enviada: ${message}`);
+                    current.status = "Aguardando cliente";
+                    state.logs.unshift(`Resposta registrada no ticket ${current.id}.`);
+                    input.value = "";
+                    renderAll();
+                });
+            };
+
+            const renderAnalytics = () => {
+                views.analytics.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>SLA por ticket</h3>
+                            <table class="exm-table">
+                                <thead><tr><th>Ticket</th><th>Primeira resposta</th><th>Status</th></tr></thead>
+                                <tbody>${state.tickets.map((ticket) => `<tr><td>${ticket.id}</td><td>${ticket.firstResponse} min</td><td>${renderBadge(ticket.firstResponse <= 15 ? "ok" : "atencao")}</td></tr>`).join("")}</tbody>
+                            </table>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Log de suporte</h3>
+                            ${renderLog(state.logs)}
+                        </article>
+                    </section>
+                `;
+            };
+
+            const renderSettings = () => {
+                views.settings.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Base de conhecimento</h3>
+                            <div class="exm-form-row">
+                                <input id="kbSearch" class="exm-input" placeholder="Buscar artigo" />
+                                <input id="kbNew" class="exm-input" placeholder="Novo artigo" />
+                            </div>
+                            <button id="kbAdd" class="proex-btn" type="button" style="margin-top:8px">Adicionar artigo</button>
+                            <ul id="kbList" class="exm-list" style="margin-top:8px">${state.knowledge.map((item) => `<li>${item}</li>`).join("")}</ul>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Regra de atendimento</h3>
+                            <ul class="exm-list">
+                                <li><label><input type="checkbox" checked /> Escalar ticket critico automaticamente</label></li>
+                                <li><label><input type="checkbox" checked /> Alertar atraso acima de 15 min</label></li>
+                                <li><label><input type="checkbox" /> Reabrir ticket apos 48h sem resposta</label></li>
+                            </ul>
+                        </article>
+                    </section>
+                `;
+
+                const renderKnowledge = (query) => {
+                    const list = views.settings.querySelector("#kbList");
+                    if (!list) return;
+                    const q = (query || "").trim().toLowerCase();
+                    const filtered = state.knowledge.filter((item) => q.length === 0 || item.toLowerCase().includes(q));
+                    list.innerHTML = filtered.map((item) => `<li>${item}</li>`).join("") || "<li>Nenhum artigo encontrado.</li>";
+                };
+
+                views.settings.querySelector("#kbSearch")?.addEventListener("input", (event) => {
+                    const input = event.target;
+                    if (!(input instanceof HTMLInputElement)) return;
+                    renderKnowledge(input.value);
+                });
+
+                views.settings.querySelector("#kbAdd")?.addEventListener("click", () => {
+                    const input = views.settings.querySelector("#kbNew");
+                    if (!(input instanceof HTMLInputElement)) return;
+                    const text = input.value.trim();
+                    if (!text) return;
+                    state.knowledge.unshift(text);
+                    state.logs.unshift("Artigo adicionado na base de conhecimento.");
+                    input.value = "";
+                    renderAll();
+                });
+            };
+
+            const runPrimary = () => {
+                const critical = state.tickets.find((ticket) => ticket.priority === "Critica" && ticket.status !== "Resolvido");
+                if (critical) {
+                    critical.status = "Em analise";
+                    critical.timeline.unshift("Ticket priorizado automaticamente.");
+                    state.logs.unshift(`Ticket ${critical.id} priorizado.`);
+                } else {
+                    state.logs.unshift("Sem tickets criticos para priorizacao.");
+                }
+                renderAll();
+            };
+
+            const renderAll = () => {
+                renderOverview();
+                renderOperations();
+                renderAnalytics();
+                renderSettings();
+            };
+
+            return { primaryLabel: "Priorizar chamados", runPrimary, renderAll };
+        };
+
+        const createErpController = () => {
+            const state = {
+                items: [
+                    { id: "i1", name: "Plano Site Start", stock: 24, min: 8, price: 2490, cost: 980 },
+                    { id: "i2", name: "Plano App Pro", stock: 14, min: 6, price: 5190, cost: 2100 },
+                    { id: "i3", name: "Pacote CRM", stock: 10, min: 5, price: 3890, cost: 1620 },
+                    { id: "i4", name: "Modulo BI", stock: 7, min: 4, price: 2990, cost: 1300 }
+                ],
+                orders: [
+                    { id: "P-101", itemId: "i1", qty: 2 },
+                    { id: "P-102", itemId: "i4", qty: 1 }
+                ],
+                cash: 182000,
+                receivable: 94000,
+                payable: 62000,
+                logs: ["ERP Lite iniciado com conciliacao automatica."]
+            };
+
+            const itemById = (id) => state.items.find((item) => item.id === id);
+            const orderTotal = (order) => {
+                const item = itemById(order.itemId);
+                return item ? item.price * order.qty : 0;
+            };
+            const sales = () => state.orders.reduce((sum, order) => sum + orderTotal(order), 0);
+
+            const renderOverview = () => {
+                const costs = state.orders.reduce((sum, order) => {
+                    const item = itemById(order.itemId);
+                    return sum + (item ? item.cost * order.qty : 0);
+                }, 0);
+                const profit = sales() - costs;
+                views.overview.innerHTML = `
+                    <section class="exm-stats">
+                        <article class="exm-stat"><strong>${money(sales())}</strong><span>Vendas acumuladas</span></article>
+                        <article class="exm-stat"><strong>${state.orders.length}</strong><span>Pedidos</span></article>
+                        <article class="exm-stat"><strong>${money(profit)}</strong><span>Lucro estimado</span></article>
+                        <article class="exm-stat"><strong>${money(state.cash)}</strong><span>Caixa</span></article>
+                    </section>
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Financeiro</h3>
+                            <ul class="exm-list">
+                                <li>Receber: ${money(state.receivable)}</li>
+                                <li>Pagar: ${money(state.payable)}</li>
+                                <li>Margem: ${percent(Math.max(0, profit), Math.max(1, sales()))}</li>
+                            </ul>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Alerta de estoque</h3>
+                            <ul class="exm-list">${state.items.filter((item) => item.stock <= item.min + 2).map((item) => `<li>${item.name} - ${item.stock} un.</li>`).join("") || "<li>Sem alerta no momento.</li>"}</ul>
+                        </article>
+                    </section>
+                `;
+            };
+
+            const renderOperations = () => {
+                views.operations.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Novo pedido</h3>
+                            <form id="erpOrderForm" class="exm-form">
+                                <select id="erpItem" class="exm-select">${state.items.map((item) => `<option value="${item.id}">${item.name} (${money(item.price)})</option>`).join("")}</select>
+                                <input id="erpQty" class="exm-input" type="number" min="1" value="1" />
+                                <button class="proex-btn proex-btn-primary" type="submit">Registrar pedido</button>
+                            </form>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Pedidos recentes</h3>
+                            <table class="exm-table">
+                                <thead><tr><th>Pedido</th><th>Item</th><th>Qtd</th><th>Total</th></tr></thead>
+                                <tbody>${state.orders.slice(-8).reverse().map((order) => {
+                                    const item = itemById(order.itemId);
+                                    return `<tr><td>${order.id}</td><td>${item ? item.name : "-"}</td><td>${order.qty}</td><td>${money(orderTotal(order))}</td></tr>`;
+                                }).join("")}</tbody>
+                            </table>
+                        </article>
+                    </section>
+                `;
+
+                views.operations.querySelector("#erpOrderForm")?.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const itemInput = views.operations.querySelector("#erpItem");
+                    const qtyInput = views.operations.querySelector("#erpQty");
+                    if (!(itemInput instanceof HTMLSelectElement) || !(qtyInput instanceof HTMLInputElement)) return;
+                    const item = itemById(itemInput.value);
+                    if (!item) return;
+                    const qty = Math.max(1, Number(qtyInput.value || "1"));
+                    if (qty > item.stock) {
+                        state.logs.unshift(`Pedido bloqueado: estoque insuficiente para ${item.name}.`);
+                        renderAll();
+                        return;
+                    }
+                    item.stock -= qty;
+                    const order = { id: `P-${100 + state.orders.length + 1}`, itemId: item.id, qty };
+                    state.orders.push(order);
+                    const total = item.price * qty;
+                    const cost = item.cost * qty;
+                    state.receivable += total;
+                    state.cash += Math.round(total * 0.35);
+                    state.payable += Math.round(cost * 0.4);
+                    state.logs.unshift(`Pedido ${order.id} registrado.`);
+                    renderAll();
+                });
+            };
+
+            const renderAnalytics = () => {
+                views.analytics.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Posicao de estoque</h3>
+                            <table class="exm-table">
+                                <thead><tr><th>Item</th><th>Disponivel</th><th>Minimo</th><th>Status</th></tr></thead>
+                                <tbody>${state.items.map((item) => `<tr><td>${item.name}</td><td>${item.stock}</td><td>${item.min}</td><td>${renderBadge(item.stock <= item.min ? "critico" : item.stock <= item.min + 2 ? "atencao" : "ok")}</td></tr>`).join("")}</tbody>
+                            </table>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Log ERP</h3>
+                            ${renderLog(state.logs)}
+                        </article>
+                    </section>
+                `;
+            };
+
+            const renderSettings = () => {
+                views.settings.innerHTML = `
+                    <section class="exm-grid two">
+                        <article class="exm-card">
+                            <h3>Governanca</h3>
+                            <div class="exm-form-row">
+                                <input id="erpApproval" class="exm-input" type="number" value="25000" />
+                                <input id="erpSafety" class="exm-input" type="number" value="15" />
+                            </div>
+                            <button id="erpSave" class="proex-btn proex-btn-primary" type="button" style="margin-top:8px">Salvar parametros</button>
+                        </article>
+                        <article class="exm-card">
+                            <h3>Controles</h3>
+                            <ul class="exm-list">
+                                <li><label><input type="checkbox" checked /> Travar pedido sem saldo de estoque</label></li>
+                                <li><label><input type="checkbox" checked /> Conciliacao diaria automatica</label></li>
+                                <li><label><input type="checkbox" /> Exigir aprovacao acima de alcada</label></li>
+                            </ul>
+                        </article>
+                    </section>
+                `;
+
+                views.settings.querySelector("#erpSave")?.addEventListener("click", () => {
+                    state.logs.unshift("Parametros de governanca atualizados.");
+                    renderAll();
+                });
+            };
+
+            const runPrimary = () => {
+                const costs = state.orders.reduce((sum, order) => {
+                    const item = itemById(order.itemId);
+                    return sum + (item ? item.cost * order.qty : 0);
+                }, 0);
+                const profit = sales() - costs;
+                state.logs.unshift(`Fechamento diario: vendas ${money(sales())} | lucro ${money(profit)}.`);
+                renderAll();
+            };
+
+            const renderAll = () => {
+                renderOverview();
+                renderOperations();
+                renderAnalytics();
+                renderSettings();
+            };
+
+            return { primaryLabel: "Rodar fechamento diario", runPrimary, renderAll };
+        };
+
+        const controllers = {
+            site: createSiteController,
+            landing: createLandingController,
+            ecommerce: createEcommerceController,
+            app: createAppController,
+            api: createApiController,
+            automation: createAutomationController,
+            dashboard: createDashboardController,
+            crm: createCrmController,
+            portal: createPortalController,
+            "erp-lite": createErpController
+        };
+
+        const controllerFactory = controllers[productKey] || createErpController;
+        const controller = controllerFactory();
+        setPrimaryAction(controller.primaryLabel, controller.runPrimary);
+        controller.renderAll();
+        decoratePanels();
+        setView("overview");
+    });
+</script>

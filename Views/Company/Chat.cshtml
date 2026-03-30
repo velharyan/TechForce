@@ -1,15 +1,45 @@
-<section class="container narrow">
-  <h1>Converse com nossa IA</h1>
-  <p>Use o balão de chat fixo no canto inferior direito em qualquer página.</p>
-  <div class="chat-demo">
-    <div class="chat-messages" id="chatMessagesPage"></div>
-    <form class="chat-form" id="chatFormPage">
-      <input id="chatInputPage" placeholder="Como a NexCore pode ajudar seu negócio?" required />
-      <button class="btn btn-primary" type="submit">Perguntar</button>
-    </form>
-    <p class="small muted">Se não houver integração real, as respostas serão simuladas e você será direcionado a um especialista humano.</p>
-  </div>
+<section class="page-shell module-page theme-mobile">
+    <div class="container">
+        <header class="page-hero" data-reveal>
+            <p class="eyebrow">Assistente virtual</p>
+            <h1>Converse com nossa IA e receba direcionamento tecnico imediato</h1>
+            <p>Use linguagem simples: a IA interpreta o cenario e sugere caminhos praticos para software, automacao, apps, APIs e dashboards.</p>
+        </header>
+
+        <section class="module-layout">
+            <article class="card module-card" data-reveal data-hover-tilt>
+                <h3>Como tirar o melhor proveito</h3>
+                <ul class="list-clean">
+                    <li>Descreva o objetivo principal em uma frase</li>
+                    <li>Informe volume de usuarios e canais envolvidos</li>
+                    <li>Conte qual area sofre mais hoje (comercial, operacao, suporte)</li>
+                    <li>Pergunte por roadmap inicial para comecar rapido</li>
+                </ul>
+                <div class="module-badges">
+                    <span class="module-badge">Resposta imediata</span>
+                    <span class="module-badge">Plano inicial</span>
+                    <span class="module-badge">Linguagem simples</span>
+                </div>
+            </article>
+
+            <article class="card module-card" data-reveal data-delay="1">
+                <h3>Quando escalar para atendimento humano</h3>
+                <ul class="list-clean">
+                    <li>Quando ja existe escopo macro e prioridades definidas</li>
+                    <li>Quando e necessario detalhar arquitetura e cronograma</li>
+                    <li>Quando o projeto envolve multiplas areas e integracoes</li>
+                </ul>
+                <div class="module-actions">
+                    <a class="btn btn-primary" href="/Company/Contact">Falar com especialista</a>
+                </div>
+            </article>
+        </section>
+
+        <section class="section-spaced card module-card" data-reveal>
+            <h2>Painel de conversa</h2>
+            <div class="chat-messages" id="chatMessagesPage"></div>
+            <p>Assistente Vistual em Atualização agendada!.</p>
+            <p class="small muted">Este assistente oferece orientacao inicial. Para proposta formal com escopo e investimento, use a pagina de contato.</p>
+        </section>
+    </div>
 </section>
-@section Scripts{
-<script>window.NEX_CHAT_PAGE = true;</script>
-}

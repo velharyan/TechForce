@@ -1,9 +1,51 @@
-@model NexCore.Web.Controllers.Post
-<section class="container narrow">
-  <nav class="breadcrumb"><a href="/">Início</a> / <a href="/Blog">Blog</a> / <span>@Model.Title</span></nav>
-  <article>
-    <h1>@Model.Title</h1>
-    <p class="muted">@Model.Excerpt</p>
-    <p>Conteúdo do post (placeholder). Substitua por texto real e otimize para SEO com headings, listas e links internos.</p>
-  </article>
+@model TechForce.Web.Controllers.Post
+<section class="page-shell compact module-page theme-web">
+    <div class="container article-shell">
+        <nav class="breadcrumb"><a href="/">Home</a> / <a href="/Blog">Blog</a> / <span>@Model.Title</span></nav>
+
+        <article class="card" data-reveal>
+            <header class="page-hero">
+                <h1>@Model.Title</h1>
+                <p>@Model.Excerpt</p>
+            </header>
+
+            @if (Model.Slug == "como-escolher-sistema-para-restaurante")
+            {
+                <h2>1. Comece pelo processo real, nao pela ferramenta</h2>
+                <p>Mapeie entrada de pedido, producao, entrega e fechamento financeiro. O sistema correto precisa refletir o fluxo da operacao para gerar valor rapido.</p>
+
+                <h2>2. Garanta integracao entre atendimento, cozinha e estoque</h2>
+                <p>Quando essas etapas ficam separadas, surgem erros de item, ruptura e perda de margem. Integracao reduz retrabalho e melhora previsibilidade.</p>
+
+                <h2>3. Priorize usabilidade em horario de pico</h2>
+                <p>Interface confusa em momentos de pressao aumenta atrasos e cancelamentos. O ideal e ter poucos cliques, status claros e fluxo padronizado.</p>
+
+                <h2>4. Decida por indicadores, nao por percepcao</h2>
+                <p>Ticket medio, tempo de preparo, cancelamento e desperdicio devem estar em painel simples para ajuste diario de operacao.</p>
+            }
+            else if (Model.Slug == "automacao-whatsapp-que-converte")
+            {
+                <h2>1. Estruture cada fluxo com objetivo de negocio</h2>
+                <p>Automacao sem meta vira ruido. Defina jornada para captacao, qualificacao, distribuicao comercial e acompanhamento de fechamento.</p>
+
+                <h2>2. Use linguagem curta e contexto claro</h2>
+                <p>Mensagens objetivas com opcoes simples elevam taxa de resposta e reduzem abandono no meio da conversa.</p>
+
+                <h2>3. Integre a automacao com CRM e funil comercial</h2>
+                <p>Sem integracao os dados se perdem. Com pipeline conectado, o time comercial enxerga origem do lead e etapa atual com clareza.</p>
+
+                <h2>4. Monitore conversao, tempo de resposta e SLA</h2>
+                <p>Ajustes frequentes por dados melhoram desempenho rapidamente, principalmente em operacoes com alto volume.</p>
+            }
+            else
+            {
+                <p>Conteudo em atualizacao. Em breve este artigo recebera versao completa com checklist pratico, exemplos reais e plano de implantacao.</p>
+            }
+
+            <div class="module-actions section-spaced">
+                <a class="btn btn-outline" href="/Blog">Voltar para blog</a>
+                <a class="btn btn-primary" href="/Company/Contact">Falar com especialista</a>
+            </div>
+        </article>
+    </div>
 </section>

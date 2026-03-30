@@ -4,7 +4,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
-    <UserSecretsId>nexcore-web-secrets</UserSecretsId>
+    <UserSecretsId>TechForce-web-secrets</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <Content Update="wwwroot/**/*">

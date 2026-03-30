@@ -1,28 +1,133 @@
-<section class="container">
-  <h1>Produtos</h1>
-  <div class="grid cols-2">
-    <article class="card">
-      <h3>NexCore Order — pedidos e vendas</h3>
-      <p>Gerencie pedidos, carrinho, pagamentos e relatórios.</p>
-      <ul><li>+Vendas</li><li>Checkout simples</li><li>Integrações</li></ul>
-      <details><summary>Roadmap</summary><ul><li>Relatórios avançados</li><li>Marketplace</li></ul></details>
-      <a class="btn btn-outline" href="/Company/Contact">Quero demonstração</a>
-    </article>
-    <article class="card">
-      <h3>NexCore Stock — controle de estoque</h3>
-      <p>Entrada/saída, inventário, alertas e análise de custo.</p>
-      <details><summary>Roadmap</summary><ul><li>Previsão de consumo</li><li>Integração fiscal</li></ul></details>
-      <a class="btn btn-outline" href="/Company/Contact">Quero demonstração</a>
-    </article>
-    <article class="card">
-      <h3>NexCore Menu — cardápio digital</h3>
-      <p>Cardápio online com fotos, preços e pedidos por WhatsApp.</p>
-      <a class="btn btn-outline" href="/Company/Contact">Quero demonstração</a>
-    </article>
-    <article class="card">
-      <h3>NexCore Bot — automação de WhatsApp</h3>
-      <p>Bots, fluxos e disparos autorizados conforme políticas.</p>
-      <a class="btn btn-outline" href="/Company/Contact">Quero demonstração</a>
-    </article>
-  </div>
+@model IReadOnlyList<TechForce.Web.Controllers.ProductItem>
+@{
+    var categories = Model.Select(x => x.Category).Distinct().OrderBy(x => x).ToArray();
+}
+
+<section class="page-shell module-page theme-web">
+    <div class="container">
+        <header class="page-hero" data-reveal>
+            <h1>Catalogo premium com exemplos reais por cenario de negocio</h1>
+            <p>Cada modulo possui demo funcional com contexto pratico, fluxo completo e experiencia otimizada para mobile e desktop.</p>
+        </header>
+
+        <section class="catalog-toolbar card" data-reveal>
+            <div class="catalog-search">
+                <input id="productSearch" type="search" placeholder="Buscar por produto, desafio, setor ou tecnologia..." />
+                <a class="btn btn-primary" href="/Company/Contact">Falar com especialista</a>
+            </div>
+            <div class="catalog-filters" id="categoryFilters">
+                <button class="catalog-chip active" type="button" data-category="all">Todos</button>
+                @foreach (var category in categories)
+                {
+                    <button class="catalog-chip" type="button" data-category="@category">@category</button>
+                }
+            </div>
+        </section>
+
+        <div class="catalog-goals" data-reveal>
+            <button class="catalog-goal" type="button" data-goal="site">Quero gerar mais leads</button>
+            <button class="catalog-goal" type="button" data-goal="automation">Quero reduzir tarefas manuais</button>
+            <button class="catalog-goal" type="button" data-goal="dashboard">Quero visao executiva por KPI</button>
+            <button class="catalog-goal" type="button" data-goal="api">Quero integrar sistemas internos</button>
+            <button class="catalog-goal" type="button" data-goal="app">Quero um app para operacao</button>
+        </div>
+
+        <p id="productsCount" class="catalog-count">@Model.Count produto(s) encontrado(s)</p>
+
+        <section class="catalog-grid" id="productsGrid">
+            @foreach (var product in Model)
+            {
+                <article class="card catalog-card" data-hover-tilt data-product-card data-category="@product.Category" data-name="@product.Name" data-summary="@product.Summary" data-tags="@string.Join(" ", product.Tags)">
+                    <div>
+                        <h3>@product.Name</h3>
+                        <p>@product.Summary</p>
+                    </div>
+
+                    <div class="catalog-meta">
+                        <span class="catalog-badge">@product.Category</span>
+                        <span class="catalog-badge">Publico: @product.Audience</span>
+                        <span class="catalog-badge">Go-live inicial: ~@product.StartingWeeks semana(s)</span>
+                    </div>
+
+                    <ul class="inline-list">
+                        @foreach (var tag in product.Tags)
+                        {
+                            <li class="tag">@tag</li>
+                        }
+                    </ul>
+
+                    <ul class="catalog-highlights">
+                        @foreach (var item in product.Highlights)
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+
+                    <div class="catalog-actions">
+                        <a class="btn btn-outline" href="/Products/Example/@product.Slug">Abrir demo completo</a>
+                        <a class="btn btn-primary" href="/Company/Contact">Solicitar proposta</a>
+                    </div>
+                </article>
+            }
+        </section>
+    </div>
 </section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("productSearch");
+        const filterRoot = document.getElementById("categoryFilters");
+        const cards = Array.from(document.querySelectorAll("[data-product-card]"));
+        const countLabel = document.getElementById("productsCount");
+        const goalButtons = Array.from(document.querySelectorAll("[data-goal]"));
+        let activeCategory = "all";
+
+        const goalMap = {
+            site: "site",
+            automation: "automacao",
+            dashboard: "dashboard",
+            api: "api",
+            app: "app"
+        };
+
+        const applyFilters = () => {
+            const query = (searchInput?.value || "").trim().toLowerCase();
+            let visible = 0;
+            cards.forEach((card) => {
+                const category = card.getAttribute("data-category") || "";
+                const name = (card.getAttribute("data-name") || "").toLowerCase();
+                const summary = (card.getAttribute("data-summary") || "").toLowerCase();
+                const tags = (card.getAttribute("data-tags") || "").toLowerCase();
+                const categoryMatch = activeCategory === "all" || category === activeCategory;
+                const queryMatch = query.length === 0 || name.includes(query) || summary.includes(query) || tags.includes(query);
+                const show = categoryMatch && queryMatch;
+                card.style.display = show ? "" : "none";
+                if (show) visible += 1;
+            });
+            if (countLabel) countLabel.textContent = visible + " produto(s) encontrado(s)";
+        };
+
+        searchInput?.addEventListener("input", applyFilters);
+
+        filterRoot?.addEventListener("click", (event) => {
+            const target = event.target;
+            if (!(target instanceof Element)) return;
+            const button = target.closest("[data-category]");
+            if (!(button instanceof HTMLButtonElement)) return;
+            activeCategory = button.getAttribute("data-category") || "all";
+            filterRoot.querySelectorAll("[data-category]").forEach((x) => x.classList.remove("active"));
+            button.classList.add("active");
+            applyFilters();
+        });
+
+        goalButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const goal = button.getAttribute("data-goal") || "";
+                if (!searchInput) return;
+                searchInput.value = goalMap[goal] || goal;
+                applyFilters();
+                searchInput.focus();
+            });
+        });
+    });
+</script>

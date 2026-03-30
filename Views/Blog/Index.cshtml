@@ -1,9 +1,22 @@
-@model IEnumerable<NexCore.Web.Controllers.Post>
-<section class="container">
-  <h1>Blog & Artigos</h1>
-  <ul class="post-list">
-    @foreach(var p in Model){
-      <li class="card"><a href="/Blog/@p.Slug"><h3>@p.Title</h3><p class="muted">@p.Excerpt</p></a></li>
-    }
-  </ul>
+@model IEnumerable<TechForce.Web.Controllers.Post>
+<section class="page-shell module-page theme-web">
+    <div class="container">
+        <header class="page-hero" data-reveal>
+            <h1>Conteudo pratico para liderancas de negocio, operacao e tecnologia</h1>
+            <p>Guias objetivos, checklists e experiencias de campo para apoiar decisoes de investimento digital com menos risco.</p>
+        </header>
+
+        <ul class="content-list">
+            @foreach (var post in Model)
+            {
+                <li class="card" data-reveal data-hover-tilt>
+                    <a href="/Blog/@post.Slug">
+                        <h3>@post.Title</h3>
+                        <p class="muted">@post.Excerpt</p>
+                        <p class="small">Ler artigo completo</p>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
 </section>

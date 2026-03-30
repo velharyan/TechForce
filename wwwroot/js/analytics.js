@@ -1,16 +1,17 @@
-// Carrega GA4 e GTM somente com consentimento
-(function(){
-  const prefs = JSON.parse(localStorage.getItem('nxc_cookies')||'{}');
-  if(prefs.analytics){
-    const gaId = '{{GA_ID}}';
-    if(gaId){
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m) })(window,document,'script','https://www.googletagmanager.com/gtag/js?id='+gaId,'ga');
-    }
-  }
-  document.querySelectorAll('[data-evt]').forEach(el=>{
-    el.addEventListener('click', ()=>{
-      // Aqui você dispara eventos para GA4/GTM se desejar
-      // console.log('Evento', el.dataset.evt);
+(function () {
+    "use strict";
+
+    const rawPrefs = localStorage.getItem("nxc_cookies");
+    const prefs = rawPrefs ? JSON.parse(rawPrefs) : null;
+    if (!prefs || !prefs.analytics) return;
+
+    document.querySelectorAll("[data-evt]").forEach((element) => {
+        element.addEventListener("click", () => {
+            const name = element.getAttribute("data-evt");
+            if (!name) return;
+            if (window.console && typeof window.console.info === "function") {
+                window.console.info("[analytics:event]", name);
+            }
+        });
     });
-  });
 })();

@@ -1,17 +1,41 @@
-(function(){
-  const banner = document.getElementById('cookieBanner');
-  const prefs = JSON.parse(localStorage.getItem('nxc_cookies')||'{}');
-  if(!prefs.version){
-    banner.hidden = false;
-  }
-  document.getElementById('btnAcceptAll').addEventListener('click',()=>{
-    localStorage.setItem('nxc_cookies', JSON.stringify({version:1, necessary:true, analytics:true, marketing:true}));
-    banner.hidden = true; location.reload();
-  });
-  document.getElementById('btnSavePrefs').addEventListener('click',()=>{
-    const analytics = document.getElementById('ckAnalytics').checked;
-    const marketing = document.getElementById('ckMarketing').checked;
-    localStorage.setItem('nxc_cookies', JSON.stringify({version:1, necessary:true, analytics, marketing}));
-    banner.hidden = true; location.reload();
-  });
+(function () {
+    "use strict";
+
+    const banner = document.getElementById("cookieBanner");
+    const acceptAll = document.getElementById("btnAcceptAll");
+    const savePrefs = document.getElementById("btnSavePrefs");
+    const analyticsInput = document.getElementById("ckAnalytics");
+    const marketingInput = document.getElementById("ckMarketing");
+
+    if (!banner || !acceptAll || !savePrefs || !analyticsInput || !marketingInput) return;
+
+    const stored = localStorage.getItem("nxc_cookies");
+    const prefs = stored ? JSON.parse(stored) : null;
+
+    if (!prefs || prefs.version !== 1) {
+        banner.hidden = false;
+    } else {
+        analyticsInput.checked = !!prefs.analytics;
+        marketingInput.checked = !!prefs.marketing;
+    }
+
+    const persist = (value) => {
+        localStorage.setItem("nxc_cookies", JSON.stringify(value));
+        banner.hidden = true;
+    };
+
+    acceptAll.addEventListener("click", () => {
+        persist({ version: 1, necessary: true, analytics: true, marketing: true });
+        window.location.reload();
+    });
+
+    savePrefs.addEventListener("click", () => {
+        persist({
+            version: 1,
+            necessary: true,
+            analytics: analyticsInput.checked,
+            marketing: marketingInput.checked
+        });
+        window.location.reload();
+    });
 })();

@@ -1,38 +1,103 @@
-@model NexCore.Web.Controllers.ContactForm
+@model TechForce.Web.Controllers.ContactForm
 @inject Microsoft.Extensions.Options.IOptions<AppOptions> App
-<section class="container narrow">
-  <h1>Contato & Orçamento</h1>
-  <p>WhatsApp: <a class="btn btn-outline" href="https://wa.me/" target="_blank" rel="noopener" data-evt="cta_whatsapp">Falar no WhatsApp</a></p>
-  <p>E-mail: <a href="mailto:@App.Value.ContactEmail">@App.Value.ContactEmail</a></p>
-  @if(TempData["Success"] != null){<div class="alert success">@TempData["Success"]</div>}
-  <form asp-action="Contact" method="post" class="grid form">
-    <div>
-      <label for="Name">Nome</label>
-      <input asp-for="Name" />
-      <span asp-validation-for="Name" class="validation"></span>
+@{
+    var normalizedWhatsApp = System.Text.RegularExpressions.Regex.Replace(App.Value.WhatsAppNumber ?? string.Empty, "[^0-9]", string.Empty);
+    var whatsappHref = string.IsNullOrWhiteSpace(normalizedWhatsApp) ? string.Empty : $"https://wa.me/{normalizedWhatsApp}";
+}
+<section class="page-shell module-page theme-web">
+    <div class="container">
+        <header class="page-hero" data-reveal>
+            <h1>Receba um plano tecnico completo para seu cenario</h1>
+            <p>Compartilhe seu desafio e retornamos com proposta de arquitetura, etapas, prazo e recomendacao de rollout.</p>
+        </header>
+
+        <section class="contact-grid">
+            <article class="card module-card" data-reveal data-hover-tilt>
+                <h3>Canal direto com especialista</h3>
+                <p>Atendimento consultivo para entender seu contexto e orientar a melhor estrategia de implantacao.</p>
+                @if (!string.IsNullOrWhiteSpace(whatsappHref))
+                {
+                    <p><a class="btn btn-outline" href="@whatsappHref" target="_blank" rel="noopener noreferrer" data-evt="cta_whatsapp_contact">Falar no WhatsApp</a></p>
+                }
+                @if (!string.IsNullOrWhiteSpace(App.Value.ContactEmail))
+                {
+                    <p>E-mail: <a href="mailto:@App.Value.ContactEmail">@App.Value.ContactEmail</a></p>
+                }
+                <p class="small muted">SLA medio de retorno: ate @App.Value.SlaHours horas em dias uteis.</p>
+                <div class="module-kpis">
+                    <article class="module-kpi">
+                        <strong data-count-to="4">0</strong>
+                        <span>etapas no kickoff</span>
+                    </article>
+                    <article class="module-kpi">
+                        <strong data-count-to="2" data-count-suffix=" dias">0</strong>
+                        <span>prazo para proposta inicial</span>
+                    </article>
+                    <article class="module-kpi">
+                        <strong data-count-to="8" data-count-suffix="+">0</strong>
+                        <span>areas de atuacao tecnica</span>
+                    </article>
+                    <article class="module-kpi">
+                        <strong data-count-to="1">0</strong>
+                        <span>ponto focal dedicado</span>
+                    </article>
+                </div>
+            </article>
+
+            <article class="card module-card contact-checklist" data-reveal data-delay="1">
+                <h3>Informacoes que aceleram sua proposta</h3>
+                <ul class="list-clean">
+                    <li>Objetivo principal do projeto e meta de negocio</li>
+                    <li>Processos que hoje geram gargalo operacional</li>
+                    <li>Sistemas atuais e integracoes necessarias</li>
+                    <li>Prazo esperado para primeira entrega em producao</li>
+                    <li>Times envolvidos (comercial, operacao, financeiro, TI)</li>
+                </ul>
+                <div class="module-badges">
+                    <span class="module-badge">Escopo</span>
+                    <span class="module-badge">Prioridades</span>
+                    <span class="module-badge">Riscos</span>
+                    <span class="module-badge">Roadmap</span>
+                </div>
+            </article>
+        </section>
+
+        <section class="section-spaced card module-card" data-reveal>
+            <h2>Formulario de proposta</h2>
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert success">@TempData["Success"]</div>
+            }
+            <form asp-action="Contact" method="post" class="form-grid">
+                <div>
+                    <label for="Name">Nome</label>
+                    <input asp-for="Name" />
+                    <span asp-validation-for="Name" class="validation"></span>
+                </div>
+                <div>
+                    <label for="Company">Empresa</label>
+                    <input asp-for="Company" />
+                    <span asp-validation-for="Company" class="validation"></span>
+                </div>
+                <div>
+                    <label for="Email">E-mail</label>
+                    <input asp-for="Email" type="email" />
+                    <span asp-validation-for="Email" class="validation"></span>
+                </div>
+                <div>
+                    <label for="Phone">Telefone ou WhatsApp</label>
+                    <input asp-for="Phone" />
+                    <span asp-validation-for="Phone" class="validation"></span>
+                </div>
+                <div class="form-row-full">
+                    <label for="Need">Necessidade</label>
+                    <textarea asp-for="Need" placeholder="Descreva contexto, principal problema, objetivo e prazo desejado."></textarea>
+                    <span asp-validation-for="Need" class="validation"></span>
+                </div>
+                <div class="form-row-full">
+                    <button class="btn btn-primary" type="submit" data-evt="cta_contact_form">Enviar mensagem</button>
+                </div>
+            </form>
+        </section>
     </div>
-    <div>
-      <label for="Company">Empresa</label>
-      <input asp-for="Company" />
-      <span asp-validation-for="Company" class="validation"></span>
-    </div>
-    <div>
-      <label for="Email">E-mail</label>
-      <input asp-for="Email" type="email" />
-      <span asp-validation-for="Email" class="validation"></span>
-    </div>
-    <div>
-      <label for="Phone">Telefone/WhatsApp</label>
-      <input asp-for="Phone" />
-      <span asp-validation-for="Phone" class="validation"></span>
-    </div>
-    <div class="col-span-2">
-      <label for="Need">Necessidade</label>
-      <textarea asp-for="Need"></textarea>
-      <span asp-validation-for="Need" class="validation"></span>
-    </div>
-    <div class="col-span-2">
-      <button class="btn btn-primary" type="submit" data-evt="cta_orcamento">Enviar</button>
-    </div>
-  </form>
 </section>

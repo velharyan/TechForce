@@ -1,17 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace NexCore.Web.Controllers;
+namespace TechForce.Web.Controllers;
 
 public class LegalController : Controller
 {
     public IActionResult Privacy()
     {
-        ViewData["Title"] = "Política de Privacidade — LGPD";
+        ViewData["Title"] = "Politica de Privacidade - TechForce";
         return View();
     }
+
     public IActionResult Terms()
     {
-        ViewData["Title"] = "Termos de Uso";
+        ViewData["Title"] = "Termos de Uso - TechForce";
         return View();
     }
 }

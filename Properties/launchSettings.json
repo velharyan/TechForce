@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "NexCore.Web": {
+    "TechForce.Web": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
