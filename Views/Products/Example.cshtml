@@ -316,6 +316,21 @@
             </div>
         </header>
 
+        <section class="info-strip" data-reveal>
+            <article class="info-chip">
+                <strong>Categoria</strong>
+                <span>@Model.Category</span>
+            </article>
+            <article class="info-chip">
+                <strong>Publico principal</strong>
+                <span>@Model.Audience</span>
+            </article>
+            <article class="info-chip">
+                <strong>Go-live inicial</strong>
+                <span>@Model.StartingWeeks semana(s) para primeira entrega</span>
+            </article>
+        </section>
+
         <section class="proex-context-grid" data-reveal>
             @foreach (var item in contextCards)
             {

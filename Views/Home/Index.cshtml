@@ -2,303 +2,161 @@
 @{
     var appOptions = App.Value;
     var companyName = string.IsNullOrWhiteSpace(appOptions.CompanyName) ? "TechForce" : appOptions.CompanyName;
-    var tagline = string.IsNullOrWhiteSpace(appOptions.Tagline)
-        ? "Software, automacao e dados para empresas que precisam crescer com previsibilidade."
-        : appOptions.Tagline;
-    var subhead = string.IsNullOrWhiteSpace(appOptions.Subhead)
-        ? "Projetamos sistemas robustos e operacoes digitais para times que buscam escala e resultado."
-        : appOptions.Subhead;
     var normalizedWhatsApp = System.Text.RegularExpressions.Regex.Replace(appOptions.WhatsAppNumber ?? string.Empty, "[^0-9]", string.Empty);
-    var fallbackContact = Url.Action("Contact", "Company") ?? "/Company/Contact";
-    var specialistHref = string.IsNullOrWhiteSpace(normalizedWhatsApp) ? fallbackContact : $"https://wa.me/{normalizedWhatsApp}";
+    var contactHref = Url.Action("Contact", "Company") ?? "/Company/Contact";
+    var specialistHref = string.IsNullOrWhiteSpace(normalizedWhatsApp) ? contactHref : $"https://wa.me/{normalizedWhatsApp}";
     var specialistIsExternal = !string.IsNullOrWhiteSpace(normalizedWhatsApp);
-
-    string IconSvg(string key) => key switch
-    {
-        "spark" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M12 3l1.9 4.8L19 10l-5.1 2.2L12 17l-1.9-4.8L5 10l5.1-2.2L12 3z'/></svg>",
-        "stack" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M12 4l8 4-8 4-8-4 8-4z'/><path d='M4 12l8 4 8-4'/><path d='M4 16l8 4 8-4'/></svg>",
-        "mobile" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><rect x='7' y='2.8' width='10' height='18.4' rx='2.3'/><path d='M10 5.5h4'/><circle cx='12' cy='17.8' r='0.9'/></svg>",
-        "flow" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><circle cx='6' cy='6' r='2.5'/><circle cx='18' cy='6' r='2.5'/><circle cx='12' cy='18' r='2.5'/><path d='M8.5 6h7'/><path d='M7.8 8.1l2.8 6.3'/><path d='M16.2 8.1l-2.8 6.3'/></svg>",
-        "chart" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M4 19h16'/><path d='M7 16V9'/><path d='M12 16V5'/><path d='M17 16v-4'/></svg>",
-        "shield" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6l7-3z'/><path d='M9.5 12.2l1.8 1.8 3.4-3.8'/></svg>",
-        "rocket" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><path d='M14 4c3 0 5 2 5 5-2.5 1.6-4.6 3.7-6.2 6.2-3 0-5-2-5-5C9.4 6 11.5 4 14 4z'/><path d='M9 15l-3 3'/><path d='M12 18l-1.5 3'/></svg>",
-        "target" => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><circle cx='12' cy='12' r='8'/><circle cx='12' cy='12' r='4'/><path d='M12 4v2'/><path d='M20 12h-2'/><path d='M12 20v-2'/><path d='M4 12h2'/></svg>",
-        _ => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8'><rect x='4' y='4' width='16' height='16' rx='3'/></svg>"
-    };
 }
 
-<style>
-    .hm-home { position: relative; color: #f5f8ff; isolation: isolate; overflow: clip; }
-    .hm-home::before, .hm-home::after { content: ""; position: absolute; border-radius: 999px; filter: blur(90px); z-index: -1; pointer-events: none; }
-    .hm-home::before { width: 420px; height: 420px; top: -150px; right: -120px; background: rgba(54, 183, 232, 0.14); }
-    .hm-home::after { width: 360px; height: 360px; left: -110px; top: 35%; background: rgba(72, 192, 143, 0.08); }
-    .hm-wrap { width: min(1280px, 100%); margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
-    .hm-section { padding: 104px 0; }
-    .hm-hero { padding-top: 156px; padding-bottom: 104px; }
-    .hm-grid { display: grid; grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr); gap: 46px; align-items: start; }
-    .hm-badge { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(54,183,232,.34); background: rgba(54,183,232,.1); color: #d9f6ff; font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 18px; }
-    .hm-badge svg, .hm-icon svg, .hm-btn svg { width: 16px; height: 16px; }
-    .hm-title { margin: 0 0 16px; font-size: clamp(2.3rem, 5vw, 4.1rem); line-height: .98; letter-spacing: -.04em; max-width: 12ch; }
-    .hm-title span { color: #78d8ff; }
-    .hm-lead { margin: 0 0 26px; color: #a8bdd6; font-size: clamp(1rem, 2vw, 1.14rem); line-height: 1.72; max-width: 58ch; }
-    .hm-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
-    .hm-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 14px; padding: 14px 20px; font-size: .94rem; font-weight: 800; border: 1px solid transparent; transition: transform .24s ease, border-color .24s ease; }
-    .hm-btn:hover { transform: translateY(-2px); }
-    .hm-btn.primary { color: #031220; background: linear-gradient(135deg, #78d8ff 0%, #36b7e8 100%); box-shadow: 0 14px 34px rgba(54,183,232,.3); }
-    .hm-btn.secondary { color: #f5f8ff; border-color: rgba(148,163,184,.18); background: rgba(12,22,39,.58); }
-    .hm-points { display: grid; grid-template-columns: 1fr; gap: 14px; max-width: 580px; }
-    .hm-point, .hm-card, .hm-example, .hm-quote, .hm-step { border: 1px solid rgba(148,163,184,.18); border-radius: 22px; background: linear-gradient(180deg, rgba(13,25,43,.92) 0%, rgba(9,18,31,.92) 100%); box-shadow: 0 16px 30px rgba(2,8,22,.18); }
-    .hm-point { display: grid; grid-template-columns: auto 1fr; gap: 12px; padding: 16px; }
-    .hm-icon { width: 42px; height: 42px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; background: rgba(54,183,232,.14); color: #dff7ff; border: 1px solid rgba(54,183,232,.18); }
-    .hm-point strong, .hm-card h3, .hm-example h3, .hm-step h3 { display: block; margin: 0 0 6px; }
-    .hm-point p, .hm-card p, .hm-head p, .hm-example p, .hm-step p, .hm-quote blockquote, .hm-cta p { margin: 0; color: #a8bdd6; line-height: 1.62; }
-    .hm-stage { position: relative; border: 1px solid rgba(96,153,209,.18); border-radius: 28px; background: radial-gradient(circle at top left, rgba(54,183,232,.16) 0%, rgba(7,14,27,0) 42%), linear-gradient(180deg, rgba(10,19,34,.95) 0%, rgba(7,14,27,.98) 100%); padding: 24px; box-shadow: 0 24px 56px rgba(2,8,22,.34); overflow: hidden; }
-    .hm-stage::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(180deg, transparent 0%, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 28px 28px; opacity: .12; }
-    .hm-stage-inner { position: relative; z-index: 1; display: grid; gap: 14px; }
-    .hm-stage-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
-    .hm-stage-head strong { display: block; font-size: .98rem; }
-    .hm-stage-head span { color: #a8bdd6; font-size: .78rem; }
-    .hm-status { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 8px 12px; background: rgba(72,192,143,.1); border: 1px solid rgba(72,192,143,.2); color: #d7fff0; font-size: .76rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
-    .hm-status i { width: 8px; height: 8px; border-radius: 999px; background: #63d9a8; box-shadow: 0 0 0 6px rgba(99,217,168,.12); animation: hmPulse 1.8s ease-in-out infinite; }
-    .hm-stage-grid { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr); gap: 16px; }
-    .hm-panel, .hm-feed, .hm-kpis, .hm-bars { border: 1px solid rgba(148,163,184,.14); border-radius: 20px; background: rgba(11,20,36,.84); padding: 16px; backdrop-filter: blur(10px); }
-    .hm-panel { display: grid; gap: 10px; }
-    .hm-flow { display: grid; gap: 10px; }
-    .hm-flow article { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 12px; border-radius: 16px; border: 1px solid rgba(148,163,184,.14); background: rgba(255,255,255,.03); }
-    .hm-flow article strong { display: block; margin-bottom: 2px; font-size: .86rem; }
-    .hm-flow article span { color: #a8bdd6; font-size: .74rem; }
-    .hm-pill { border-radius: 999px; padding: 5px 8px; font-size: .68rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
-    .hm-pill.ok { color: #d7fff0; background: rgba(72,192,143,.12); border: 1px solid rgba(72,192,143,.2); }
-    .hm-pill.warn { color: #fff0d6; background: rgba(240,169,78,.12); border: 1px solid rgba(240,169,78,.2); }
-    .hm-kpis { display: grid; gap: 10px; }
-    .hm-kpis article, .hm-metric { padding: 12px; border-radius: 16px; border: 1px solid rgba(148,163,184,.14); background: rgba(255,255,255,.03); }
-    .hm-kpis strong { display: block; font-size: 1.22rem; margin-bottom: 4px; }
-    .hm-kpis span, .hm-metric span { color: #a8bdd6; font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
-    .hm-feed ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-    .hm-feed li { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; padding: 10px; border-radius: 14px; background: rgba(255,255,255,.03); transition: transform .32s ease, border-color .32s ease, background-color .32s ease; border: 1px solid transparent; }
-    .hm-feed li.is-active { transform: translateX(6px); border-color: rgba(54,183,232,.2); background: rgba(54,183,232,.08); }
-    .hm-time { width: 44px; height: 44px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; background: rgba(54,183,232,.12); color: #dcf6ff; font-size: .76rem; font-weight: 800; }
-    .hm-feed strong { display: block; margin-bottom: 2px; }
-    .hm-feed span { color: #a8bdd6; font-size: .78rem; }
-    .hm-bars { display: grid; gap: 10px; }
-    .hm-bar { display: grid; gap: 6px; }
-    .hm-bar-head { display: flex; justify-content: space-between; gap: 10px; color: #a8bdd6; font-size: .76rem; }
-    .hm-track { height: 9px; border-radius: 999px; overflow: hidden; background: rgba(148,163,184,.14); }
-    .hm-track i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #36b7e8 0%, #6fdcff 100%); width: var(--width, 50%); transition: width .6s ease; }
-    .hm-head { text-align: center; display: grid; gap: 10px; margin: 0 auto 40px; max-width: 760px; }
-    .hm-head h2, .hm-cta h2 { margin: 0; font-size: clamp(1.8rem, 3vw, 3rem); letter-spacing: -.03em; }
-    .hm-head p { max-width: 64ch; margin: 0 auto; }
-    .hm-cards, .hm-examples { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-    .hm-quotes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; max-width: 1120px; margin: 0 auto; }
-    .hm-card, .hm-example, .hm-quote { padding: 22px; }
-    .hm-card-top, .hm-example-top { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
-    .hm-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-    .hm-tag { display: inline-flex; align-items: center; padding: 6px 10px; border-radius: 999px; font-size: .72rem; color: #a8bdd6; border: 1px solid rgba(148,163,184,.18); background: rgba(255,255,255,.03); font-weight: 700; }
-    .hm-steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; max-width: 1080px; margin: 0 auto; }
-    .hm-step { padding: 20px; }
-    .hm-step-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-    .hm-step-id { width: 46px; height: 46px; border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; background: rgba(54,183,232,.12); color: #dff7ff; border: 1px solid rgba(54,183,232,.18); font-size: .82rem; font-weight: 900; }
-    .hm-example ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-    .hm-example li { position: relative; padding-left: 16px; color: #a8bdd6; font-size: .86rem; }
-    .hm-example li::before { content: ""; position: absolute; left: 0; top: .58em; width: 7px; height: 7px; border-radius: 999px; background: #36b7e8; }
-    .hm-metrics { border-top: 1px solid rgba(148,163,184,.14); border-bottom: 1px solid rgba(148,163,184,.14); background: linear-gradient(180deg, rgba(11,20,36,.48) 0%, rgba(7,13,24,.2) 100%); }
-    .hm-metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 920px; margin: 0 auto; }
-    .hm-metric { text-align: center; padding: 32px 12px; }
-    .hm-metric strong { display: block; font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1; margin-bottom: 8px; }
-    .hm-quote blockquote { font-size: .98rem; }
-    .hm-author { display: flex; align-items: center; gap: 12px; padding-top: 14px; margin-top: 16px; border-top: 1px solid rgba(148,163,184,.14); }
-    .hm-avatar { width: 46px; height: 46px; border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; background: rgba(54,183,232,.14); color: #def8ff; font-weight: 900; letter-spacing: .08em; }
-    .hm-author strong { display: block; margin-bottom: 2px; }
-    .hm-author span { color: #a8bdd6; font-size: .8rem; }
-    .hm-cta { text-align: center; border: 1px solid rgba(54,183,232,.28); border-radius: 28px; padding: clamp(28px, 5vw, 52px); background: radial-gradient(circle at 50% 0%, rgba(54,183,232,.18) 0%, rgba(8,16,29,0) 48%), linear-gradient(180deg, rgba(13,25,43,.96) 0%, rgba(7,14,27,.98) 100%); box-shadow: 0 26px 70px rgba(2,8,22,.42); max-width: 1040px; margin: 0 auto; }
-    .hm-cta p { max-width: 62ch; margin: 0 auto 22px; }
-    .hm-cta-actions { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
-    @@keyframes hmPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.12); opacity: .82; } }
-    @@media (min-width: 1121px) { .hm-home > .hm-section:not(.hm-hero) .hm-wrap { width: min(1140px, 100%); } .hm-hero .hm-grid > :first-child { max-width: 580px; } .hm-stage { max-width: 700px; margin-left: auto; } .hm-cards .hm-card:first-child, .hm-examples .hm-example:first-child { grid-column: 1 / -1; } .hm-cards .hm-card:first-child .hm-card-top, .hm-examples .hm-example:first-child .hm-example-top { max-width: 720px; margin-bottom: 18px; } .hm-examples .hm-example:first-child ul { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 18px; } }
-    @@media (max-width: 1120px) { .hm-grid, .hm-stage-grid, .hm-cards, .hm-examples, .hm-quotes { grid-template-columns: 1fr; } .hm-steps, .hm-metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: none; } .hm-points { grid-template-columns: 1fr; max-width: none; } .hm-quotes { max-width: none; } }
-    @@media (max-width: 760px) { .hm-wrap { padding: 0 16px; } .hm-section { padding: 72px 0; } .hm-hero { padding-top: 122px; padding-bottom: 72px; } .hm-title { max-width: none; font-size: clamp(2.1rem, 12vw, 3.2rem); } .hm-actions, .hm-cta-actions { flex-direction: column; } .hm-btn { width: 100%; } .hm-stage, .hm-card, .hm-example, .hm-quote, .hm-step, .hm-point { padding: 16px; border-radius: 20px; } .hm-stage-head, .hm-card-top, .hm-example-top { flex-direction: column; align-items: flex-start; } .hm-flow article { grid-template-columns: 1fr; } .hm-steps, .hm-metric-grid { grid-template-columns: 1fr; } .hm-time { width: 40px; height: 40px; border-radius: 12px; } }
-    @@media (prefers-reduced-motion: reduce) { .hm-status i { animation: none !important; } }
-</style>
-
-<div class="hm-home">
-    <section class="hm-section hm-hero">
-        <div class="hm-wrap hm-grid">
-            <div data-reveal>
-                <p class="hm-badge">@Html.Raw(IconSvg("spark"))<span>@companyName | software, automacao e dados</span></p>
-                <h1 class="hm-title">Projetos digitais com <span>cara de produto pronto</span> desde a primeira entrega.</h1>
-                <p class="hm-lead">@tagline @subhead Entregamos algo que precisa vender bem, operar bem e continuar bonito no mobile.</p>
-                <div class="hm-actions">
-                    @if (specialistIsExternal)
-                    {
-                        <a class="hm-btn primary" href="@specialistHref" target="_blank" rel="noopener noreferrer">@Html.Raw(IconSvg("rocket"))<span>Falar com especialista</span></a>
-                    }
-                    else
-                    {
-                        <a class="hm-btn primary" href="@specialistHref">@Html.Raw(IconSvg("rocket"))<span>Falar com especialista</span></a>
-                    }
-                    <a class="hm-btn secondary" href="#solucoes">@Html.Raw(IconSvg("stack"))<span>Ver solucoes</span></a>
-                    <a class="hm-btn secondary" href="#exemplos">@Html.Raw(IconSvg("mobile"))<span>Ver exemplos</span></a>
+<section class="studio-home">
+    <section class="hero-section" aria-labelledby="hero-title">
+        <div class="container hero-grid">
+            <div class="hero-copy" data-reveal>
+                <p class="eyebrow">Tech studio para empresas que precisam vender e operar melhor</p>
+                <h1 id="hero-title">Produtos digitais premium para transformar operacao em crescimento.</h1>
+                <p class="hero-lead">
+                    Criamos sites, sistemas, automacoes, landing pages, catalogos, cardapios digitais,
+                    chatbots e plataformas sob medida com acabamento comercial, performance e escala.
+                </p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="@specialistHref" @(specialistIsExternal ? "target=\"_blank\" rel=\"noopener noreferrer\"" : "")>
+                        Solicitar diagnostico
+                    </a>
+                    <a class="btn btn-outline" href="/Products">Ver demos funcionais</a>
                 </div>
-                <div class="hm-points">
-                    <article class="hm-point" data-reveal data-hover-tilt><span class="hm-icon">@Html.Raw(IconSvg("target"))</span><div><strong>Diagnostico com profundidade</strong><p>Mapeamos objetivo, gargalo, risco e KPI antes de implementar.</p></div></article>
-                    <article class="hm-point" data-reveal data-delay="1" data-hover-tilt><span class="hm-icon">@Html.Raw(IconSvg("mobile"))</span><div><strong>Experiencia pronta para mobile</strong><p>Interface pensada para uso real em celular, tablet e desktop.</p></div></article>
-                    <article class="hm-point" data-reveal data-delay="2" data-hover-tilt><span class="hm-icon">@Html.Raw(IconSvg("shield"))</span><div><strong>Evolucao com governanca</strong><p>Arquitetura, monitoramento e roadmap para crescer sem bagunca.</p></div></article>
-                </div>
+                <dl class="hero-metrics" aria-label="Indicadores de experiencia">
+                    <div><dt data-count-to="150" data-count-suffix="+">0</dt><dd>entregas digitais</dd></div>
+                    <div><dt data-count-to="40" data-count-suffix="%">0</dt><dd>ganho operacional medio</dd></div>
+                    <div><dt data-count-to="24" data-count-suffix="/7">0</dt><dd>base pronta para suporte</dd></div>
+                </dl>
             </div>
 
-            <div class="hm-stage" data-reveal data-delay="1">
-                <div class="hm-stage-inner">
-                    <div class="hm-stage-head">
-                        <div><strong>Nucleo de operacao integrada</strong><span>Painel conceitual de uma entrega com UX, automacao e dados conectados.</span></div>
-                        <div class="hm-status"><i></i><span>deploy estavel</span></div>
+            <div class="hero-product" data-reveal data-delay="1" aria-label="Preview de produto digital">
+                <div class="product-window">
+                    <div class="window-bar">
+                        <span></span><span></span><span></span>
+                        <strong>NexCore Command Center</strong>
                     </div>
-                    <div class="hm-stage-grid">
-                        <section class="hm-panel">
-                            <div class="hm-flow">
-                                <article><span class="hm-icon">@Html.Raw(IconSvg("target"))</span><div><strong>Captacao e qualificacao</strong><span>Leads entram, passam por regra de prioridade e seguem para comercial.</span></div><span class="hm-pill ok">3.9% conv</span></article>
-                                <article><span class="hm-icon">@Html.Raw(IconSvg("flow"))</span><div><strong>Workflow operacional</strong><span>Tarefas, aprovacoes e excecoes sao tratadas por fila e SLA.</span></div><span class="hm-pill warn">12 min sla</span></article>
-                                <article><span class="hm-icon">@Html.Raw(IconSvg("chart"))</span><div><strong>Painel executivo</strong><span>Diretoria acompanha meta, gargalo e produtividade com clareza.</span></div><span class="hm-pill ok">52 KPI</span></article>
+                    <div class="command-grid">
+                        <article class="command-card command-card-wide">
+                            <span>Receita projetada</span>
+                            <strong>R$ 428k</strong>
+                            <div class="mini-chart" aria-hidden="true">
+                                <i style="height:38%"></i><i style="height:56%"></i><i style="height:48%"></i><i style="height:72%"></i><i style="height:66%"></i><i style="height:88%"></i>
                             </div>
-                        </section>
-                        <div style="display:grid; gap:14px">
-                            <section class="hm-kpis">
-                                <article><strong data-count-to="218">0</strong><span>leads qualificados</span></article>
-                                <article><strong data-count-to="34" data-count-suffix="%">0</strong><span>ganho medio de eficiencia</span></article>
-                                <article><strong data-count-to="99" data-count-suffix="%">0</strong><span>disponibilidade alvo</span></article>
-                            </section>
-                            <section class="hm-feed">
-                                <ul id="homeFeed">
-                                    <li class="is-active" data-home-log><span class="hm-time">09:12</span><div><strong>Landing aprovada</strong><span>Campanha B2B liberada com CRM e analytics conectados.</span></div></li>
-                                    <li data-home-log><span class="hm-time">10:04</span><div><strong>Workflow sincronizado</strong><span>Financeiro, estoque e atendimento refletindo a mesma base de dados.</span></div></li>
-                                    <li data-home-log><span class="hm-time">11:26</span><div><strong>Indicador em alerta</strong><span>Painel apontou fila acima do limite e equipe reagiu em minutos.</span></div></li>
-                                </ul>
-                            </section>
-                            <section class="hm-bars">
-                                <div class="hm-bar"><div class="hm-bar-head"><span>Conversao comercial</span><strong id="homeBarValueA">68%</strong></div><div class="hm-track"><i id="homeBarA" style="--width:68%"></i></div></div>
-                                <div class="hm-bar"><div class="hm-bar-head"><span>Automacao de rotina</span><strong id="homeBarValueB">74%</strong></div><div class="hm-track"><i id="homeBarB" style="--width:74%"></i></div></div>
-                            </section>
-                        </div>
+                        </article>
+                        <article class="command-card">
+                            <span>Leads qualificados</span>
+                            <strong>218</strong>
+                            <small>+32% no mes</small>
+                        </article>
+                        <article class="command-card">
+                            <span>SLA medio</span>
+                            <strong>12m</strong>
+                            <small>atendimento priorizado</small>
+                        </article>
+                        <article class="workflow-card">
+                            <div><span class="status-dot"></span><strong>Landing captou novo lead</strong></div>
+                            <p>Bot qualificou projeto, criou card no CRM e notificou o comercial.</p>
+                        </article>
+                        <article class="workflow-card">
+                            <div><span class="status-dot status-dot-warm"></span><strong>Pedido exigiu aprovacao</strong></div>
+                            <p>Automacao abriu tarefa, anexou dados e atualizou o dashboard.</p>
+                        </article>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="hm-section" id="solucoes">
-        <div class="hm-wrap">
-            <header class="hm-head" data-reveal>
-                <h2>Solucoes completas para vender melhor e operar com ordem</h2>
-                <p>Da camada comercial ate a operacao interna, tudo precisa ter leitura forte, conteudo convincente e uso consistente no celular.</p>
+    <section class="section-band" id="solucoes">
+        <div class="container">
+            <header class="section-heading" data-reveal>
+                <p class="eyebrow">Solucoes</p>
+                <h2>Uma esteira completa para presenca digital, operacao e vendas.</h2>
+                <p>Combinamos design, engenharia e estrategia comercial para entregar experiencias que parecem prontas para cliente real desde o primeiro contato.</p>
             </header>
-            <div class="hm-cards">
-                <article class="hm-card" data-reveal data-hover-tilt><div class="hm-card-top"><span class="hm-icon">@Html.Raw(IconSvg("stack"))</span><div><h3>Plataformas web e portais</h3><p>Sites, portais e areas logadas com UX forte, SEO tecnico e foco em conversao.</p></div></div><div class="hm-tags"><span class="hm-tag">UX</span><span class="hm-tag">SEO</span><span class="hm-tag">Conversao</span></div></article>
-                <article class="hm-card" data-reveal data-delay="1" data-hover-tilt><div class="hm-card-top"><span class="hm-icon">@Html.Raw(IconSvg("mobile"))</span><div><h3>Apps para operacao e campo</h3><p>Aplicativos para checklist, atendimento, aprovacao e produtividade operacional.</p></div></div><div class="hm-tags"><span class="hm-tag">Android</span><span class="hm-tag">iOS</span><span class="hm-tag">Offline</span></div></article>
-                <article class="hm-card" data-reveal data-delay="2" data-hover-tilt><div class="hm-card-top"><span class="hm-icon">@Html.Raw(IconSvg("flow"))</span><div><h3>Automacao de processos</h3><p>Esteiras para atendimento, backoffice e integracoes com menos retrabalho manual.</p></div></div><div class="hm-tags"><span class="hm-tag">Workflow</span><span class="hm-tag">SLA</span><span class="hm-tag">Escala</span></div></article>
-                <article class="hm-card" data-reveal data-hover-tilt><div class="hm-card-top"><span class="hm-icon">@Html.Raw(IconSvg("chart"))</span><div><h3>Dados, BI e dashboards</h3><p>Indicadores claros para lideranca enxergar gargalo, margem e performance em tempo real.</p></div></div><div class="hm-tags"><span class="hm-tag">KPI</span><span class="hm-tag">Alertas</span><span class="hm-tag">Forecast</span></div></article>
-                <article class="hm-card" data-reveal data-delay="1" data-hover-tilt><div class="hm-card-top"><span class="hm-icon">@Html.Raw(IconSvg("shield"))</span><div><h3>Software sob medida</h3><p>Sistemas desenhados no processo real da operacao, com perfis, regras e governanca.</p></div></div><div class="hm-tags"><span class="hm-tag">ERP</span><span class="hm-tag">CRM</span><span class="hm-tag">Backoffice</span></div></article>
-                <article class="hm-card" data-reveal data-delay="2" data-hover-tilt><div class="hm-card-top"><span class="hm-icon">@Html.Raw(IconSvg("rocket"))</span><div><h3>Suporte e evolucao</h3><p>Go-live assistido, monitoramento e melhorias priorizadas por impacto de negocio.</p></div></div><div class="hm-tags"><span class="hm-tag">Roadmap</span><span class="hm-tag">QA</span><span class="hm-tag">Suporte</span></div></article>
+            <div class="service-grid">
+                <article class="premium-card" data-reveal data-hover-tilt>
+                    <span class="card-index">01</span>
+                    <h3>Sites e landing pages</h3>
+                    <p>Narrativa, SEO tecnico, performance mobile e paginas de conversao para captar oportunidades.</p>
+                    <ul><li>Institucional premium</li><li>Landing de campanha</li><li>Pagina de vendas</li></ul>
+                </article>
+                <article class="premium-card" data-reveal data-delay="1" data-hover-tilt>
+                    <span class="card-index">02</span>
+                    <h3>Sistemas e produtos SaaS</h3>
+                    <p>Dashboards, CRMs, portais e softwares sob medida para organizar rotinas e dados.</p>
+                    <ul><li>Fluxos financeiros</li><li>Perfis e permissoes</li><li>Relatorios executivos</li></ul>
+                </article>
+                <article class="premium-card" data-reveal data-delay="2" data-hover-tilt>
+                    <span class="card-index">03</span>
+                    <h3>Automacoes e chatbots</h3>
+                    <p>Atendimento, triagem, backoffice e integracoes que reduzem tarefas manuais.</p>
+                    <ul><li>WhatsApp e CRM</li><li>Regras de SLA</li><li>Base de conhecimento</li></ul>
+                </article>
+                <article class="premium-card" data-reveal data-delay="3" data-hover-tilt>
+                    <span class="card-index">04</span>
+                    <h3>Catalogos e cardapios digitais</h3>
+                    <p>Experiencias comerciais bonitas, filtraveis e prontas para apresentar produtos.</p>
+                    <ul><li>Busca e categorias</li><li>Carrinho simples</li><li>CTA comercial</li></ul>
+                </article>
             </div>
         </div>
     </section>
 
-    <section class="hm-section">
-        <div class="hm-wrap">
-            <header class="hm-head" data-reveal>
-                <h2>Metodo de entrega para projeto com cara de empresa grande</h2>
-                <p>O objetivo nao e apenas uma tela bonita. E colocar no ar algo coerente, confiavel, rastreavel e preparado para continuar crescendo.</p>
+    <section class="section-band split-section">
+        <div class="container split-grid">
+            <div data-reveal>
+                <p class="eyebrow">Metodo</p>
+                <h2>Arquitetura de produto, nao apenas telas bonitas.</h2>
+                <p>Antes de codar, definimos objetivo, publico, fluxo, dados, integracoes e criterio de sucesso. O resultado fica mais claro, mais vendavel e mais facil de evoluir.</p>
+                <a class="btn btn-outline" href="/Services">Conhecer servicos</a>
+            </div>
+            <div class="process-list" data-reveal data-delay="1">
+                <article><span>Diagnostico</span><p>Entendimento do negocio, gargalos, dores e oportunidades comerciais.</p></article>
+                <article><span>Prototipo premium</span><p>Visual, conteudo e fluxo testados antes da entrega final.</p></article>
+                <article><span>Implementacao</span><p>Codigo limpo, responsivo, acessivel e preparado para evoluir.</p></article>
+                <article><span>Evolucao</span><p>Roadmap por impacto, metricas e melhoria continua.</p></article>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-band">
+        <div class="container">
+            <header class="section-heading" data-reveal>
+                <p class="eyebrow">Demos</p>
+                <h2>Veja exemplos navegaveis antes de pedir uma proposta.</h2>
+                <p>A vitrine de demos mostra dashboards, paginas comerciais, catalogos e cardapios com interacao real usando dados mockados.</p>
             </header>
-            <div class="hm-steps">
-                <article class="hm-step" data-reveal data-hover-tilt><div class="hm-step-head"><span class="hm-step-id">01</span><span class="hm-icon">@Html.Raw(IconSvg("target"))</span></div><h3>Diagnostico</h3><p>Levantamento do cenario, objetivo principal e pontos de ruptura da operacao.</p></article>
-                <article class="hm-step" data-reveal data-delay="1" data-hover-tilt><div class="hm-step-head"><span class="hm-step-id">02</span><span class="hm-icon">@Html.Raw(IconSvg("stack"))</span></div><h3>Arquitetura</h3><p>Definimos stack, integracoes, jornadas e estrutura de entrega por sprint.</p></article>
-                <article class="hm-step" data-reveal data-delay="2" data-hover-tilt><div class="hm-step-head"><span class="hm-step-id">03</span><span class="hm-icon">@Html.Raw(IconSvg("rocket"))</span></div><h3>Entrega guiada por valor</h3><p>Colocamos em producao o que gera retorno mais rapido, sem perder qualidade.</p></article>
-                <article class="hm-step" data-reveal data-delay="3" data-hover-tilt><div class="hm-step-head"><span class="hm-step-id">04</span><span class="hm-icon">@Html.Raw(IconSvg("shield"))</span></div><h3>Escala e governanca</h3><p>Monitoramos, ajustamos e expandimos com dados, estabilidade e previsibilidade.</p></article>
+            <div class="showcase-row">
+                <a class="showcase-tile" href="/Products" data-reveal>
+                    <strong>Fluxo de caixa SaaS</strong>
+                    <span>Dashboard, transacoes, filtros e graficos.</span>
+                </a>
+                <a class="showcase-tile" href="/Products" data-reveal data-delay="1">
+                    <strong>Landing de conversao</strong>
+                    <span>Oferta, prova social, FAQ e formulario.</span>
+                </a>
+                <a class="showcase-tile" href="/Products" data-reveal data-delay="2">
+                    <strong>Cardapio digital</strong>
+                    <span>Categorias, itens, carrinho e total.</span>
+                </a>
             </div>
         </div>
     </section>
 
-    <section class="hm-section" id="exemplos">
-        <div class="hm-wrap">
-            <header class="hm-head" data-reveal>
-                <h2>Exemplos funcionais com identidade propria por modulo</h2>
-                <p>Cada demo representa um tipo de entrega diferente, com tema, acao principal e leitura mais clara para celular e desktop.</p>
-            </header>
-            <div class="hm-examples">
-                <article class="hm-example" data-reveal data-hover-tilt><div class="hm-example-top"><span class="hm-icon">@Html.Raw(IconSvg("stack"))</span><div><h3>Site institucional premium</h3><p>Captacao de leads com narrativa comercial, prova social e funnel integrado.</p></div></div><ul><li>Home orientada a conversao</li><li>Formulario inteligente</li><li>CRM conectado</li></ul><div style="margin-top:14px"><a class="hm-btn secondary" href="/Products/Example/site">Abrir exemplo</a></div></article>
-                <article class="hm-example" data-reveal data-delay="1" data-hover-tilt><div class="hm-example-top"><span class="hm-icon">@Html.Raw(IconSvg("rocket"))</span><div><h3>Landing de campanha</h3><p>Estrutura de midia paga com teste A/B, verba e leitura de ROI.</p></div></div><ul><li>Experimentos reais</li><li>Heatmap de horario</li><li>Canal por CPL</li></ul><div style="margin-top:14px"><a class="hm-btn secondary" href="/Products/Example/landing">Abrir exemplo</a></div></article>
-                <article class="hm-example" data-reveal data-delay="2" data-hover-tilt><div class="hm-example-top"><span class="hm-icon">@Html.Raw(IconSvg("mobile"))</span><div><h3>App de operacao</h3><p>Checklist, apontamento e acompanhamento de equipe em ambiente de campo.</p></div></div><ul><li>Fluxo mobile-first</li><li>Status por equipe</li><li>Checklist acionavel</li></ul><div style="margin-top:14px"><a class="hm-btn secondary" href="/Products/Example/app">Abrir exemplo</a></div></article>
-                <article class="hm-example" data-reveal data-hover-tilt><div class="hm-example-top"><span class="hm-icon">@Html.Raw(IconSvg("flow"))</span><div><h3>Automacao com SLA</h3><p>Workflow com fila, regras, telemetria e escalonamento operacional.</p></div></div><ul><li>Fila operacional</li><li>Logs de execucao</li><li>Tratamento de excecao</li></ul><div style="margin-top:14px"><a class="hm-btn secondary" href="/Products/Example/automation">Abrir exemplo</a></div></article>
-                <article class="hm-example" data-reveal data-delay="1" data-hover-tilt><div class="hm-example-top"><span class="hm-icon">@Html.Raw(IconSvg("chart"))</span><div><h3>Dashboard executivo</h3><p>Leitura de meta, alerta de desvio e comparativo por periodo.</p></div></div><ul><li>KPI em tempo real</li><li>Analise temporal</li><li>Alertas de meta</li></ul><div style="margin-top:14px"><a class="hm-btn secondary" href="/Products/Example/dashboard">Abrir exemplo</a></div></article>
-                <article class="hm-example" data-reveal data-delay="2" data-hover-tilt><div class="hm-example-top"><span class="hm-icon">@Html.Raw(IconSvg("shield"))</span><div><h3>ERP Lite e integracoes</h3><p>Pedidos, estoque, financeiro e rotinas administrativas organizadas.</p></div></div><ul><li>Pedidos e estoque</li><li>Financeiro base</li><li>Governanca de processo</li></ul><div style="margin-top:14px"><a class="hm-btn secondary" href="/Products/Example/erp-lite">Abrir exemplo</a></div></article>
-            </div>
-        </div>
-    </section>
-
-    <section class="hm-section hm-metrics">
-        <div class="hm-wrap">
-            <div class="hm-metric-grid">
-                <article class="hm-metric" data-reveal><strong data-count-to="150" data-count-suffix="+">0</strong><span>entregas estruturadas</span></article>
-                <article class="hm-metric" data-reveal data-delay="1"><strong data-count-to="99" data-count-suffix="%">0</strong><span>satisfacao media</span></article>
-                <article class="hm-metric" data-reveal data-delay="2"><strong data-count-to="24" data-count-suffix="/7">0</strong><span>suporte especializado</span></article>
-                <article class="hm-metric" data-reveal data-delay="3"><strong data-count-to="40" data-count-suffix="%">0</strong><span>ganho medio operacional</span></article>
-            </div>
-        </div>
-    </section>
-
-    <section class="hm-section">
-        <div class="hm-wrap">
-            <header class="hm-head" data-reveal>
-                <h2>Percepcao de quem passou a operar com mais clareza</h2>
-                <p>Quando a interface melhora, o processo encaixa e os dados ficam visiveis, a sensacao de organizacao muda rapido.</p>
-            </header>
-            <div class="hm-quotes">
-                <figure class="hm-quote" data-reveal data-hover-tilt><blockquote>"Nossa estrutura digital deixou de parecer improvisada. Hoje o comercial opera com clareza e prioridade real."</blockquote><figcaption class="hm-author"><span class="hm-avatar">CE</span><div><strong>Carlos E.</strong><span>Diretor Comercial</span></div></figcaption></figure>
-                <figure class="hm-quote" data-reveal data-delay="1" data-hover-tilt><blockquote>"Conectamos processos que estavam espalhados. O time ganhou ritmo, e a lideranca passou a decidir com dados."</blockquote><figcaption class="hm-author"><span class="hm-avatar">ML</span><div><strong>Mariana L.</strong><span>Gerente de Operacoes</span></div></figcaption></figure>
-                <figure class="hm-quote" data-reveal data-delay="2" data-hover-tilt><blockquote>"Recebemos algo com cara de produto pronto: boa interface, logica consistente e espaco para evolucao."</blockquote><figcaption class="hm-author"><span class="hm-avatar">RA</span><div><strong>Roberto A.</strong><span>CEO</span></div></figcaption></figure>
-            </div>
-        </div>
-    </section>
-
-    <section class="hm-section">
-        <div class="hm-wrap">
-            <div class="hm-cta" data-reveal>
-                <h2>Se a empresa precisa parecer pronta, a entrega tambem precisa nascer pronta</h2>
-                <p>Visual profissional, experiencia consistente, logica de negocio e foco em uso real. O resultado precisa vender bem e operar bem ao mesmo tempo.</p>
-                <div class="hm-cta-actions">
-                    <a class="hm-btn primary" href="/Company/Contact">@Html.Raw(IconSvg("rocket"))<span>Solicitar proposta</span></a>
-                    <a class="hm-btn secondary" href="/Products">@Html.Raw(IconSvg("stack"))<span>Ver portifolio</span></a>
-                    <a class="hm-btn secondary" href="/Company/Chat">@Html.Raw(IconSvg("spark"))<span>Converse com a IA</span></a>
+    <section class="section-band final-cta">
+        <div class="container">
+            <div class="cta-panel" data-reveal>
+                <p class="eyebrow">@companyName</p>
+                <h2>Vamos transformar sua ideia em um produto digital com presenca de marca grande.</h2>
+                <p>Conte seu objetivo e receba um plano inicial com escopo, prioridade e caminho recomendado.</p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="@contactHref">Solicitar proposta</a>
+                    <button class="btn btn-outline" type="button" data-open-chat>Falar com assistente</button>
                 </div>
             </div>
         </div>
     </section>
-</div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (reducedMotion) return;
-
-        const feedItems = Array.from(document.querySelectorAll("[data-home-log]"));
-        const barA = document.getElementById("homeBarA");
-        const barB = document.getElementById("homeBarB");
-        const barValueA = document.getElementById("homeBarValueA");
-        const barValueB = document.getElementById("homeBarValueB");
-        const states = [{ a: 68, b: 74 }, { a: 72, b: 79 }, { a: 76, b: 82 }, { a: 81, b: 87 }];
-        let index = 0;
-
-        window.setInterval(function () {
-            if (feedItems.length > 0) {
-                feedItems.forEach(function (item, itemIndex) {
-                    item.classList.toggle("is-active", itemIndex === index % feedItems.length);
-                });
-            }
-
-            const state = states[index % states.length];
-            if (barA) barA.style.setProperty("--width", state.a + "%");
-            if (barB) barB.style.setProperty("--width", state.b + "%");
-            if (barValueA) barValueA.textContent = state.a + "%";
-            if (barValueB) barValueB.textContent = state.b + "%";
-            index += 1;
-        }, 2600);
-    });
-</script>
+</section>

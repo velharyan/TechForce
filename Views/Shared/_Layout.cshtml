@@ -18,7 +18,7 @@
     var nav = new (string href, string text, bool cta)[] {
         ("/", "Home", false),
         ("/Services", "Servicos", false),
-        ("/Products", "Produtos", false),
+        ("/Products", "Demos", false),
         ("/Cases", "Cases", false),
         ("/Testimonials", "Depoimentos", false),
         ("/Blog", "Blog", false),
@@ -32,15 +32,15 @@
         return lower == "/" ? path == "/" : path.StartsWith(lower);
     };
 
-    var normalizedWhatsApp = System.Text.RegularExpressions.Regex.Replace(app.WhatsAppNumber ?? string.Empty, "[^019997614591]", string.Empty);
+    var normalizedWhatsApp = System.Text.RegularExpressions.Regex.Replace(app.WhatsAppNumber ?? string.Empty, "[^0-9]", string.Empty);
     var whatsappHref = string.IsNullOrWhiteSpace(normalizedWhatsApp) ? null : $"https://wa.me/{normalizedWhatsApp}";
 }
 <!DOCTYPE html>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <html lang="pt-BR" class="no-js" data-theme="dark">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
     <title>@title</title>
     <meta name="description" content="@description" />
     @if (!string.IsNullOrWhiteSpace(canonical))
@@ -56,9 +56,22 @@
     }
     <meta property="og:image" content="@ogImage" />
     <meta name="theme-color" content="#0a162d" />
+    <script>
+        (function () {
+            try {
+                var savedTheme = localStorage.getItem("nxc_theme");
+                if (savedTheme === "dark" || savedTheme === "light") {
+                    document.documentElement.setAttribute("data-theme", savedTheme);
+                }
+            } catch (error) {
+                /* no-op */
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body data-section="@sectionKey" data-page="@pageKey">
@@ -71,7 +84,10 @@
         <div class="container header-inner">
             <a class="brand" href="/" aria-label="Ir para Home">
                 <img src="~/img/logo3.png" asp-append-version="true" alt="@app.CompanyName" />
-                
+                <span class="brand-lockup">
+                    <strong class="brand-name">@app.CompanyName</strong>
+                    <small class="brand-subtitle">Digital products e automacao</small>
+                </span>
             </a>
 
             <nav class="desktop-nav" aria-label="Navegacao principal">
@@ -82,11 +98,18 @@
                 }
             </nav>
 
-            <button id="menuToggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menu">Menu</button>
+            <div class="header-actions">
+                <button id="themeToggle" class="theme-toggle" type="button" aria-label="Alternar tema">Tema</button>
+                <button id="menuToggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menu">Menu</button>
+            </div>
         </div>
 
         <nav id="mobileNav" class="mobile-nav" aria-label="Navegacao mobile" hidden>
             <div class="mobile-nav-inner">
+                <div class="mobile-nav-head">
+                    <span>Navegacao</span>
+                    <button id="themeToggleMobile" class="theme-toggle" type="button" aria-label="Alternar tema mobile">Tema</button>
+                </div>
                 @foreach (var item in nav)
                 {
                     var active = isActive(item.href);
@@ -95,6 +118,7 @@
             </div>
         </nav>
     </header>
+    <button id="mobileNavBackdrop" class="mobile-nav-backdrop" type="button" hidden aria-label="Fechar menu"></button>
 
     <main id="conteudo" class="site-main" role="main" tabindex="-1">
         @RenderBody()
@@ -165,27 +189,32 @@
         </a>
     }
 
-    @* <button id="chatWidget" class="chat-widget" type="button" aria-label="Abrir chat">IA</button>
-    <aside id="chatPanel" class="chat-panel" aria-label="Assistente virtual">
+    <button id="chatWidget" class="chat-widget" type="button" aria-label="Abrir assistente comercial" data-open-chat>
+        <span class="chat-widget-pulse" aria-hidden="true"></span>
+        <span>Assistente</span>
+    </button>
+    <aside id="chatPanel" class="chat-panel" aria-label="Assistente comercial" aria-hidden="true">
         <div class="chat-header">
-            <strong>Assistente @app.CompanyName</strong>
+            <div>
+                <strong>Assistente @app.CompanyName</strong>
+                <span>Diagnostico comercial em tempo real</span>
+            </div>
             <button id="chatClose" type="button" aria-label="Fechar chat">Fechar</button>
         </div>
         <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
         <form id="chatForm" class="chat-form">
-            <input id="chatInput" type="text" placeholder="Digite sua mensagem..." maxlength="240" required />
+            <label class="sr-only" for="chatInput">Mensagem para o assistente</label>
+            <input id="chatInput" type="text" placeholder="Ex: preciso vender mais pelo site" maxlength="280" autocomplete="off" required />
             <button type="submit" class="btn btn-primary">Enviar</button>
-        </form>s
-    </aside> *@
+        </form>
+    </aside>
 
-    
-
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/chat.js" asp-append-version="true"></script>
-    <script src="~/js/theme.js" asp-append-version="true"></script>
-    <script src="~/js/consent.js" asp-append-version="true"></script>
-    <script src="~/js/analytics.js" asp-append-version="true"></script>
-    <script src="~/js/sw-register.js" asp-append-version="true"></script>
+    <script defer src="~/js/site.js" asp-append-version="true"></script>
+    <script defer src="~/js/chat.js" asp-append-version="true"></script>
+    <script defer src="~/js/theme.js" asp-append-version="true"></script>
+    <script defer src="~/js/consent.js" asp-append-version="true"></script>
+    <script defer src="~/js/analytics.js" asp-append-version="true"></script>
+    <script defer src="~/js/sw-register.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

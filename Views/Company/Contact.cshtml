@@ -11,6 +11,21 @@
             <p>Compartilhe seu desafio e retornamos com proposta de arquitetura, etapas, prazo e recomendacao de rollout.</p>
         </header>
 
+        <section class="info-strip" data-reveal>
+            <article class="info-chip">
+                <strong>Resposta consultiva</strong>
+                <span>Diagnostico inicial com foco tecnico e comercial.</span>
+            </article>
+            <article class="info-chip">
+                <strong>Plano claro de execucao</strong>
+                <span>Prioridade por impacto, etapas e estimativa inicial.</span>
+            </article>
+            <article class="info-chip">
+                <strong>Ponto focal dedicado</strong>
+                <span>Comunicacao objetiva durante todo o ciclo do projeto.</span>
+            </article>
+        </section>
+
         <section class="contact-grid">
             <article class="card module-card" data-reveal data-hover-tilt>
                 <h3>Canal direto com especialista</h3>
@@ -23,7 +38,14 @@
                 {
                     <p>E-mail: <a href="mailto:@App.Value.ContactEmail">@App.Value.ContactEmail</a></p>
                 }
-                <p class="small muted">SLA medio de retorno: ate @App.Value.SlaHours horas em dias uteis.</p>
+                <div class="contact-panel">
+                    @if (!string.IsNullOrWhiteSpace(App.Value.ContactEmail))
+                    {
+                        <p class="contact-line"><span>E-mail principal</span><strong>@App.Value.ContactEmail</strong></p>
+                    }
+                    <p class="contact-line"><span>SLA medio de retorno</span><strong>Ate @App.Value.SlaHours horas uteis</strong></p>
+                    <p class="contact-line"><span>Formato da primeira entrega</span><strong>Diagnostico + proposta inicial</strong></p>
+                </div>
                 <div class="module-kpis">
                     <article class="module-kpi">
                         <strong data-count-to="4">0</strong>
@@ -59,6 +81,11 @@
                     <span class="module-badge">Riscos</span>
                     <span class="module-badge">Roadmap</span>
                 </div>
+                <ul class="timeline-list">
+                    <li><strong>Dia 0:</strong> recebimento do briefing e triagem do contexto</li>
+                    <li><strong>Dia 1:</strong> alinhamento tecnico-comercial e prioridades</li>
+                    <li><strong>Dia 2:</strong> envio da proposta inicial com proximo passo</li>
+                </ul>
             </article>
         </section>
 
@@ -98,6 +125,10 @@
                     <button class="btn btn-primary" type="submit" data-evt="cta_contact_form">Enviar mensagem</button>
                 </div>
             </form>
+        </section>
+
+        <section class="status-note section-spaced" data-reveal>
+            Dica para acelerar: inclua no campo de necessidade o sistema atual, o maior gargalo e o prazo desejado para a primeira entrega.
         </section>
     </div>
 </section>

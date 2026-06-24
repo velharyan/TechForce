@@ -8,7 +8,7 @@
         const theme = root.getAttribute("data-theme") || "dark";
         toggles.forEach((button) => {
             if (!(button instanceof HTMLElement)) return;
-            button.textContent = theme === "light" ? "Dark" : "Light";
+            button.textContent = theme === "light" ? "Escuro" : "Claro";
             button.setAttribute("aria-label", theme === "light" ? "Ativar tema escuro" : "Ativar tema claro");
         });
     };

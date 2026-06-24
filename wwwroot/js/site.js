@@ -5,16 +5,24 @@
 
     const prefersReducedMotion = window.matchMedia &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const supportsFinePointer = window.matchMedia &&
+        window.matchMedia("(pointer: fine)").matches;
 
     const header = document.getElementById("mainHeader");
     const menuToggle = document.getElementById("menuToggle");
     const mobileNav = document.getElementById("mobileNav");
+    const mobileNavBackdrop = document.getElementById("mobileNavBackdrop");
     const progress = document.getElementById("scrollProgress");
     const glows = Array.from(document.querySelectorAll(".bg-glow"));
 
+    const updateHeaderOffset = () => {
+        if (!header) return;
+        document.documentElement.style.setProperty("--header-offset", `${header.offsetHeight}px`);
+    };
+
     const setHeaderState = () => {
         if (!header) return;
-        if (window.scrollY > 8) {
+        if (window.scrollY > 12) {
             header.classList.add("scrolled");
         } else {
             header.classList.remove("scrolled");
@@ -32,15 +40,22 @@
     const closeMenu = () => {
         if (!menuToggle || !mobileNav) return;
         mobileNav.hidden = true;
+        if (mobileNavBackdrop) mobileNavBackdrop.hidden = true;
         menuToggle.setAttribute("aria-expanded", "false");
-        document.body.style.overflow = "";
+        document.body.classList.remove("menu-open");
     };
 
     const openMenu = () => {
         if (!menuToggle || !mobileNav) return;
         mobileNav.hidden = false;
+        if (mobileNavBackdrop) mobileNavBackdrop.hidden = false;
         menuToggle.setAttribute("aria-expanded", "true");
-        document.body.style.overflow = "hidden";
+        document.body.classList.add("menu-open");
+
+        const firstLink = mobileNav.querySelector("a, button");
+        if (firstLink instanceof HTMLElement) {
+            window.requestAnimationFrame(() => firstLink.focus());
+        }
     };
 
     if (menuToggle && mobileNav) {
@@ -57,14 +72,33 @@
             }
         });
 
+        if (mobileNavBackdrop) {
+            mobileNavBackdrop.addEventListener("click", closeMenu);
+        }
+
         document.addEventListener("keydown", (event) => {
             if (event.key === "Escape") closeMenu();
         });
 
         window.addEventListener("resize", () => {
             if (window.innerWidth > 1060) closeMenu();
+            updateHeaderOffset();
         });
     }
+
+    const ensureResponsiveTables = () => {
+        const tables = Array.from(document.querySelectorAll(".module-table"));
+        tables.forEach((table) => {
+            if (!(table instanceof HTMLTableElement)) return;
+            const parent = table.parentElement;
+            if (parent && parent.classList.contains("table-scroll")) return;
+            const wrapper = document.createElement("div");
+            wrapper.className = "table-scroll";
+            table.parentNode?.insertBefore(wrapper, table);
+            wrapper.appendChild(table);
+        });
+    };
+    ensureResponsiveTables();
 
     const revealElements = document.querySelectorAll("[data-reveal]");
     if ("IntersectionObserver" in window && !prefersReducedMotion) {
@@ -111,8 +145,8 @@
                     if (!entry.isIntersecting) return;
                     animateCount(entry.target);
                     observer.unobserve(entry.target);
-                });
-            }, { threshold: 0.55 });
+            });
+        }, { threshold: 0.55 });
 
             countElements.forEach((element) => countObserver.observe(element));
         } else {
@@ -123,7 +157,7 @@
         }
     }
 
-    if (!prefersReducedMotion && glows.length > 0) {
+    if (!prefersReducedMotion && supportsFinePointer && glows.length > 0) {
         window.addEventListener("pointermove", (event) => {
             const relX = event.clientX / Math.max(window.innerWidth, 1) - 0.5;
             const relY = event.clientY / Math.max(window.innerHeight, 1) - 0.5;
@@ -137,8 +171,8 @@
         }, { passive: true });
     }
 
-    if (!prefersReducedMotion) {
-        const tiltCards = document.querySelectorAll(".card[data-hover-tilt]");
+    if (!prefersReducedMotion && supportsFinePointer) {
+        const tiltCards = document.querySelectorAll("[data-hover-tilt]");
         tiltCards.forEach((card) => {
             card.addEventListener("pointermove", (event) => {
                 const rect = card.getBoundingClientRect();
@@ -186,6 +220,8 @@
         setScrollProgress();
     };
 
+    updateHeaderOffset();
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", updateHeaderOffset);
 })();
