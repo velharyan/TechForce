@@ -1,12 +1,16 @@
 @{
     ViewData["Title"] = "Nossos Numeros - TechForce";
+    var months = new[] {
+        ("Jan", 28, 42), ("Fev", 36, 48), ("Mar", 44, 56), ("Abr", 52, 62),
+        ("Mai", 64, 70), ("Jun", 72, 78), ("Jul", 78, 82), ("Ago", 82, 86)
+    };
 }
 <section class="page-shell module-page theme-web">
     <div class="container">
         <header class="page-hero" data-reveal>
             <p class="eyebrow">Indicadores</p>
             <h1>Painel executivo de desempenho e maturidade operacional</h1>
-            <p>Visao consolidada de entregas, satisfacao, produtividade e confiabilidade para acompanhamento continuo da evolucao digital.</p>
+            <p>Visao consolidada de entregas, satisfacao, produtividade e confiabilidade para acompanhar evolucao digital sem depender de scripts externos.</p>
         </header>
 
         <section class="info-strip" data-reveal>
@@ -35,7 +39,7 @@
             </article>
             <article class="card metric-card" data-reveal data-delay="2" data-hover-tilt>
                 <div class="metric-value" data-count-to="24" data-count-suffix="/7">0</div>
-                <div class="metric-label">suporte tecnico</div>
+                <div class="metric-label">visibilidade de status</div>
             </article>
             <article class="card metric-card" data-reveal data-delay="3" data-hover-tilt>
                 <div class="metric-value" data-count-to="34" data-count-suffix="%">0</div>
@@ -44,12 +48,41 @@
         </section>
 
         <section class="numbers-chart-grid section-spaced">
-            <article class="card chart-card" data-reveal><h3>Projetos entregues por mes</h3><canvas id="chartProjetos"></canvas></article>
-            <article class="card chart-card" data-reveal><h3>Servicos por mes</h3><canvas id="chartServicosMes"></canvas></article>
-            <article class="card chart-card" data-reveal><h3>NPS e satisfacao</h3><canvas id="chartNps"></canvas></article>
-            <article class="card chart-card" data-reveal><h3>Tempo medio de entrega</h3><canvas id="chartTempoEntrega"></canvas></article>
-            <article class="card chart-card" data-reveal><h3>Pedidos processados</h3><canvas id="chartPedidos"></canvas></article>
-            <article class="card chart-card" data-reveal><h3>Automacoes ativas</h3><canvas id="chartAutomacoes"></canvas></article>
+            <article class="card chart-card chart-card-wide" data-reveal>
+                <div class="chart-card-head">
+                    <h3>Evolucao de entregas e automacoes</h3>
+                    <span>Mock local</span>
+                </div>
+                <div class="local-chart" aria-label="Grafico de barras comparando projetos e automacoes por mes">
+                    @foreach (var item in months)
+                    {
+                        <div class="local-chart-month">
+                            <i class="bar-primary" style="height:@item.Item2%"></i>
+                            <i class="bar-secondary" style="height:@item.Item3%"></i>
+                            <span>@item.Item1</span>
+                        </div>
+                    }
+                </div>
+                <div class="chart-legend">
+                    <span><i class="legend-primary"></i> Projetos</span>
+                    <span><i class="legend-secondary"></i> Automacoes</span>
+                </div>
+            </article>
+
+            <article class="card chart-card" data-reveal data-delay="1">
+                <h3>NPS e satisfacao</h3>
+                <div class="radial-score" style="--score: 88"><strong>88</strong><span>NPS</span></div>
+                <p class="muted">Promotores acima da media em projetos com acompanhamento pos-go-live.</p>
+            </article>
+
+            <article class="card chart-card" data-reveal data-delay="2">
+                <h3>Tempo medio de entrega</h3>
+                <div class="trend-list">
+                    <p><span>Discovery</span><strong>3 dias</strong></p>
+                    <p><span>MVP inicial</span><strong>21 dias</strong></p>
+                    <p><span>Go-live assistido</span><strong>7 dias</strong></p>
+                </div>
+            </article>
         </section>
 
         <section class="insight-grid section-spaced" data-reveal>
@@ -68,8 +101,3 @@
         </section>
     </div>
 </section>
-
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="~/js/charts.js" asp-append-version="true"></script>
-}

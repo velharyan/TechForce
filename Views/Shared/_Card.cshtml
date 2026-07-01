@@ -1,0 +1,15 @@
+@model dynamic
+
+<div class="@(Model.CardClass ?? "card")" data-reveal="@Model.DataRevealAttributes">
+    @if (Model.Index != null)
+    {
+        <span class="card-index">@Model.Index</span>
+    }
+
+    <h3>@Model.Title</h3>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Body))
+    {
+        <p>@Model.Body</p>
+    }
+</div>

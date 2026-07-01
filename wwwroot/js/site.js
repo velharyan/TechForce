@@ -3,10 +3,8 @@
 
     document.documentElement.classList.remove("no-js");
 
-    const prefersReducedMotion = window.matchMedia &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const supportsFinePointer = window.matchMedia &&
-        window.matchMedia("(pointer: fine)").matches;
+    const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const supportsFinePointer = window.matchMedia && window.matchMedia("(pointer: fine)").matches;
 
     const header = document.getElementById("mainHeader");
     const menuToggle = document.getElementById("menuToggle");
@@ -15,6 +13,8 @@
     const progress = document.getElementById("scrollProgress");
     const glows = Array.from(document.querySelectorAll(".bg-glow"));
 
+    let menuLastFocus = null;
+
     const updateHeaderOffset = () => {
         if (!header) return;
         document.documentElement.style.setProperty("--header-offset", `${header.offsetHeight}px`);
@@ -22,18 +22,14 @@
 
     const setHeaderState = () => {
         if (!header) return;
-        if (window.scrollY > 12) {
-            header.classList.add("scrolled");
-        } else {
-            header.classList.remove("scrolled");
-        }
+        header.classList.toggle("scrolled", window.scrollY > 12);
     };
 
     const setScrollProgress = () => {
         if (!progress) return;
         const doc = document.documentElement;
         const total = Math.max(1, doc.scrollHeight - window.innerHeight);
-        const ratio = Math.max(0, Math.min(1, window.scrollY / total));
+        const ratio = total > 0 ? Math.min(1, window.scrollY / total) : 0;
         progress.style.width = `${(ratio * 100).toFixed(2)}%`;
     };
 
@@ -42,16 +38,19 @@
         mobileNav.hidden = true;
         if (mobileNavBackdrop) mobileNavBackdrop.hidden = true;
         menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Abrir menu");
         document.body.classList.remove("menu-open");
+        if (menuLastFocus instanceof HTMLElement) menuLastFocus.focus();
     };
 
     const openMenu = () => {
         if (!menuToggle || !mobileNav) return;
+        menuLastFocus = document.activeElement;
         mobileNav.hidden = false;
         if (mobileNavBackdrop) mobileNavBackdrop.hidden = false;
         menuToggle.setAttribute("aria-expanded", "true");
+        menuToggle.setAttribute("aria-label", "Fechar menu");
         document.body.classList.add("menu-open");
-
         const firstLink = mobileNav.querySelector("a, button");
         if (firstLink instanceof HTMLElement) {
             window.requestAnimationFrame(() => firstLink.focus());
@@ -61,20 +60,15 @@
     if (menuToggle && mobileNav) {
         menuToggle.addEventListener("click", () => {
             const expanded = menuToggle.getAttribute("aria-expanded") === "true";
-            if (expanded) closeMenu();
-            else openMenu();
+            expanded ? closeMenu() : openMenu();
         });
 
         mobileNav.addEventListener("click", (event) => {
             const target = event.target;
-            if (target instanceof HTMLElement && target.closest("a")) {
-                closeMenu();
-            }
+            if (target instanceof HTMLElement && target.closest("a")) closeMenu();
         });
 
-        if (mobileNavBackdrop) {
-            mobileNavBackdrop.addEventListener("click", closeMenu);
-        }
+        if (mobileNavBackdrop) mobileNavBackdrop.addEventListener("click", closeMenu);
 
         document.addEventListener("keydown", (event) => {
             if (event.key === "Escape") closeMenu();
@@ -108,31 +102,32 @@
                 entry.target.classList.add("is-visible");
                 observer.unobserve(entry.target);
             });
-        }, { threshold: 0.16, rootMargin: "0px 0px -44px 0px" });
+        }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
 
         revealElements.forEach((element) => revealObserver.observe(element));
     } else {
         revealElements.forEach((element) => element.classList.add("is-visible"));
     }
 
+    /* ---------- Counter Animation ---------- */
     const countElements = document.querySelectorAll("[data-count-to]");
-    const setCountValue = (element, value) => {
-        const suffix = element.getAttribute("data-count-suffix") || "";
-        element.textContent = `${value.toLocaleString("pt-BR")}${suffix}`;
-    };
-
     const animateCount = (element) => {
         const target = Number(element.getAttribute("data-count-to") || "0");
-        const duration = 1200;
+        const suffix = element.getAttribute("data-count-suffix") || "";
+        const duration = 1400;
         let start = null;
+
+        const setCount = (value) => {
+            element.textContent = `${value.toLocaleString("pt-BR")}${suffix}`;
+        };
 
         const step = (time) => {
             if (start === null) start = time;
-            const progressRatio = Math.min((time - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - progressRatio, 3);
-            setCountValue(element, Math.round(target * eased));
-            if (progressRatio < 1) requestAnimationFrame(step);
-            else setCountValue(element, target);
+            const ratio = Math.min((time - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - ratio, 3);
+            setCount(Math.round(target * eased));
+            if (ratio < 1) requestAnimationFrame(step);
+            else setCount(target);
         };
 
         requestAnimationFrame(step);
@@ -145,32 +140,35 @@
                     if (!entry.isIntersecting) return;
                     animateCount(entry.target);
                     observer.unobserve(entry.target);
-            });
-        }, { threshold: 0.55 });
-
+                });
+            }, { threshold: 0.5 });
             countElements.forEach((element) => countObserver.observe(element));
         } else {
             countElements.forEach((element) => {
                 const target = Number(element.getAttribute("data-count-to") || "0");
-                setCountValue(element, target);
+                const suffix = element.getAttribute("data-count-suffix") || "";
+                element.textContent = `${target.toLocaleString("pt-BR")}${suffix}`;
             });
         }
     }
 
+    /* ---------- Parallax Glow Effect ---------- */
     if (!prefersReducedMotion && supportsFinePointer && glows.length > 0) {
+        let glowRaf = null;
         window.addEventListener("pointermove", (event) => {
-            const relX = event.clientX / Math.max(window.innerWidth, 1) - 0.5;
-            const relY = event.clientY / Math.max(window.innerHeight, 1) - 0.5;
-
-            glows.forEach((glow, index) => {
-                const depth = index === 0 ? 26 : 18;
-                const x = relX * depth;
-                const y = relY * depth;
-                glow.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
+            if (glowRaf) cancelAnimationFrame(glowRaf);
+            glowRaf = requestAnimationFrame(() => {
+                const relX = event.clientX / Math.max(window.innerWidth, 1) - 0.5;
+                const relY = event.clientY / Math.max(window.innerHeight, 1) - 0.5;
+                glows.forEach((glow, index) => {
+                    const depth = index === 0 ? 26 : 18;
+                    glow.style.transform = `translate3d(${(relX * depth).toFixed(1)}px, ${(relY * depth).toFixed(1)}px, 0)`;
+                });
             });
         }, { passive: true });
     }
 
+    /* ---------- Card Tilt Effect ---------- */
     if (!prefersReducedMotion && supportsFinePointer) {
         const tiltCards = document.querySelectorAll("[data-hover-tilt]");
         tiltCards.forEach((card) => {
@@ -178,9 +176,9 @@
                 const rect = card.getBoundingClientRect();
                 const relX = (event.clientX - rect.left) / Math.max(rect.width, 1);
                 const relY = (event.clientY - rect.top) / Math.max(rect.height, 1);
-                const rotateY = (relX - 0.5) * 5;
-                const rotateX = (0.5 - relY) * 4;
-                card.style.transform = `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-2px)`;
+                const rotateY = (relX - 0.5) * 6;
+                const rotateX = (0.5 - relY) * 5;
+                card.style.transform = `rotateX(${rotateX.toFixed(1)}deg) rotateY(${rotateY.toFixed(1)}deg) translateY(-3px)`;
             });
 
             card.addEventListener("pointerleave", () => {
@@ -189,6 +187,7 @@
         });
     }
 
+    /* ---------- Services Estimator ---------- */
     const estimator = document.getElementById("servicesEstimator");
     if (estimator instanceof HTMLFormElement) {
         const complexityInput = estimator.querySelector("[name='complexity']");
@@ -215,6 +214,7 @@
         computeEstimate();
     }
 
+    /* ---------- Scroll Handler ---------- */
     const onScroll = () => {
         setHeaderState();
         setScrollProgress();

@@ -1,0 +1,7 @@
+@* Showcase tile component *@
+@model dynamic
+<a class="showcase-tile" href="@Model.Href" data-reveal @Model.DataRevealAttributes>
+    <strong>@Model.Title</strong>
+    <span>@Model.Description</span>
+    <span class="tile-link">Ver demo &rarr;</span>
+</a>

@@ -12,21 +12,22 @@
     <section class="hero-section" aria-labelledby="hero-title">
         <div class="container hero-grid">
             <div class="hero-copy" data-reveal>
-                <p class="eyebrow">Tech studio para empresas que precisam vender e operar melhor</p>
-                <h1 id="hero-title">Produtos digitais premium para transformar operacao em crescimento.</h1>
+                <p class="eyebrow">TechForce — Tecnologia sob medida</p>
+                <h1 id="hero-title">Sites, sistemas e automações que multiplicam o seu negócio.</h1>
                 <p class="hero-lead">
-                    Criamos sites, sistemas, automacoes, landing pages, catalogos, cardapios digitais,
-                    chatbots e plataformas sob medida com acabamento comercial, performance e escala.
+                    Criamos produtos digitais com foco em resultado: sites de alta conversão, sistemas sob medida,
+                    automações inteligentes e catálogos digitais — tudo entregue em ciclos curtos, com código limpo
+                    e estratégia de crescimento.
                 </p>
                 <div class="hero-actions">
                     <a class="btn btn-primary" href="@specialistHref" @(specialistIsExternal ? "target=\"_blank\" rel=\"noopener noreferrer\"" : "")>
-                        Solicitar diagnostico
+                        Solicitar diagnóstico
                     </a>
                     <a class="btn btn-outline" href="/Products">Ver demos funcionais</a>
                 </div>
-                <dl class="hero-metrics" aria-label="Indicadores de experiencia">
+                <dl class="hero-metrics" aria-label="Indicadores de experiência">
                     <div><dt data-count-to="150" data-count-suffix="+">0</dt><dd>entregas digitais</dd></div>
-                    <div><dt data-count-to="40" data-count-suffix="%">0</dt><dd>ganho operacional medio</dd></div>
+                    <div><dt data-count-to="40" data-count-suffix="%">0</dt><dd>ganho operacional médio</dd></div>
                     <div><dt data-count-to="24" data-count-suffix="/7">0</dt><dd>base pronta para suporte</dd></div>
                 </dl>
             </div>
@@ -35,7 +36,7 @@
                 <div class="product-window">
                     <div class="window-bar">
                         <span></span><span></span><span></span>
-                        <strong>NexCore Command Center</strong>
+                        <strong>TechForce Command Center</strong>
                     </div>
                     <div class="command-grid">
                         <article class="command-card command-card-wide">
@@ -48,10 +49,10 @@
                         <article class="command-card">
                             <span>Leads qualificados</span>
                             <strong>218</strong>
-                            <small>+32% no mes</small>
+                            <small>+32% no mês</small>
                         </article>
                         <article class="command-card">
-                            <span>SLA medio</span>
+                            <span>SLA médio</span>
                             <strong>12m</strong>
                             <small>atendimento priorizado</small>
                         </article>
@@ -60,8 +61,8 @@
                             <p>Bot qualificou projeto, criou card no CRM e notificou o comercial.</p>
                         </article>
                         <article class="workflow-card">
-                            <div><span class="status-dot status-dot-warm"></span><strong>Pedido exigiu aprovacao</strong></div>
-                            <p>Automacao abriu tarefa, anexou dados e atualizou o dashboard.</p>
+                            <div><span class="status-dot status-dot-warm"></span><strong>Pedido exigiu aprovação</strong></div>
+                            <p>Automação abriu tarefa, anexou dados e atualizou o dashboard.</p>
                         </article>
                     </div>
                 </div>
@@ -72,34 +73,18 @@
     <section class="section-band" id="solucoes">
         <div class="container">
             <header class="section-heading" data-reveal>
-                <p class="eyebrow">Solucoes</p>
-                <h2>Uma esteira completa para presenca digital, operacao e vendas.</h2>
-                <p>Combinamos design, engenharia e estrategia comercial para entregar experiencias que parecem prontas para cliente real desde o primeiro contato.</p>
+                <p class="eyebrow">Soluções</p>
+                <h2>Uma esteira completa: do zero ao digital.</h2>
+                <p>Do primeiro contato até a entrega final, você tem acompanhamento estratégico, comunicação direta e transparência total na execução.</p>
             </header>
             <div class="service-grid">
-                <article class="premium-card" data-reveal data-hover-tilt>
-                    <span class="card-index">01</span>
-                    <h3>Sites e landing pages</h3>
-                    <p>Narrativa, SEO tecnico, performance mobile e paginas de conversao para captar oportunidades.</p>
-                    <ul><li>Institucional premium</li><li>Landing de campanha</li><li>Pagina de vendas</li></ul>
-                </article>
-                <article class="premium-card" data-reveal data-delay="1" data-hover-tilt>
-                    <span class="card-index">02</span>
-                    <h3>Sistemas e produtos SaaS</h3>
-                    <p>Dashboards, CRMs, portais e softwares sob medida para organizar rotinas e dados.</p>
-                    <ul><li>Fluxos financeiros</li><li>Perfis e permissoes</li><li>Relatorios executivos</li></ul>
-                </article>
-                <article class="premium-card" data-reveal data-delay="2" data-hover-tilt>
-                    <span class="card-index">03</span>
-                    <h3>Automacoes e chatbots</h3>
-                    <p>Atendimento, triagem, backoffice e integracoes que reduzem tarefas manuais.</p>
-                    <ul><li>WhatsApp e CRM</li><li>Regras de SLA</li><li>Base de conhecimento</li></ul>
-                </article>
+                @await Html.PartialAsync("_Card", new { CardClass = "premium-card", Index = "01", Title = "Sites e landing pages", Body = "Performance, SEO e páginas de alta conversão.", DataRevealAttributes = "data-reveal data-hover-tilt" })
+                @await Html.PartialAsync("_Card", new { CardClass = "premium-card", Index = "02", Title = "Sistemas e produtos SaaS", Body = "Software sob medida que organiza operações e escala processos.", DataRevealAttributes = "data-reveal data-delay=\"1\" data-hover-tilt" })
+                @await Html.PartialAsync("_Card", new { CardClass = "premium-card", Index = "03", Title = "Automações e chatbots", Body = "Fluxos automáticos que triam, qualificam e conectam.", DataRevealAttributes = "data-reveal data-delay=\"2\" data-hover-tilt" })
                 <article class="premium-card" data-reveal data-delay="3" data-hover-tilt>
                     <span class="card-index">04</span>
-                    <h3>Catalogos e cardapios digitais</h3>
-                    <p>Experiencias comerciais bonitas, filtraveis e prontas para apresentar produtos.</p>
-                    <ul><li>Busca e categorias</li><li>Carrinho simples</li><li>CTA comercial</li></ul>
+                    <h3>Catálogos e cardápios</h3>
+                    <p>Catálogos filtráveis com busca, categorias e checkout simples.</p>
                 </article>
             </div>
         </div>
@@ -108,16 +93,16 @@
     <section class="section-band split-section">
         <div class="container split-grid">
             <div data-reveal>
-                <p class="eyebrow">Metodo</p>
-                <h2>Arquitetura de produto, nao apenas telas bonitas.</h2>
-                <p>Antes de codar, definimos objetivo, publico, fluxo, dados, integracoes e criterio de sucesso. O resultado fica mais claro, mais vendavel e mais facil de evoluir.</p>
-                <a class="btn btn-outline" href="/Services">Conhecer servicos</a>
+                <p class="eyebrow">Método</p>
+                <h2>Arquitetura de produto, não de apenas telas bonitas.</h2>
+                <p>Antes de escrever uma linha de código, mapeamos objetivos, público, fluxos e critérios de sucesso. Isso resulta em entregas mais rápidas, mais vendáveis e mais fáceis de evoluir.</p>
+                <a class="btn btn-outline" href="/Services">Conhecer serviços</a>
             </div>
             <div class="process-list" data-reveal data-delay="1">
-                <article><span>Diagnostico</span><p>Entendimento do negocio, gargalos, dores e oportunidades comerciais.</p></article>
-                <article><span>Prototipo premium</span><p>Visual, conteudo e fluxo testados antes da entrega final.</p></article>
-                <article><span>Implementacao</span><p>Codigo limpo, responsivo, acessivel e preparado para evoluir.</p></article>
-                <article><span>Evolucao</span><p>Roadmap por impacto, metricas e melhoria continua.</p></article>
+                <article><span>Diagnóstico</span><p>Entendimento do negócio, gargalos, dores e oportunidades comerciais com mapeamento completo.</p></article>
+                <article><span>Protótipo premium</span><p>Visual, conteúdo e fluxo testados antes da entrega final com validação de usuário real.</p></article>
+                <article><span>Implementação</span><p>Código limpo, responsivo, acessível e preparado para evoluir sem dívida técnica.</p></article>
+                <article><span>Evolução contínua</span><p>Roadmap por impacto, métricas de negócio e melhoria contínua orientada a dados.</p></article>
             </div>
         </div>
     </section>
@@ -126,21 +111,16 @@
         <div class="container">
             <header class="section-heading" data-reveal>
                 <p class="eyebrow">Demos</p>
-                <h2>Veja exemplos navegaveis antes de pedir uma proposta.</h2>
-                <p>A vitrine de demos mostra dashboards, paginas comerciais, catalogos e cardapios com interacao real usando dados mockados.</p>
+                <h2>Veja demos reais antes de pedir uma proposta.</h2>
+                <p>Toda a vitrine é interativa: clique, filtre, adicione itens e veja como o produto final se comporta. Sem surpresas no orçamento.</p>
             </header>
             <div class="showcase-row">
-                <a class="showcase-tile" href="/Products" data-reveal>
-                    <strong>Fluxo de caixa SaaS</strong>
-                    <span>Dashboard, transacoes, filtros e graficos.</span>
-                </a>
-                <a class="showcase-tile" href="/Products" data-reveal data-delay="1">
-                    <strong>Landing de conversao</strong>
-                    <span>Oferta, prova social, FAQ e formulario.</span>
-                </a>
+                @await Html.PartialAsync("_ShowcaseTile", new { Href = "/Products", Title = "Fluxo de caixa SaaS", Description = "Dashboard, transações, filtros e gráficos em tempo real.", DataRevealAttributes = "data-reveal" })
+                @await Html.PartialAsync("_ShowcaseTile", new { Href = "/Products", Title = "Landing de conversão", Description = "Oferta, prova social, FAQ e formulário com validação local.", DataRevealAttributes = "data-reveal data-delay=\"1\"" })
                 <a class="showcase-tile" href="/Products" data-reveal data-delay="2">
-                    <strong>Cardapio digital</strong>
-                    <span>Categorias, itens, carrinho e total.</span>
+                    <strong>Cardápio digital</strong>
+                    <span>Categorias, itens, carrinho e fechamento simulados.</span>
+                    <span class="tile-link">Ver demo &rarr;</span>
                 </a>
             </div>
         </div>
@@ -150,8 +130,8 @@
         <div class="container">
             <div class="cta-panel" data-reveal>
                 <p class="eyebrow">@companyName</p>
-                <h2>Vamos transformar sua ideia em um produto digital com presenca de marca grande.</h2>
-                <p>Conte seu objetivo e receba um plano inicial com escopo, prioridade e caminho recomendado.</p>
+                <h2>Vamos transformar sua ideia em produto digital?</h2>
+                <p>Orçamento sem compromisso em 24h. Proposta com escopo, prazo e investimento.</p>
                 <div class="hero-actions">
                     <a class="btn btn-primary" href="@contactHref">Solicitar proposta</a>
                     <button class="btn btn-outline" type="button" data-open-chat>Falar com assistente</button>

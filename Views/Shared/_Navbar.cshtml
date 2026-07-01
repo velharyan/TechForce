@@ -1,0 +1,71 @@
+@* Navbar partial *@
+@inject Microsoft.Extensions.Options.IOptions<AppOptions> App
+@inject Microsoft.Extensions.Options.IOptions<SeoOptions> SeoOptions
+@inject Microsoft.Extensions.Options.IOptions<AnalyticsOptions> AnalyticsOptions
+@{
+    var app = App.Value;
+    var seo = SeoOptions.Value;
+    var normalizedWhatsApp = System.Text.RegularExpressions.Regex.Replace(app.WhatsAppNumber ?? string.Empty, "[^0-9]", string.Empty);
+    var whatsappHref = string.IsNullOrWhiteSpace(normalizedWhatsApp) ? null : $"https://wa.me/{normalizedWhatsApp}";
+    var nav = new (string href, string text, bool cta)[] {
+        ("/", "Home", false),
+        ("/Services", "Serviços", false),
+        ("/Products", "Demos", false),
+        ("/Cases", "Cases", false),
+        ("/Testimonials", "Depoimentos", false),
+        ("/Blog", "Blog", false),
+        ("/Company/About", "Sobre", false),
+        ("/Company/Contact", "Falar com time", true)
+    };
+    Func<string, bool> isActive = href => {
+        var path = Context?.Request?.Path.HasValue == true ? Context.Request.Path.Value : "/";
+        var lower = href.ToLowerInvariant();
+        return lower == "/" ? path == "/" : path.StartsWith(lower);
+    };
+}
+<header class="site-header" id="mainHeader" role="banner">
+    <div class="container header-inner">
+        <a class="brand" href="/" aria-label="Ir para Home">
+            <img src="~/img/logo3.png" asp-append-version="true" alt="@app.CompanyName" />
+            <span class="brand-lockup">
+                <strong class="brand-name">@app.CompanyName</strong>
+                <small class="brand-subtitle">Tech studio para produtos digitais</small>
+            </span>
+        </a>
+        <nav class="desktop-nav" aria-label="Navegação principal">
+            @foreach (var item in nav)
+            {
+                var active = isActive(item.href);
+                <a href="@item.href" class="@(item.cta ? "btn btn-primary nav-cta" : "nav-link")" aria-current="@(active ? "page" : null)">@item.text</a>
+            }
+        </nav>
+        <div class="header-actions">
+            <button id="themeToggle" class="theme-toggle" type="button" aria-label="Alternar tema">
+                <span aria-hidden="true">&#x25D0;</span>
+                <span class="sr-only">Alternar tema</span>
+            </button>
+            <button id="menuToggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+    <nav id="mobileNav" class="mobile-nav" aria-label="Navegação mobile" hidden>
+        <div class="mobile-nav-inner">
+            <div class="mobile-nav-head">
+                <span>Navegação</span>
+                <button id="themeToggleMobile" class="theme-toggle" type="button" aria-label="Alternar tema mobile">
+                    <span aria-hidden="true">&#x25D0;</span>
+                    <span class="sr-only">Alternar tema</span>
+                </button>
+            </div>
+            @foreach (var item in nav)
+            {
+                var active = isActive(item.href);
+                <a href="@item.href" class="@(item.cta ? "btn btn-primary" : "mobile-link")" aria-current="@(active ? "page" : null)">@item.text</a>
+            }
+        </div>
+    </nav>
+</header>
+<button id="mobileNavBackdrop" class="mobile-nav-backdrop" type="button" hidden aria-label="Fechar menu"></button>

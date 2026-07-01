@@ -7,7 +7,7 @@ public class ProductsController : Controller
     public IActionResult Index()
     {
         ViewData["Title"] = "Produtos - TechForce";
-        ViewData["Description"] = "Portifolio de produtos com exemplos funcionais para sites, apps, APIs, automacoes e sistemas.";
+        ViewData["Description"] = "Portfolio de produtos com demos funcionais para sites, apps, APIs, automacoes e sistemas.";
         return View(ProductCatalog.All);
     }
 

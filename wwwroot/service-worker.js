@@ -1,7 +1,17 @@
-const CACHE = 'nxc-cache-v1';
+const CACHE = 'techforce-cache-v2';
 const OFFLINE_URL = '/offline.html';
 self.addEventListener('install', (e)=>{
-  e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['/', OFFLINE_URL, '/css/site.css'])));
+  e.waitUntil(caches.open(CACHE).then(c=>c.addAll([
+    '/',
+    OFFLINE_URL,
+    '/css/site.css',
+    '/js/site.js',
+    '/js/chat.js',
+    '/js/data/chatbot-knowledge.js'
+  ])));
+});
+self.addEventListener('activate', (e)=>{
+  e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))));
 });
 self.addEventListener('fetch', (e)=>{
   e.respondWith(

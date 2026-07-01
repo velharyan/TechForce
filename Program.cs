@@ -77,15 +77,19 @@ public interface IChatService
 
 public class ChatService : IChatService
 {
-    private readonly string? _apiKey = Environment.GetEnvironmentVariable("TechForce_AI_API_KEY");
-    private readonly string? _provider = Environment.GetEnvironmentVariable("TechForce_AI_PROVIDER");
+    private readonly string? _apiKey =
+        Environment.GetEnvironmentVariable("TECHFORCE_AI_API_KEY") ??
+        Environment.GetEnvironmentVariable("TechForce_AI_API_KEY");
+    private readonly string? _provider =
+        Environment.GetEnvironmentVariable("TECHFORCE_AI_PROVIDER") ??
+        Environment.GetEnvironmentVariable("TechForce_AI_PROVIDER");
 
     public async Task<string> AskAsync(string message, CancellationToken ct = default)
     {
         if (!string.IsNullOrWhiteSpace(_apiKey) && !string.IsNullOrWhiteSpace(_provider))
         {
             await Task.Delay(350, ct);
-            return $"[IA {_provider}] Demo ativo. Recebi: '{message}'. Em producao, a resposta viria do provedor configurado.";
+            return $"[IA {_provider}] Integracao futura preparada no backend. Recebi: '{message}'. Em producao, a resposta viria do provedor configurado, sem expor chave no frontend.";
         }
 
         await Task.Delay(220, ct);

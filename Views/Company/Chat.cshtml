@@ -50,16 +50,26 @@
             </article>
         </section>
 
-        <section class="section-spaced card module-card" data-reveal>
-            <h2>Painel de conversa</h2>
-            <div class="chat-messages" id="chatMessagesPage"></div>
-            <p>Assistente virtual em atualizacao agendada.</p>
-            <div class="chat-suggestions">
-                <span class="chat-suggestion">"Quero reduzir retrabalho no atendimento"</span>
-                <span class="chat-suggestion">"Qual primeiro modulo devo priorizar?"</span>
-                <span class="chat-suggestion">"Quanto tempo para primeira entrega?"</span>
+        <section class="section-spaced card module-card chat-page-card" data-reveal>
+            <div class="chat-page-head">
+                <div>
+                    <h2>Painel de conversa</h2>
+                    <p>Explique seu objetivo e o assistente qualifica nome, telefone, tipo de projeto, investimento e urgencia.</p>
+                </div>
+                <div class="chat-lead-panel chat-lead-panel-page" aria-live="polite">
+                    <span data-lead-chip-page="name">Nome pendente</span>
+                    <span data-lead-chip-page="phone">Telefone pendente</span>
+                    <span data-lead-chip-page="project">Projeto pendente</span>
+                </div>
             </div>
-            <p class="small muted">Este assistente oferece orientacao inicial. Para proposta formal com escopo e investimento, use a pagina de contato.</p>
+            <div class="chat-messages chat-messages-page" id="chatMessagesPage" aria-live="polite"></div>
+            <div id="chatSuggestionsPage" class="chat-suggestions" aria-label="Sugestoes rapidas"></div>
+            <form id="chatFormPage" class="chat-form chat-form-page">
+                <label class="sr-only" for="chatInputPage">Mensagem para o assistente</label>
+                <input id="chatInputPage" type="text" placeholder="Ex: quero automatizar meu atendimento no WhatsApp" maxlength="280" autocomplete="off" required />
+                <button class="btn btn-primary" type="submit">Enviar</button>
+            </form>
+            <p class="small muted">O assistente funciona com base local/mockada. Uma integracao futura com IA deve acontecer pelo backend, usando variavel de ambiente segura.</p>
         </section>
 
         <section class="cta-panel section-spaced" data-reveal>

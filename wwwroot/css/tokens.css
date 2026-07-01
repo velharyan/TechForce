@@ -1,0 +1,50 @@
+/* Design tokens extracted from site.css */
+:root {
+  --bg: #07090d;
+  --bg-2: #0e141b;
+  --surface: rgba(18, 24, 32, 0.88);
+  --surface-solid: #121821;
+  --surface-soft: rgba(255, 255, 255, 0.065);
+  --line: rgba(220, 230, 244, 0.14);
+  --text: #f7f9fc;
+  --muted: #aeb8c7;
+  --muted-2: #7d899a;
+  --brand: #66e3d4;
+  --brand-2: #f3c766;
+  --accent: #ff7a5c;
+  --violet: #9b8cff;
+  --success: #5ed59b;
+  --danger: #ff6b73;
+  --warning: #f2b84b;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
+  --shadow-lg: 0 40px 120px rgba(0, 0, 0, 0.52);
+  --shadow-soft: 0 14px 46px rgba(0, 0, 0, 0.22);
+  --glass-bg: rgba(18, 24, 32, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --font-display: "Sora", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-body: "Plus Jakarta Sans", "Sora", system-ui, -apple-system, sans-serif;
+  --reveal-delay: 0;
+  /* Additional design tokens */
+  --whatsapp-bg: #25d366;
+  --whatsapp-text: #04150a;
+  --btn-primary-text: var(--text);
+}
+
+html[data-theme="light"] {
+  --bg: #f7f8f6;
+  --bg-2: #eef2ef;
+  --surface: rgba(255, 255, 255, 0.9);
+  --surface-solid: #ffffff;
+  --surface-soft: rgba(13, 24, 36, 0.055);
+  --line: rgba(13, 24, 36, 0.13);
+  --text: #111820;
+  --muted: #536173;
+  --muted-2: #697789;
+  --shadow: 0 28px 80px rgba(34, 45, 58, 0.14);
+  --shadow-lg: 0 40px 120px rgba(34, 45, 58, 0.18);
+  --shadow-soft: 0 14px 40px rgba(34, 45, 58, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(13, 24, 36, 0.06);
+}
