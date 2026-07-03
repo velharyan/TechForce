@@ -7,7 +7,7 @@ public class CasesController : Controller
     public IActionResult Index()
     {
         ViewData["Title"] = "Cases - TechForce";
-        ViewData["Description"] = "Projetos com resultados mensuraveis em operacao, vendas e eficiencia.";
+        ViewData["Description"] = "Projetos com resultado medido em receita, eficiencia operacional e previsibilidade de crescimento.";
         return View();
     }
 }

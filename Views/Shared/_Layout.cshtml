@@ -1,7 +1,6 @@
 @using Microsoft.Extensions.Options
 @inject IOptions<AppOptions> AppOptions
 @inject IOptions<SeoOptions> SeoOptions
-@inject IOptions<AnalyticsOptions> AnalyticsOptions
 @{
     var app = AppOptions.Value;
     var seo = SeoOptions.Value;
@@ -14,23 +13,6 @@
     var baseUrl = seo.BaseUrl?.TrimEnd('/');
     var canonical = !string.IsNullOrWhiteSpace(baseUrl) ? $"{baseUrl}{Context?.Request?.Path.Value}" : null;
     var ogImage = !string.IsNullOrWhiteSpace(seo.OgImage) ? seo.OgImage : Url.Content("~/img/og-default.png");
-
-    var nav = new (string href, string text, bool cta)[] {
-        ("/", "Home", false),
-        ("/Services", "Serviços", false),
-        ("/Products", "Demos", false),
-        ("/Cases", "Cases", false),
-        ("/Testimonials", "Depoimentos", false),
-        ("/Blog", "Blog", false),
-        ("/Company/About", "Sobre", false),
-        ("/Company/Contact", "Falar com time", true)
-    };
-
-    Func<string, bool> isActive = href =>
-    {
-        var lower = href.ToLowerInvariant();
-        return lower == "/" ? path == "/" : path.StartsWith(lower);
-    };
 
     var normalizedWhatsApp = System.Text.RegularExpressions.Regex.Replace(app.WhatsAppNumber ?? string.Empty, "[^0-9]", string.Empty);
     var whatsappHref = string.IsNullOrWhiteSpace(normalizedWhatsApp) ? null : $"https://wa.me/{normalizedWhatsApp}";
@@ -56,7 +38,7 @@
         <meta property="og:url" content="@canonical" />
     }
     <meta property="og:image" content="@ogImage" />
-    <meta name="theme-color" content="#07090d" />
+    <meta name="theme-color" content="#090a10" />
     <script>
         (function () {
             try {
@@ -64,7 +46,7 @@
                 if (savedTheme === "dark" || savedTheme === "light") {
                     document.documentElement.setAttribute("data-theme", savedTheme);
                 }
-            } catch (error) { /* no-op */ }
+            } catch (_error) { }
         })();
     </script>
     <script type="application/ld+json">
@@ -78,19 +60,21 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/tokens.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/utils.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/refactor-overrides.css" asp-append-version="true" />
 </head>
 <body data-section="@sectionKey" data-page="@pageKey">
-    <a class="skip-link" href="#conteudo">Ir para o conteúdo principal</a>
+    <a class="skip-link" href="#conteudo">Ir para o conteudo principal</a>
+
     <div id="scrollProgress" class="scroll-progress" aria-hidden="true"></div>
     <div class="bg-glow bg-glow-a" aria-hidden="true"></div>
     <div class="bg-glow bg-glow-b" aria-hidden="true"></div>
+    <canvas id="ambientCanvas" aria-hidden="true"></canvas>
 
     @await Html.PartialAsync("_Navbar")
-    <button id="mobileNavBackdrop" class="mobile-nav-backdrop" type="button" hidden aria-label="Fechar menu"></button
 
     <main id="conteudo" class="site-main" role="main" tabindex="-1">
         @RenderBody()
@@ -100,52 +84,77 @@
 
     @if (!string.IsNullOrWhiteSpace(whatsappHref))
     {
-        <a class="float-whatsapp" href="@whatsappHref" target="_blank" rel="noopener noreferrer" aria-label="Falar no WhatsApp">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <a id="floatingWhatsapp" class="float-whatsapp" href="@whatsappHref" target="_blank" rel="noopener noreferrer" aria-label="Abrir conversa no WhatsApp">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.52 3.478A11.78 11.78 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                <path d="M17.472 14.382c-.297-.149-.937-.867-2.03-.967-.197-.1-.39-.1-.56.067-.77.75-1.1 1.63-3.16 3.26-1.9 1.4-4.18 2.0-6.37 1.2-1.76-.6-4.05-2.35-4.7-5.03-.33-1.45-.13-2.8.35-3.84 1.17-2.56 2.96-4.03 4.2-4.84 1.05-.67 2.34-1.03 3.66-.83 0 0 .58.1.84.61.33.65.93 2.12 1.01 2.28.08.16.13.35.03.54l-.39.61c-.1.16-.17.27-.33.4-.16.13-.35.3-.51.45-.17.16-.35.34-.15.67.2.34 1.16 1.9 2.48 3.08 1.7 1.51 3.15 2 3.51 2.21.37.2.58.17.8-.1.22-.27.94-1.08 1.19-1.45.24-.36.49-.3.84-.18.35.12 2.19 1.03 2.56 1.22.37.18.62.27.71.42.08.15.08.88-.2 1.73-.26.85-.84 1.6-1.58 2.11-2.1 1.49-4.58 1.54-6.6.45z"></path>
+            </svg>
         </a>
     }
 
-    <!-- Chat entry bubble -->
-    <div id="chatEntryBubble" class="chat-entry-bubble" role="status" aria-live="polite">
-        <p>👋 Oi! Sou assistente virtual da <strong>@app.CompanyName</strong></p>
-        <small>Posso ajudar com orçamento, demonstrações e tirar dúvidas!</small>
-        <button id="chatEntryClose" class="chat-entry-bubble-close" type="button" aria-label="Fechar">&times;</button>
+    <div id="chatEntryBubble" class="chat-entry-bubble" role="status" aria-live="polite" aria-label="Mensagem de boas-vindas do assistente">
+        <p>Sou o assistente da <strong>@app.CompanyName</strong>.</p>
+        <small>Quero te guiar com objetividade para o próximo passo ideal da sua tecnologia.</small>
+        <button id="chatEntryClose" class="chat-entry-bubble-close" aria-label="Fechar aviso" type="button">&times;</button>
     </div>
 
     <button id="chatWidget" class="chat-widget" type="button" aria-label="Abrir assistente virtual" data-open-chat>
-        <span class="chat-widget-icon">&#x1F916;</span>
-        <span class="chat-widget-text">Assistente TechForce</span>
+        <span aria-hidden="true">&#x1F4AC;</span>
+        <span class="chat-label">Falar com assistente</span>
     </button>
+
     <aside id="chatPanel" class="chat-panel" aria-label="Assistente TechForce" aria-hidden="true" data-chat-endpoint="/api/chat">
-        <div class="chat-header">
+        <header class="chat-panel-header">
             <div class="chat-avatar" aria-hidden="true">TF</div>
             <div class="chat-header-info">
                 <strong>Assistente TechForce</strong>
-                <span>Online · Vamos conversar!</span>
+                <span class="chat-online"><span aria-hidden="true"></span>Online agora</span>
             </div>
             <button id="chatClose" class="chat-header-close" type="button" aria-label="Fechar chat">&times;</button>
+        </header>
+        <div class="chat-panel-body">
+            <div class="chat-lead-panel" aria-live="polite">
+                <span data-lead-chip="name">Nome: pendente</span>
+                <span data-lead-chip="sector">Setor: pendente</span>
+                <span data-lead-chip="phone">Contato: pendente</span>
+            </div>
+            <div id="chatMessages" class="chat-messages" aria-live="polite" style="scroll-behavior:smooth"></div>
+            <div id="chatSuggestions" class="chat-suggestions" aria-label="Sugestoes rapidas"></div>
+            <form id="chatForm" class="chat-form">
+                <label class="sr-only" for="chatInput">Mensagem para o assistente</label>
+                <input id="chatInput" type="text" placeholder="Escreva aqui..." maxlength="280" autocomplete="off" required />
+                <button type="submit" class="btn btn-primary">Enviar</button>
+            </form>
         </div>
-        <div class="chat-lead-panel" aria-live="polite">
-            <span data-lead-chip="name">Nome pendente</span>
-            <span data-lead-chip="phone">Telefone pendente</span>
-            <span data-lead-chip="project">Projeto pendente</span>
-        </div>
-        <div id="chatMessages" class="chat-messages" aria-live="polite" style="scroll-behavior:smooth"></div>
-        <div id="chatSuggestions" class="chat-suggestions" aria-label="Sugestões rápidas"></div>
-        <form id="chatForm" class="chat-form">
-            <label class="sr-only" for="chatInput">Mensagem para o assistente</label>
-            <input id="chatInput" type="text" placeholder="Digite sua mensagem..." maxlength="280" autocomplete="off" required />
-            <button type="submit" class="btn btn-primary">Enviar</button>
-        </form>
     </aside>
 
-    <script defer src="~/js/data/chatbot-knowledge.js" asp-append-version="true"></script>
+    <div id="demoModal" class="demo-modal" aria-hidden="true" hidden>
+        <div class="demo-overlay" data-demo-close></div>
+        <section class="demo-window" role="dialog" aria-modal="true" aria-labelledby="demoModalTitle">
+            <header class="demo-window-header">
+                <div>
+                    <p id="demoModalKicker" class="eyebrow">Demo interativa</p>
+                    <strong id="demoModalTitle">Demo</strong>
+                </div>
+                <button class="demo-close" data-demo-close type="button" aria-label="Fechar demo">&times;</button>
+            </header>
+            <div class="demo-browser">
+                <div class="demo-address-bar">
+                    <strong>Tech Studio Browser</strong>
+                    <span id="demoModalAddress">https://...</span>
+                </div>
+                <p id="demoModalLoader" class="demo-loading" aria-hidden="true">
+                    <span>Carregando experiência no simulador</span>
+                    <span class="typing-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+                </p>
+                <iframe id="demoModalFrame" class="demo-frame" src="about:blank" loading="lazy" title="Visualizador de demo" allowfullscreen></iframe>
+            </div>
+        </section>
+    </div>
+
     <script defer src="~/js/site.js" asp-append-version="true"></script>
+    <script defer src="~/js/demos.js" asp-append-version="true"></script>
     <script defer src="~/js/chat.js" asp-append-version="true"></script>
-    <script defer src="~/js/theme.js" asp-append-version="true"></script>
-    <script defer src="~/js/consent.js" asp-append-version="true"></script>
     <script defer src="~/js/analytics.js" asp-append-version="true"></script>
-    <script defer src="~/js/sw-register.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

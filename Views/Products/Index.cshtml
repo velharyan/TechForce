@@ -1,157 +1,115 @@
-@model IReadOnlyList<TechForce.Web.Controllers.ProductItem>
+@using TechForce.Web.Controllers
+@model IReadOnlyList<ProductItem>
 @{
-    ViewData["Title"] = "Demos funcionais - TechForce";
-    ViewData["Description"] = "Vitrine premium com demos funcionais de fluxo de caixa, site institucional, landing page, página de vendas, catálogo digital e cardápio digital — todos interativos com dados mockados.";
+    var categories = Model
+        .GroupBy(item => item.Category)
+        .OrderBy(group => group.Key)
+        .Select(group => new { Name = group.Key, Count = group.Count(), Items = group.ToList() })
+        .ToList();
+
+    var topIndicators = new[]
+    {
+        ("Demos ativos", $"{Model.Count} módulos", "demos"),
+        ("Tempo médio inicial", "2 a 6 semanas", "weeks"),
+        ("Cobertura", "10+ cenários reais", "scenarios"),
+        ("Formato", "Web + Mobile + API", "format")
+    };
 }
 
-<section class="demos-page">
-    <header class="demo-hero">
-        <div class="container demo-hero-grid">
-            <div class="demo-hero-copy" data-reveal>
-                <p class="eyebrow">Demos funcionais</p>
-                <h1>Produtos digitais navegáveis para vender tecnologia com prova, não promessa.</h1>
-                <p>
-                     Faça uma demonstração totalmente interativa com os dados mockados. Experimente filtros, formulários e funcionalidades verdadeiras sem surpresas no orçamento.
-                </p>
-                <div class="hero-actions">
-                    <a class="btn btn-primary" href="#demoGrid">Explorar demos</a>
-                    <button class="btn btn-outline" type="button" data-open-chat>Pedir recomendação</button>
-                </div>
+<section class="page-shell compact module-page theme-software">
+    <div class="container">
+        <nav class="breadcrumb">
+            <a href="/">Home</a> / <a href="/">Serviços</a> / <span>Demos por módulo</span>
+        </nav>
+
+        <header class="page-hero" data-reveal>
+            <p class="eyebrow">Portfólio de demonstrações</p>
+            <h1>Laboratório visual de soluções Tech Studio</h1>
+            <p>Visualize experiências reais de operação, aquisição, dados e atendimento com aparência de produto pronto para produção.</p>
+            <div class="hero-actions module-actions">
+                <a class="btn btn-primary" href="/Company/Contact">Iniciar diagnóstico express</a>
+                <a class="btn btn-outline" href="/Company/Chat">Abrir chat premium</a>
             </div>
-
-            <aside class="demo-hero-preview" data-reveal data-delay="1" aria-label="Resumo visual das demos">
-                <span class="preview-label">TechForce Demo Lab</span>
-                <div class="demo-preview-screen">
-                    <div class="preview-screen-top">
-                        <strong>Pipeline de experiências</strong>
-                        <span>6 demos ativas</span>
-                    </div>
-                    <div class="preview-stack">
-                        <article>
-                            <span>Cash Flow SaaS</span>
-                            <strong>+18,4%</strong>
-                        </article>
-                        <article>
-                            <span>Landing de campanha</span>
-                            <strong>8,7% CVR</strong>
-                        </article>
-                        <article>
-                            <span>Cardápio digital</span>
-                            <strong>R$ 136,70</strong>
-                        </article>
-                    </div>
-                    <div class="preview-progress" aria-hidden="true"><i style="width:72%"></i></div>
-                </div>
-            </aside>
-        </div>
-    </header>
-
-    <section class="section-band">
-        <div class="container">
-            <div class="demo-toolbar" data-reveal>
-                <div class="demo-search-field">
-                    <label class="sr-only" for="demoSearch">Buscar demo</label>
-                    <input id="demoSearch" type="search" placeholder="Buscar por produto, setor ou objetivo..." autocomplete="off" />
-                </div>
-                <div class="demo-filter-group" aria-label="Filtros de demos">
-                    <button class="demo-filter is-active" type="button" data-demo-filter="all">Todas</button>
-                    <button class="demo-filter" type="button" data-demo-filter="saas">SaaS</button>
-                    <button class="demo-filter" type="button" data-demo-filter="web">Web</button>
-                    <button class="demo-filter" type="button" data-demo-filter="commerce">Comercial</button>
-                    <button class="demo-filter" type="button" data-demo-filter="food">Food</button>
-                </div>
-            </div>
-
-            <div id="demoGrid" class="demo-grid" aria-live="polite">
-                <article class="demo-card" data-reveal data-demo-card data-demo="cashflow" data-category="saas" data-keywords="fluxo caixa financeiro dashboard saas transacoes graficos lucro entradas saidas">
-                    <div class="demo-thumb cash-thumb" aria-hidden="true"><span>Cash Flow</span><i></i><i></i><i></i></div>
-                    <div class="demo-card-body">
-                        <span class="demo-kicker">SaaS financeiro</span>
-                        <h2>Aplicativo de Fluxo de Caixa</h2>
-                        <p>Dashboard com saldo, entradas, saídas, lucro, gráficos, filtros, tabela e nova transação local.</p>
-                        <div class="tag-row"><span>Dashboard</span><span>Mês</span><span>Categoria</span></div>
-                    </div>
-                    <button class="btn btn-primary" type="button" data-open-demo="cashflow">Abrir demo</button>
-                </article>
-
-                <article class="demo-card" data-reveal data-delay="1" data-demo-card data-demo="institutional" data-category="web" data-keywords="site institucional empresa servicos sobre numeros depoimentos cta">
-                    <div class="demo-thumb site-thumb" aria-hidden="true"><span>NovaHaus</span><strong>Website</strong></div>
-                    <div class="demo-card-body">
-                        <span class="demo-kicker">Website premium</span>
-                        <h2>Demo de Site Institucional</h2>
-                        <p>Mini site com navegação interna, hero, serviços, sobre, indicadores, depoimentos e CTA.</p>
-                        <div class="tag-row"><span>Institucional</span><span>Prova social</span><span>CTA</span></div>
-                    </div>
-                    <button class="btn btn-primary" type="button" data-open-demo="institutional">Abrir demo</button>
-                </article>
-
-                <article class="demo-card" data-reveal data-delay="2" data-demo-card data-demo="landing" data-category="web" data-keywords="landing page conversao formulario faq prova social campanha leads dor solucao">
-                    <div class="demo-thumb landing-thumb" aria-hidden="true"><span>LeadOps</span><i></i></div>
-                    <div class="demo-card-body">
-                        <span class="demo-kicker">Alta conversão</span>
-                        <h2>Demo de Landing Page</h2>
-                        <p>Oferta forte, dor, solução, benefícios, FAQ e formulário funcional com validação local.</p>
-                        <div class="tag-row"><span>Leads</span><span>Formulário</span><span>FAQ</span></div>
-                    </div>
-                    <button class="btn btn-primary" type="button" data-open-demo="landing">Abrir demo</button>
-                </article>
-
-                <article class="demo-card" data-reveal data-demo-card data-demo="sales" data-category="commerce" data-keywords="site vendas pagina produto preco bonus garantia depoimentos checkout oferta">
-                    <div class="demo-thumb sales-thumb" aria-hidden="true"><span>ScaleKit</span><strong>R$ 497</strong></div>
-                    <div class="demo-card-body">
-                        <span class="demo-kicker">Página de vendas</span>
-                        <h2>Demo de Site de Vendas</h2>
-                        <p>Oferta, preço, benefícios, bônus, garantia, comparação, depoimentos, FAQ e CTA.</p>
-                        <div class="tag-row"><span>Oferta</span><span>Garantia</span><span>Comparação</span></div>
-                    </div>
-                    <button class="btn btn-primary" type="button" data-open-demo="sales">Abrir demo</button>
-                </article>
-
-                <article class="demo-card" data-reveal data-delay="1" data-demo-card data-demo="catalog" data-category="commerce" data-keywords="catalogo digital produtos categorias busca filtro preco botao vitrine">
-                    <div class="demo-thumb catalog-thumb" aria-hidden="true"><span>Catálogo</span><i></i><i></i><i></i><i></i></div>
-                    <div class="demo-card-body">
-                        <span class="demo-kicker">Catálogo digital</span>
-                        <h2>Demo de Catálogo Digital</h2>
-                        <p>Produtos fictícios com busca, filtro por categoria, cards, preços, previews e ação comercial.</p>
-                        <div class="tag-row"><span>Busca</span><span>Filtro</span><span>Produtos</span></div>
-                    </div>
-                    <button class="btn btn-primary" type="button" data-open-demo="catalog">Abrir demo</button>
-                </article>
-
-                <article class="demo-card" data-reveal data-delay="2" data-demo-card data-demo="menu" data-category="food" data-keywords="cardapio digital restaurante categorias carrinho total quantidade remover produtos preco imagem">
-                    <div class="demo-thumb menu-thumb" aria-hidden="true"><span>Bistro</span><strong>Pedido</strong></div>
-                    <div class="demo-card-body">
-                        <span class="demo-kicker">Restaurante</span>
-                        <h2>Demo de Cardápio Digital</h2>
-                        <p>Categorias, busca, pratos, carrinho com quantidade, remoção, total e estado vazio.</p>
-                        <div class="tag-row"><span>Pedidos</span><span>Carrinho</span><span>Mobile-first</span></div>
-                    </div>
-                    <button class="btn btn-primary" type="button" data-open-demo="menu">Abrir demo</button>
-                </article>
-            </div>
-
-            <div id="demoEmpty" class="empty-state demo-empty" hidden>
-                Nenhuma demo encontrada. Ajuste a busca ou selecione outra categoria.
-            </div>
-        </div>
-    </section>
-</section>
-
-<div id="demoModal" class="demo-modal" hidden>
-    <div class="demo-modal-backdrop" data-close-demo></div>
-    <section class="demo-modal-panel" role="dialog" aria-modal="true" aria-labelledby="demoModalTitle" tabindex="-1">
-        <header class="demo-modal-header">
-            <div>
-                <span id="demoModalKicker">Demo</span>
-                <h2 id="demoModalTitle">Demo funcional</h2>
-            </div>
-            <button class="demo-close" type="button" data-close-demo aria-label="Fechar demo">&times;</button>
         </header>
-        <div id="demoModalBody" class="demo-modal-body"></div>
-    </section>
-</div>
 
-@section Scripts {
-    <script defer src="~/js/data/demos-data.js" asp-append-version="true"></script>
-    <script defer src="~/js/demos.js" asp-append-version="true"></script>
-}
+        <section class="info-strip" data-reveal>
+            @foreach (var item in topIndicators)
+            {
+                <article class="info-chip">
+                    <strong>@item.Item1</strong>
+                    <span>@item.Item2</span>
+                </article>
+            }
+        </section>
+
+        <section class="module-layout">
+            <article class="card module-card" data-reveal data-hover-tilt>
+                <h2>Como usar este laboratório</h2>
+                <p>Navegue por qualquer demo para abrir a experiência imersiva em modal. Cada ambiente mostra fluxo, indicadores e estado de operação com interface premium.</p>
+                <ul class="list-clean">
+                    <li><strong>1.</strong> Clique em “Ver demo” para abrir o simulador dentro do próprio site.</li>
+                    <li><strong>2.</strong> Veja fluxo real de produto com painel, menus, ações e leitura de estados.</li>
+                    <li><strong>3.</strong> Compare módulos e escolha o que combina com sua operação.</li>
+                </ul>
+                <div class="module-badges">
+                    <span class="module-badge">Simulação realista</span>
+                    <span class="module-badge">UX de produto</span>
+                    <span class="module-badge">Escala arquitetural</span>
+                </div>
+            </article>
+
+                <article class="card module-card" data-reveal data-delay="1">
+                    <h2>Mapa de módulos por categoria</h2>
+                    <p>Consolidados em uma trilha que cobre aquisição, operação, atendimento, integração e inteligência de negócio.</p>
+                    <div class="module-kpis">
+                        @foreach (var category in categories)
+                        {
+                        <article class="module-kpi">
+                            <strong>@category.Count</strong>
+                            <span>@category.Name</span>
+                        </article>
+                        }
+                    </div>
+            </article>
+        </section>
+
+        <section class="section-spaced">
+            @foreach (var category in categories)
+            {
+                var anchor = $"cat-{(category.Name ?? "geral").ToLowerInvariant().Replace(" ", "-")}";
+                <article class="card section-spaced" id="@anchor" data-reveal>
+                    <h2>@category.Name</h2>
+                    <p>Conjunto de ativos com foco em <strong>@(category.Name?.ToLowerInvariant())</strong>. Inicie pelo demo mais aderente ao seu objetivo atual.</p>
+                    <div class="showcase-row">
+                        @foreach (var item in category.Items)
+                        {
+                            var slug = item.Slug?.ToLowerInvariant() ?? "site";
+                            var demoDevice = slug == "app" ? "mobile" : "web";
+                            var badgeText = string.Join(" · ", item.Tags);
+                            var details = $"{item.Audience} • entrega inicial {item.StartingWeeks} semana(s)";
+
+                            @await Html.PartialAsync("_ShowcaseTile", new
+                            {
+                                Href = $"/Products/Example/{item.Slug}",
+                                Title = item.Name,
+                                Kicker = item.Category,
+                                Description = item.Summary,
+                                Details = $"{badgeText} | {details}",
+                                Device = demoDevice
+                            })
+                        }
+                    </div>
+                </article>
+            }
+        </section>
+
+        <section class="cta-panel section-spaced" data-reveal>
+            <h2>Quer seu próprio dashboard premium em produção?</h2>
+            <p>Montamos um conjunto de módulos para sua operação com roteiro, prazos e plano de implantação contínua.</p>
+            <div class="module-actions">
+                <a class="btn btn-primary" href="/Services">Ver soluções recomendadas</a>
+                <a class="btn btn-outline" href="/Company/Contact">Quero proposta sob medida</a>
+            </div>
+        </section>
+    </div>
+</section>

@@ -1,7 +1,37 @@
 @* Showcase tile component *@
 @model dynamic
-<a class="showcase-tile" href="@Model.Href" data-reveal @Model.DataRevealAttributes>
-    <strong>@Model.Title</strong>
-    <span>@Model.Description</span>
-    <span class="tile-link">Ver demo &rarr;</span>
-</a>
+
+@{
+    var href = (Model?.Href as string) ?? "#";
+    var title = (Model?.Title as string) ?? "Demo";
+    var description = (Model?.Description as string) ?? string.Empty;
+    var kicker = (Model?.Kicker as string);
+    var details = (Model?.Details as string);
+    var device = (Model?.Device as string) ?? "web";
+}
+
+<article class="showcase-tile">
+    @if (!string.IsNullOrWhiteSpace(kicker))
+    {
+        <span class="showcase-kicker">@kicker</span>
+    }
+    <strong>@title</strong>
+    <span>@description</span>
+    @if (!string.IsNullOrWhiteSpace(details))
+    {
+        <small>@details</small>
+    }
+    <div class="tile-actions">
+        <button class="btn btn-outline"
+                type="button"
+                data-magnetic
+                data-demo-open
+                data-demo-url="@href"
+                data-demo-title="@title"
+                data-demo-kicker="(@kicker)"
+                data-demo-device="@device">
+            Ver demo
+        </button>
+        <a class="tile-link" href="@href">Abrir em nova pagina</a>
+    </div>
+</article>

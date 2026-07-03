@@ -1,78 +1,94 @@
-@* Footer partial *@
-@inject Microsoft.Extensions.Options.IOptions<AppOptions> App
-@inject Microsoft.Extensions.Options.IOptions<SeoOptions> SeoOptions
-@inject Microsoft.Extensions.Options.IOptions<AnalyticsOptions> AnalyticsOptions
+﻿@using Microsoft.Extensions.Options
+@inject IOptions<AppOptions> App
+@inject IOptions<SeoOptions> SeoOptions
 @{
     var app = App.Value;
     var seo = SeoOptions.Value;
     var normalizedWhatsApp = System.Text.RegularExpressions.Regex.Replace(app.WhatsAppNumber ?? string.Empty, "[^0-9]", string.Empty);
     var whatsappHref = string.IsNullOrWhiteSpace(normalizedWhatsApp) ? null : $"https://wa.me/{normalizedWhatsApp}";
 }
-<footer class="site-footer" role="contentinfo">
+
+<footer class="site-footer">
     <div class="container footer-grid">
         <section class="footer-brand">
-            <a class="brand footer-logo" href="/" aria-label="Ir para Home">
+            <a class="brand footer-logo" href="/" aria-label="Voltar para home">
                 <img src="~/img/logo3.png" asp-append-version="true" alt="@app.CompanyName" />
                 <span>@app.CompanyName</span>
             </a>
-            <p>@(string.IsNullOrWhiteSpace(app.Tagline) ? "Soluções digitais com foco em resultado, escala e confiança operacional." : app.Tagline)</p>
+            <p>
+                @(
+                    string.IsNullOrWhiteSpace(app.Tagline)
+                    ? "Arquitetura de produto, operação e decisão para empresas que vendem com previsibilidade."
+                    : app.Tagline
+                )
+            </p>
+            <div class="footer-trust">
+                <article><strong>Mais de 10</strong><span>segmentos atendidos</span></article>
+                <article><strong>R$ 1,8M+</strong><span>recorrência gerenciada por projetos ativos</span></article>
+                <article><strong>4+ anos</strong><span>de projetos com indicadores de ganho real</span></article>
+            </div>
             <div class="footer-social">
-                <a href="@{ var normalizedWhatsApp = System.Text.RegularExpressions.Regex.Replace(app.WhatsAppNumber ?? string.Empty, "[^0-9]", string.Empty); var whatsappHref = string.IsNullOrWhiteSpace(normalizedWhatsApp) ? null : $"https://wa.me/{normalizedWhatsApp}"; } @whatsappHref" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                <a href="mailto:@app.ContactEmail" aria-label="Enviar e-mail para contato">
+                    <span>✉</span>
                 </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-                </a>
-                <a href="mailto:@app.ContactEmail" aria-label="Email">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                @if (!string.IsNullOrWhiteSpace(whatsappHref))
+                {
+                    <a href="@whatsappHref" target="_blank" rel="noopener noreferrer" aria-label="Contato por WhatsApp">
+                        <span>WA</span>
+                    </a>
+                }
+                <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn TechForce">
+                    <span>in</span>
                 </a>
             </div>
         </section>
+
         <section>
             <h2 class="footer-title">Empresa</h2>
             <ul class="footer-links">
-                <li><a href="/Company/About">Sobre</a></li>
-                <li><a href="/Cases">Cases</a></li>
+                <li><a href="/Company/About">Quem somos</a></li>
+                <li><a href="/Company/Contact">Contato comercial</a></li>
+                <li><a href="/Cases">Casos comprovados</a></li>
                 <li><a href="/Testimonials">Depoimentos</a></li>
-                <li><a href="/Blog">Blog</a></li>
+                <li><a href="/Home/Accessibility">Acessibilidade</a></li>
             </ul>
         </section>
+
         <section>
             <h2 class="footer-title">Soluções</h2>
             <ul class="footer-links">
-                <li><a href="/Services/Software">Software sob medida</a></li>
-                <li><a href="/Services/WebApps">Web apps</a></li>
-                <li><a href="/Services/MobileApps">Aplicativos</a></li>
-                <li><a href="/Services/Automations">Automações</a></li>
+                <li><a href="/Services">Portfólio de serviços</a></li>
+                <li><a href="/Products">Demos por produto</a></li>
+                <li><a href="/Products/Example/site">Site institucional</a></li>
+                <li><a href="/Products/Example/ia">IA aplicada ao atendimento</a></li>
+                <li><a href="/Products/Example/automation">Automações</a></li>
             </ul>
         </section>
+
         <section>
-            <h2 class="footer-title">Contato</h2>
+            <h2 class="footer-title">Início orientado a ação</h2>
             <ul class="footer-links">
-                @if (!string.IsNullOrWhiteSpace(app.ContactEmail))
-                {
-                    <li><a href="mailto:@app.ContactEmail">@app.ContactEmail</a></li>
-                }
-                <li><a href="/Company/Contact">Solicitar proposta</a></li>
-                @if (!string.IsNullOrWhiteSpace(whatsappHref))
-                {
-                    <li><a href="@whatsappHref" target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a></li>
-                }
+                <li><a href="/Company/Chat">Começar conversa com assistente</a></li>
+                <li><a href="/Products">Laboratório de demonstrações</a></li>
+                <li><a href="/Blog">Artigos de execução e operação</a></li>
                 <li><a href="/Legal/Privacy">Privacidade</a></li>
+                <li><a href="/Legal/Terms">Termos</a></li>
             </ul>
+            <div class="footer-legal">
+                <a class="btn btn-outline" href="/Company/Contact">Marcar conversa executiva</a>
+            </div>
         </section>
     </div>
+
     <div class="footer-bottom">
         <div class="container footer-bottom-inner">
             <p>&copy; @DateTime.UtcNow.Year @app.CompanyName. Todos os direitos reservados.</p>
             <div class="footer-bottom-links">
-                <a href="/Legal/Privacy">Política de Privacidade</a>
-                <a href="/Legal/Terms">Termos de Uso</a>
-                <a href="/Home/Accessibility">Acessibilidade</a>
+                <a href="/Legal/Privacy">Privacidade</a>
+                <a href="/Legal/Terms">Termos</a>
+                <a href="@seo.BaseUrl">Sitemap</a>
             </div>
         </div>
     </div>
 </footer>
+

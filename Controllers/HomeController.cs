@@ -21,22 +21,22 @@ public class HomeController : Controller
 
     public IActionResult Numbers()
     {
-        ViewData["Title"] = "Indicadores e Numeros - TechForce";
-        ViewData["Description"] = "Painel com indicadores de desempenho e eficiencia operacional.";
+        ViewData["Title"] = "Indicadores de desempenho - TechForce";
+        ViewData["Description"] = "Indicadores operacionais de producao, maturidade tecnica e ganhos praticos em projetos ativos.";
         return View();
     }
 
     public IActionResult Accessibility()
     {
         ViewData["Title"] = "Acessibilidade - TechForce";
-        ViewData["Description"] = "Compromisso com navegacao inclusiva e experiencia acessivel.";
+        ViewData["Description"] = "Compromisso com navegacao inclusiva, contraste, teclado e usabilidade em todos os fluxos do portal.";
         return View();
     }
 
     public IActionResult Sitemap()
     {
-        ViewData["Title"] = "Mapa do Site - TechForce";
-        ViewData["Description"] = "Navegue por todas as secoes do site em um unico lugar.";
+        ViewData["Title"] = "Mapa do site - TechForce";
+        ViewData["Description"] = "Visao completa do portfolio institucional, comercial, demos e documentos legais do ecossistema TechForce.";
         return View();
     }
 

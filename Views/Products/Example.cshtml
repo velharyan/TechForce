@@ -26,6 +26,7 @@
         "crm" => "https://crm.seunegocio.com.br",
         "api" => "https://api.seunegocio.com.br/v1",
         "automation" => "https://ops.seunegocio.com.br/automacoes",
+        "ia" => "https://assistente.seunegocio.com.br",
         "dashboard" => "https://bi.seunegocio.com.br",
         "portal" => "https://cliente.seunegocio.com.br",
         _ => "https://erp.seunegocio.com.br"
@@ -40,6 +41,7 @@
         "crm" => "Pipeline completo com follow-up e previsibilidade de receita.",
         "api" => "Plataforma de integracoes com observabilidade tecnica.",
         "automation" => "Esteira automatizada com SLA e governanca de fila.",
+        "ia" => "Assistente inteligente com roteamento consultivo para atencao comercial.",
         "dashboard" => "Painel executivo para decisao em tempo real.",
         "portal" => "Portal de cliente com suporte, historico e autosservico.",
         _ => "ERP modular para pedidos, estoque e financeiro."
@@ -96,6 +98,13 @@
             ("Reprocesso", "1.7%"),
             ("Horas poupadas", "420h")
         },
+        "ia" => new (string Label, string Value)[]
+        {
+            ("Resolvidas", "1.280"),
+            ("Tempo resposta", "< 3 min"),
+            ("Triagem", "92%"),
+            ("Satisfacao", "94%")
+        },
         "dashboard" => new (string Label, string Value)[]
         {
             ("KPIs", "52"),
@@ -128,6 +137,7 @@
         "crm" => new[] { "Funil por etapa", "Score de oportunidade", "Cadencia de follow-up", "Forecast por carteira" },
         "api" => new[] { "Gateway e endpoints", "Log de request", "Health check", "Rate limit e retry" },
         "automation" => new[] { "Fila de workflow", "SLA por prioridade", "Escalonamento", "Telemetria operacional" },
+        "ia" => new[] { "Roteamento por prioridade", "Base de conhecimento", "Triagem inteligente", "Encaminhamento para equipe" },
         "dashboard" => new[] { "Modelo de KPI", "Alerta por limite", "Analise temporal", "Visao executiva" },
         "portal" => new[] { "Gestao de chamados", "Timeline de suporte", "Base de conhecimento", "SLA por prioridade" },
         _ => new[] { "Pedidos e faturamento", "Estoque e reposicao", "Contas e conciliacao", "Governanca de processo" }
@@ -141,6 +151,7 @@
         "crm" => new[] { "Pipeline customizavel", "Playbook comercial", "Forecast continuo", "Historico de atividade" },
         "api" => new[] { "Gateway seguro", "Versionamento", "Retry controlado", "Auditoria tecnica" },
         "automation" => new[] { "Orquestrador de filas", "Retentativa", "Dead-letter", "Metrica de throughput" },
+        "ia" => new[] { "Roteamento por prioridade", "Memoria de contexto", "Regras de negócio", "Fallback supervisionado" },
         "dashboard" => new[] { "Camada semantica", "Carga validada", "Threshold de alerta", "Permissao por area" },
         "portal" => new[] { "Dominio de ticket", "Matriz de SLA", "Knowledge base", "Escalonamento" },
         _ => new[] { "Dominios de pedido", "Regras de reposicao", "Conferencia diaria", "Aprovacao por alcada" }
@@ -159,6 +170,12 @@
             ("Campanha", "Experimentacao continua para reduzir CPL e ampliar ROI."),
             ("Metrica", "Decisao orientada por taxa de conversao e qualidade."),
             ("Escala", "Modelo replicavel para multiplos canais e ofertas.")
+        },
+        "ia" => new (string Title, string Text)[]
+        {
+            ("Atendimento", "Roteamento inteligente para priorizar demanda e reduzir tempo de resposta."),
+            ("Seguranca", "Validações e regras para manter qualidade do fluxo."),
+            ("Evolucao", "A base aprende com casos reais e melhora semana a semana.")
         },
         "ecommerce" => new (string Title, string Text)[]
         {
@@ -219,6 +236,7 @@
         "crm" => "users",
         "api" => "shield",
         "automation" => "flow",
+        "ia" => "spark",
         "dashboard" => "chart",
         "portal" => "users",
         _ => "stack"
@@ -260,6 +278,11 @@
             ("target", "Objetivo", "Menos rotina manual", "Criar fila, regra e escalonamento para responder mais rapido."),
             ("users", "Publico", "Backoffice e atendimento", "Times com tarefas repetitivas e volume operacional alto."),
             ("rocket", "Primeira entrega", "Workflow ativo", "Triggers, SLA e telemetria basica em producao.")
+        },
+        "ia" => new (string Icon, string Label, string Value, string Text)[] {
+            ("target", "Objetivo", "Atendimento consultivo", "Roteamento por contexto para resolver antes de perder oportunidade."),
+            ("users", "Publico", "Comercial e suporte", "Times com alto volume de demanda e baixa latencia."),
+            ("spark", "Primeira entrega", "Fluxo inteligente", "Base de conhecimento, regras e encaminhamento com contexto.")
         },
         "dashboard" => new (string Icon, string Label, string Value, string Text)[] {
             ("target", "Objetivo", "Decisao por KPI", "Dar leitura executiva para meta, risco e tendencia de resultado."),
@@ -485,6 +508,7 @@
     .proex-page[data-product="crm"] { --proex-halo-a: rgba(42, 156, 192, 0.22); --proex-halo-b: rgba(109, 188, 216, 0.16); }
     .proex-page[data-product="api"] { --proex-halo-a: rgba(76, 119, 231, 0.2); --proex-halo-b: rgba(128, 156, 238, 0.15); }
     .proex-page[data-product="automation"] { --proex-halo-a: rgba(233, 170, 75, 0.22); --proex-halo-b: rgba(242, 202, 132, 0.16); }
+    .proex-page[data-product="ia"] { --proex-halo-a: rgba(126, 103, 242, 0.2); --proex-halo-b: rgba(173, 144, 255, 0.15); }
     .proex-page[data-product="dashboard"] { --proex-halo-a: rgba(72, 119, 226, 0.2); --proex-halo-b: rgba(132, 162, 238, 0.16); }
     .proex-page[data-product="portal"] { --proex-halo-a: rgba(89, 126, 192, 0.2); --proex-halo-b: rgba(136, 162, 211, 0.16); }
     .proex-page[data-product="erp-lite"] { --proex-halo-a: rgba(116, 160, 68, 0.2); --proex-halo-b: rgba(168, 197, 124, 0.16); }
@@ -530,6 +554,9 @@
 
     .proex-page[data-product="automation"] .proex-hero {
         background: linear-gradient(155deg, rgba(79, 57, 20, 0.88), rgba(34, 24, 9, 0.72));
+    }
+    .proex-page[data-product="ia"] .proex-hero {
+        background: linear-gradient(155deg, rgba(53, 39, 101, 0.88), rgba(29, 20, 56, 0.72));
     }
 
     .proex-page[data-product="dashboard"] .proex-hero {
@@ -714,6 +741,7 @@
     .proex-page[data-product="crm"] .proex-demo { background: radial-gradient(circle at 15% 14%, #d8edf8 0%, #ecf7fc 44%, #f8fcfe 100%); }
     .proex-page[data-product="api"] .proex-demo { background: radial-gradient(circle at 15% 14%, #dce7fd 0%, #edf3ff 44%, #f8faff 100%); }
     .proex-page[data-product="automation"] .proex-demo { background: radial-gradient(circle at 15% 14%, #f9edd8 0%, #fcf5e9 44%, #fffcf7 100%); }
+    .proex-page[data-product="ia"] .proex-demo { background: radial-gradient(circle at 15% 14%, #ece3ff 0%, #f5f0ff 44%, #fbfaff 100%); }
     .proex-page[data-product="dashboard"] .proex-demo { background: radial-gradient(circle at 15% 14%, #dbe7ff 0%, #edf2ff 44%, #f8faff 100%); }
     .proex-page[data-product="portal"] .proex-demo { background: radial-gradient(circle at 15% 14%, #e2e9f8 0%, #eef3fb 44%, #f9fbfe 100%); }
     .proex-page[data-product="erp-lite"] .proex-demo { background: radial-gradient(circle at 15% 14%, #e6efda 0%, #f1f6e9 44%, #fbfdf8 100%); }
@@ -790,6 +818,7 @@
     .proex-page[data-product="crm"] .proex-app { --accent: #258cae; --accent-soft: #ebf8fc; }
     .proex-page[data-product="api"] .proex-app { --accent: #2f68e3; --accent-soft: #edf2ff; }
     .proex-page[data-product="automation"] .proex-app { --accent: #ba8733; --accent-soft: #fff8eb; }
+    .proex-page[data-product="ia"] .proex-app { --accent: #674de4; --accent-soft: #f0ecff; }
     .proex-page[data-product="dashboard"] .proex-app { --accent: #3c67d1; --accent-soft: #edf1ff; }
     .proex-page[data-product="portal"] .proex-app { --accent: #4d73a7; --accent-soft: #eef3fa; }
     .proex-page[data-product="erp-lite"] .proex-app { --accent: #5f8d2e; --accent-soft: #f1f8e9; }
@@ -3459,10 +3488,11 @@
             api: createApiController,
             automation: createAutomationController,
             dashboard: createDashboardController,
-            crm: createCrmController,
-            portal: createPortalController,
-            "erp-lite": createErpController
-        };
+        crm: createCrmController,
+        ia: createAutomationController,
+        portal: createPortalController,
+        "erp-lite": createErpController
+    };
 
         const controllerFactory = controllers[productKey] || createErpController;
         const controller = controllerFactory();

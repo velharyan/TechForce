@@ -1,15 +1,54 @@
-@model dynamic
+@model object
+@using Microsoft.AspNetCore.Routing
 
-<div class="@(Model.CardClass ?? "card")" data-reveal="@Model.DataRevealAttributes">
-    @if (Model.Index != null)
+@{
+    var values = Model == null ? new RouteValueDictionary() : new RouteValueDictionary(Model);
+    var cardClass = (values.TryGetValue("CardClass", out var cardClassValue) ? cardClassValue as string : null) ?? "premium-card";
+    var index = values.TryGetValue("Index", out var indexValue) ? indexValue as string : null;
+    var title = values.TryGetValue("Title", out var titleValue) ? titleValue as string : string.Empty;
+    var eyebrow = values.TryGetValue("Eyebrow", out var eyebrowValue) ? eyebrowValue as string : null;
+    var body = values.TryGetValue("Body", out var bodyValue) ? bodyValue as string : null;
+    var bullets = values.TryGetValue("Bullets", out var bulletsValue) ? bulletsValue as IEnumerable<string> : null;
+    var delay = values.TryGetValue("Delay", out var delayValue) ? delayValue as string : null;
+    var noReveal = false;
+
+    if (values.TryGetValue("NoReveal", out var noRevealValue) && noRevealValue != null)
     {
-        <span class="card-index">@Model.Index</span>
+        var noRevealBool = noRevealValue as bool?;
+        if (noRevealBool == true)
+        {
+            noReveal = true;
+        }
+        else if (bool.TryParse(noRevealValue.ToString(), out var parsed))
+        {
+            noReveal = parsed;
+        }
     }
 
-    <h3>@Model.Title</h3>
+    var reveal = noReveal ? string.Empty : "data-reveal";
+}
 
-    @if (!string.IsNullOrWhiteSpace(Model.Body))
+<article class="@cardClass" @reveal@((!string.IsNullOrWhiteSpace(delay)) ? $" data-delay=\"{delay}\"" : string.Empty)>
+    @if (!string.IsNullOrWhiteSpace(index))
     {
-        <p>@Model.Body</p>
+        <span class="card-index">@index</span>
     }
-</div>
+    @if (!string.IsNullOrWhiteSpace(eyebrow))
+    {
+        <p class="card-eyebrow">@eyebrow</p>
+    }
+    <h3>@title</h3>
+    @if (!string.IsNullOrWhiteSpace(body))
+    {
+        <p>@body</p>
+    }
+    @if (bullets?.Any() == true)
+    {
+        <ul class="card-list">
+            @foreach (var item in bullets)
+            {
+                <li>@item</li>
+            }
+        </ul>
+    }
+</article>

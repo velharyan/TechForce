@@ -7,29 +7,29 @@
 <section class="page-shell module-page theme-web">
     <div class="container">
         <header class="page-hero" data-reveal>
-            <h1>Receba um plano tecnico completo para seu cenario</h1>
-            <p>Compartilhe seu desafio e retornamos com proposta de arquitetura, etapas, prazo e recomendacao de rollout.</p>
+            <h1>Receba uma proposta técnica e comercial no padrão TechForce</h1>
+            <p>Conte seu contexto e recebemos um plano com diagnóstico, etapas, prazo e recomendação de rollout.</p>
         </header>
 
         <section class="info-strip" data-reveal>
             <article class="info-chip">
                 <strong>Resposta consultiva</strong>
-                <span>Diagnostico inicial com foco tecnico e comercial.</span>
+                <span>Escopo realista com foco em negócio e tecnologia.</span>
             </article>
             <article class="info-chip">
-                <strong>Plano claro de execucao</strong>
-                <span>Prioridade por impacto, etapas e estimativa inicial.</span>
+                <strong>Plano objetivo</strong>
+                <span>Entrega com prioridades, cronograma inicial e risco mapeado.</span>
             </article>
             <article class="info-chip">
-                <strong>Ponto focal dedicado</strong>
-                <span>Comunicacao objetiva durante todo o ciclo do projeto.</span>
+                <strong>Compromisso de acompanhamento</strong>
+                <span>Um ponto focal acompanha cada etapa com clareza.</span>
             </article>
         </section>
 
         <section class="contact-grid">
             <article class="card module-card" data-reveal data-hover-tilt>
                 <h3>Canal direto com especialista</h3>
-                <p>Atendimento consultivo para entender seu contexto e orientar a melhor estrategia de implantacao.</p>
+                <p>Atendimento consultivo para diagnosticar o cenário e orientar a melhor estratégia de implantação.</p>
                 @if (!string.IsNullOrWhiteSpace(whatsappHref))
                 {
                     <p><a class="btn btn-outline" href="@whatsappHref" target="_blank" rel="noopener noreferrer" data-evt="cta_whatsapp_contact">Falar no WhatsApp</a></p>
@@ -43,8 +43,8 @@
                     {
                         <p class="contact-line"><span>E-mail principal</span><strong>@App.Value.ContactEmail</strong></p>
                     }
-                    <p class="contact-line"><span>SLA medio de retorno</span><strong>Ate @App.Value.SlaHours horas uteis</strong></p>
-                    <p class="contact-line"><span>Formato da primeira entrega</span><strong>Diagnostico + proposta inicial</strong></p>
+                    <p class="contact-line"><span>Retorno médio</span><strong>Até @App.Value.SlaHours horas úteis</strong></p>
+                    <p class="contact-line"><span>Primeira entrega</span><strong>Diagnóstico + proposta inicial</strong></p>
                 </div>
                 <div class="module-kpis">
                     <article class="module-kpi">
@@ -57,7 +57,7 @@
                     </article>
                     <article class="module-kpi">
                         <strong data-count-to="8" data-count-suffix="+">0</strong>
-                        <span>areas de atuacao tecnica</span>
+                        <span>áreas de atuação técnica</span>
                     </article>
                     <article class="module-kpi">
                         <strong data-count-to="1">0</strong>
@@ -67,13 +67,13 @@
             </article>
 
             <article class="card module-card contact-checklist" data-reveal data-delay="1">
-                <h3>Informacoes que aceleram sua proposta</h3>
+                <h3>Informações que aceleram sua análise</h3>
                 <ul class="list-clean">
-                    <li>Objetivo principal do projeto e meta de negocio</li>
-                    <li>Processos que hoje geram gargalo operacional</li>
-                    <li>Sistemas atuais e integracoes necessarias</li>
-                    <li>Prazo esperado para primeira entrega em producao</li>
-                    <li>Times envolvidos (comercial, operacao, financeiro, TI)</li>
+                    <li>Objetivo principal e meta do projeto</li>
+                    <li>Gargalos operacionais atuais</li>
+                    <li>Sistemas legados e integrações necessárias</li>
+                    <li>Prazo esperado para primeira entrega em produção</li>
+                    <li>Times envolvidos: comercial, operação, finanças, TI</li>
                 </ul>
                 <div class="module-badges">
                     <span class="module-badge">Escopo</span>
@@ -82,15 +82,15 @@
                     <span class="module-badge">Roadmap</span>
                 </div>
                 <ul class="timeline-list">
-                    <li><strong>Dia 0:</strong> recebimento do briefing e triagem do contexto</li>
-                    <li><strong>Dia 1:</strong> alinhamento tecnico-comercial e prioridades</li>
-                    <li><strong>Dia 2:</strong> envio da proposta inicial com proximo passo</li>
+                    <li><strong>Dia 0:</strong> recebemos o briefing e fazemos triagem do contexto</li>
+                    <li><strong>Dia 1:</strong> alinhamento técnico-comercial e definição de prioridades</li>
+                    <li><strong>Dia 2:</strong> envio de proposta inicial com próximo passo de execução</li>
                 </ul>
             </article>
         </section>
 
         <section class="section-spaced card module-card" data-reveal>
-            <h2>Formulario de proposta</h2>
+            <h2>Formulário de proposta</h2>
             @if (TempData["Success"] != null)
             {
                 <div class="alert success">@TempData["Success"]</div>
@@ -118,7 +118,7 @@
                 </div>
                 <div class="form-row-full">
                     <label for="Need">Necessidade</label>
-                    <textarea asp-for="Need" placeholder="Descreva contexto, principal problema, objetivo e prazo desejado."></textarea>
+                    <textarea asp-for="Need" placeholder="Descreva seu contexto, principal problema e objetivo com prazo estimado."></textarea>
                     <span asp-validation-for="Need" class="validation"></span>
                 </div>
                 <div class="form-row-full">
@@ -128,7 +128,7 @@
         </section>
 
         <section class="status-note section-spaced" data-reveal>
-            Dica para acelerar: inclua no campo de necessidade o sistema atual, o maior gargalo e o prazo desejado para a primeira entrega.
+            Dica: para acelerar, informe o sistema atual, o gargalo principal e o prazo que você tem para a primeira implantação.
         </section>
     </div>
 </section>

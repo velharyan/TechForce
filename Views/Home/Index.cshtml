@@ -1,71 +1,84 @@
 @inject Microsoft.Extensions.Options.IOptions<AppOptions> App
 @{
     var appOptions = App.Value;
-    var companyName = string.IsNullOrWhiteSpace(appOptions.CompanyName) ? "TechForce" : appOptions.CompanyName;
-    var normalizedWhatsApp = System.Text.RegularExpressions.Regex.Replace(appOptions.WhatsAppNumber ?? string.Empty, "[^0-9]", string.Empty);
     var contactHref = Url.Action("Contact", "Company") ?? "/Company/Contact";
-    var specialistHref = string.IsNullOrWhiteSpace(normalizedWhatsApp) ? contactHref : $"https://wa.me/{normalizedWhatsApp}";
-    var specialistIsExternal = !string.IsNullOrWhiteSpace(normalizedWhatsApp);
 }
 
 <section class="studio-home">
-    <section class="hero-section" aria-labelledby="hero-title">
+    <section class="hero-section section-band" aria-labelledby="homeHero">
         <div class="container hero-grid">
             <div class="hero-copy" data-reveal>
-                <p class="eyebrow">TechForce — Tecnologia sob medida</p>
-                <h1 id="hero-title">Sites, sistemas e automações que multiplicam o seu negócio.</h1>
+                <p class="eyebrow">Tech Studio</p>
+                <h1 id="homeHero">
+                    Uma companhia de tecnologia que entrega sistemas que vendem, escalam e convertem.
+                </h1>
                 <p class="hero-lead">
-                    Criamos produtos digitais com foco em resultado: sites de alta conversão, sistemas sob medida,
-                    automações inteligentes e catálogos digitais — tudo entregue em ciclos curtos, com código limpo
-                    e estratégia de crescimento.
+                    Projetamos ecossistemas digitais para operação e crescimento: produto, automacao, dados e atendimento.
+                    Tudo com execução de verdade, sem prototipos estereotipados.
                 </p>
                 <div class="hero-actions">
-                    <a class="btn btn-primary" href="@specialistHref" @(specialistIsExternal ? "target=\"_blank\" rel=\"noopener noreferrer\"" : "")>
-                        Solicitar diagnóstico
-                    </a>
-                    <a class="btn btn-outline" href="/Products">Ver demos funcionais</a>
+                    <button class="btn btn-primary" type="button" data-open-chat>Comecar por consultoria premium</button>
+                    <a href="/Services" class="btn btn-outline">Entender abordagem de execucao</a>
                 </div>
-                <dl class="hero-metrics" aria-label="Indicadores de experiência">
-                    <div><dt data-count-to="150" data-count-suffix="+">0</dt><dd>entregas digitais</dd></div>
-                    <div><dt data-count-to="40" data-count-suffix="%">0</dt><dd>ganho operacional médio</dd></div>
-                    <div><dt data-count-to="24" data-count-suffix="/7">0</dt><dd>base pronta para suporte</dd></div>
-                </dl>
+                <div class="hero-metrics">
+                    <div>
+                        <dt data-count-to="140">0</dt>
+                        <dd>Projetos com impacto operacional</dd>
+                    </div>
+                    <div>
+                        <dt data-count-to="92">0</dt>
+                        <dd>% de satisfacao media dos clientes</dd>
+                    </div>
+                    <div>
+                        <dt data-count-to="5">0</dt>
+                        <dd>Semanas para primeira entrega com valor</dd>
+                    </div>
+                </div>
             </div>
 
-            <div class="hero-product" data-reveal data-delay="1" aria-label="Preview de produto digital">
-                <div class="product-window">
-                    <div class="window-bar">
-                        <span></span><span></span><span></span>
-                        <strong>TechForce Command Center</strong>
-                    </div>
+            <div class="hero-product" data-reveal data-delay="1" aria-label="Painel de comando">
+                <article class="command-center">
+                    <header class="command-center-head">
+                        <div>
+                            <strong class="command-head-title">Command Center</strong>
+                        </div>
+                        <div>
+                            <span class="command-control"></span>
+                            <span class="command-control"></span>
+                            <span class="command-control"></span>
+                        </div>
+                    </header>
+
                     <div class="command-grid">
-                        <article class="command-card command-card-wide">
-                            <span>Receita projetada</span>
-                            <strong>R$ 428k</strong>
-                            <div class="mini-chart" aria-hidden="true">
-                                <i style="height:38%"></i><i style="height:56%"></i><i style="height:48%"></i><i style="height:72%"></i><i style="height:66%"></i><i style="height:88%"></i>
+                        <article class="command-card command-card-big">
+                            <h3>Decisao com previsibilidade</h3>
+                            <p>R$ 1,8M</p>
+                            <div class="command-chart" aria-hidden="true">
+                                <i style="height:34%"></i><i style="height:52%"></i><i style="height:70%"></i><i style="height:78%"></i><i style="height:89%"></i><i style="height:98%"></i>
                             </div>
                         </article>
+
                         <article class="command-card">
-                            <span>Leads qualificados</span>
-                            <strong>218</strong>
-                            <small>+32% no mês</small>
+                            <h3>Demandas em tempo real</h3>
+                            <p>284</p>
                         </article>
+
                         <article class="command-card">
-                            <span>SLA médio</span>
-                            <strong>12m</strong>
-                            <small>atendimento priorizado</small>
+                            <h3>Tempo de resposta</h3>
+                            <p>11 min</p>
                         </article>
-                        <article class="workflow-card">
-                            <div><span class="status-dot"></span><strong>Landing captou novo lead</strong></div>
-                            <p>Bot qualificou projeto, criou card no CRM e notificou o comercial.</p>
+
+                        <article class="command-card">
+                            <h3>Status da trilha</h3>
+                            <p>Roteamento ativo</p>
                         </article>
-                        <article class="workflow-card">
-                            <div><span class="status-dot status-dot-warm"></span><strong>Pedido exigiu aprovação</strong></div>
-                            <p>Automação abriu tarefa, anexou dados e atualizou o dashboard.</p>
+
+                        <article class="command-card">
+                            <h3>Execucao</h3>
+                            <p>Pronta para sprint</p>
                         </article>
                     </div>
-                </div>
+                </article>
             </div>
         </div>
     </section>
@@ -73,70 +86,135 @@
     <section class="section-band" id="solucoes">
         <div class="container">
             <header class="section-heading" data-reveal>
-                <p class="eyebrow">Soluções</p>
-                <h2>Uma esteira completa: do zero ao digital.</h2>
-                <p>Do primeiro contato até a entrega final, você tem acompanhamento estratégico, comunicação direta e transparência total na execução.</p>
+                <p class="eyebrow">Tecnologia com cara de empresa real</p>
+                <h2>Arquitetura orientada a decisao, nao a tela bonita.</h2>
+                <p>Construimos produtos que encaixam no fluxo operacional, reduzem risco e aceleram receita. Cada semana vira um ciclo de valor real com mensageria e observabilidade.</p>
             </header>
-            <div class="service-grid">
-                @await Html.PartialAsync("_Card", new { CardClass = "premium-card", Index = "01", Title = "Sites e landing pages", Body = "Performance, SEO e páginas de alta conversão.", DataRevealAttributes = "data-reveal data-hover-tilt" })
-                @await Html.PartialAsync("_Card", new { CardClass = "premium-card", Index = "02", Title = "Sistemas e produtos SaaS", Body = "Software sob medida que organiza operações e escala processos.", DataRevealAttributes = "data-reveal data-delay=\"1\" data-hover-tilt" })
-                @await Html.PartialAsync("_Card", new { CardClass = "premium-card", Index = "03", Title = "Automações e chatbots", Body = "Fluxos automáticos que triam, qualificam e conectam.", DataRevealAttributes = "data-reveal data-delay=\"2\" data-hover-tilt" })
-                <article class="premium-card" data-reveal data-delay="3" data-hover-tilt>
-                    <span class="card-index">04</span>
-                    <h3>Catálogos e cardápios</h3>
-                    <p>Catálogos filtráveis com busca, categorias e checkout simples.</p>
-                </article>
-            </div>
-        </div>
-    </section>
 
-    <section class="section-band split-section">
-        <div class="container split-grid">
-            <div data-reveal>
-                <p class="eyebrow">Método</p>
-                <h2>Arquitetura de produto, não de apenas telas bonitas.</h2>
-                <p>Antes de escrever uma linha de código, mapeamos objetivos, público, fluxos e critérios de sucesso. Isso resulta em entregas mais rápidas, mais vendáveis e mais fáceis de evoluir.</p>
-                <a class="btn btn-outline" href="/Services">Conhecer serviços</a>
-            </div>
-            <div class="process-list" data-reveal data-delay="1">
-                <article><span>Diagnóstico</span><p>Entendimento do negócio, gargalos, dores e oportunidades comerciais com mapeamento completo.</p></article>
-                <article><span>Protótipo premium</span><p>Visual, conteúdo e fluxo testados antes da entrega final com validação de usuário real.</p></article>
-                <article><span>Implementação</span><p>Código limpo, responsivo, acessível e preparado para evoluir sem dívida técnica.</p></article>
-                <article><span>Evolução contínua</span><p>Roadmap por impacto, métricas de negócio e melhoria contínua orientada a dados.</p></article>
+            <div class="service-grid">
+                @await Html.PartialAsync("_Card", new
+                {
+                    CardClass = "premium-card",
+                    Index = "01",
+                    Delay = "1",
+                    Eyebrow = "Descoberta",
+                    Title = "Diagnostico tecnico e comercial",
+                    Body = "Mapeamos gargalos, metas e prioridade de negocio para criar um plano com impacto real.",
+                    Bullets = new[] { "Mapeamento da demanda", "Definicao de ganho por sprint", "Modelo de risco e execucao" }
+                })
+                @await Html.PartialAsync("_Card", new
+                {
+                    CardClass = "premium-card",
+                    Index = "02",
+                    Delay = "2",
+                    Eyebrow = "Arquitetura",
+                    Title = "Implementacao orientada por dado",
+                    Body = "Integramos produto, automacao e atendimento para gerar uma base decisoria operacionalmente confiavel.",
+                    Bullets = new[] { "Camadas rastreaveis", "Governanca", "Observabilidade de ponta a ponta" }
+                })
+                @await Html.PartialAsync("_Card", new
+                {
+                    CardClass = "premium-card",
+                    Index = "03",
+                    Delay = "3",
+                    Eyebrow = "Escala",
+                    Title = "Entrega com previsibilidade",
+                    Body = "Iteramos em ciclos curtos com metas comerciais claras para evoluir sem interromper operação.",
+                    Bullets = new[] { "Plano quinzenal", "Qualidade de rollout", "Maturacao tecnica gradual" }
+                })
+                @await Html.PartialAsync("_Card", new
+                {
+                    CardClass = "premium-card",
+                    Index = "04",
+                    Delay = "4",
+                    Eyebrow = "Evidencia",
+                    Title = "Comunicacao executiva e premium",
+                    Body = "Relatorios, metricas e roadmap com linguagem de direcao para manter alinhamento e decisao.",
+                    Bullets = new[] { "Ritos executivos", "Dashboard de risco", "Acoes imediatas e metas semanais" }
+                })
             </div>
         </div>
     </section>
 
     <section class="section-band">
-        <div class="container">
-            <header class="section-heading" data-reveal>
-                <p class="eyebrow">Demos</p>
-                <h2>Veja demos reais antes de pedir uma proposta.</h2>
-                <p>Toda a vitrine é interativa: clique, filtre, adicione itens e veja como o produto final se comporta. Sem surpresas no orçamento.</p>
-            </header>
-            <div class="showcase-row">
-                @await Html.PartialAsync("_ShowcaseTile", new { Href = "/Products", Title = "Fluxo de caixa SaaS", Description = "Dashboard, transações, filtros e gráficos em tempo real.", DataRevealAttributes = "data-reveal" })
-                @await Html.PartialAsync("_ShowcaseTile", new { Href = "/Products", Title = "Landing de conversão", Description = "Oferta, prova social, FAQ e formulário com validação local.", DataRevealAttributes = "data-reveal data-delay=\"1\"" })
-                <a class="showcase-tile" href="/Products" data-reveal data-delay="2">
-                    <strong>Cardápio digital</strong>
-                    <span>Categorias, itens, carrinho e fechamento simulados.</span>
-                    <span class="tile-link">Ver demo &rarr;</span>
-                </a>
+        <div class="container split-grid">
+            <div data-reveal>
+                <p class="eyebrow">Metodo</p>
+                <h2>Metodo de entregas com rigor operacional.</h2>
+                <p>Na primeira semana mapeamos contexto real. Na segunda implantamos o esqueleto funcional. Nos ciclos seguintes, medimos, iteramos e escalamos.</p>
+                <a href="/Services" class="btn btn-outline">Ver escopo de servicos</a>
+            </div>
+            <div class="process-list" data-reveal data-delay="1">
+                <article>
+                    <span>Semana 1</span>
+                    <p>Mapeamento de gargalo com fluxo atual, metas e primeiro prototipo funcional.</p>
+                </article>
+                <article>
+                    <span>Semana 2</span>
+                    <p>Arquitetura viva para venda, atendimento e operacao com metrica de risco ativa.</p>
+                </article>
+                <article>
+                    <span>Semana 3</span>
+                    <p>Automacoes de ponta a ponta, reducao de retrabalho e melhoria de SLA.</p>
+                </article>
+                <article>
+                    <span>Semana 4</span>
+                    <p>Piloto com leitura de negocio, ajuste executivo e plano de evolucao.</p>
+                </article>
             </div>
         </div>
     </section>
 
-    <section class="section-band final-cta">
+    <section class="section-band" id="demos">
         <div class="container">
-            <div class="cta-panel" data-reveal>
-                <p class="eyebrow">@companyName</p>
-                <h2>Vamos transformar sua ideia em produto digital?</h2>
-                <p>Orçamento sem compromisso em 24h. Proposta com escopo, prazo e investimento.</p>
-                <div class="hero-actions">
-                    <a class="btn btn-primary" href="@contactHref">Solicitar proposta</a>
-                    <button class="btn btn-outline" type="button" data-open-chat>Falar com assistente</button>
-                </div>
+            <header class="section-heading" data-reveal>
+                <p class="eyebrow">Demos reais</p>
+                <h2>Demonstracoes hiper-realistas de ambientes comerciais e operacionais.</h2>
+                <p>Abra qualquer demo em uma experiencia integrada com janela de navegador simulada, 90% de tela e foco total em contexto de producao.</p>
+            </header>
+            <div class="showcase-row">
+                @await Html.PartialAsync("_ShowcaseTile", new
+                {
+                    Href = "/Products/Example/site",
+                    Title = "Site institucional de conversao",
+                    Kicker = "Comercial",
+                    Description = "Pagina estrategica com trilha de lead e rastreabilidade de origem.",
+                    Details = "Otimo para acelerar aquisicao com consistencia.",
+                    Device = "web"
+                })
+                @await Html.PartialAsync("_ShowcaseTile", new
+                {
+                    Href = "/Products/Example/dashboard",
+                    Title = "Painel executivo de performance",
+                    Kicker = "Dados",
+                    Description = "Indicadores por risco, tendencia e janela de decisao para lideranca.",
+                    Details = "Apoia reunioes semanais com leitura critica.",
+                    Device = "web"
+                })
+                @await Html.PartialAsync("_ShowcaseTile", new
+                {
+                    Href = "/Products/Example/ia",
+                    Title = "Assistente inteligente operacional",
+                    Kicker = "Atendimento",
+                    Description = "Fila priorizada, resposta em segundos e encaminhamento consultivo.",
+                    Details = "Experiencia escalavel para times com SLA exigente.",
+                    Device = "web"
+                })
             </div>
+        </div>
+    </section>
+
+    <section class="section-band" id="contato">
+        <div class="container">
+            <article class="cta-panel" data-reveal>
+                <p class="eyebrow">@appOptions.CompanyName</p>
+                <h2>Pronto para evoluir tecnologia em decisao e crescimento?</h2>
+                <p>Iniciamos com uma descoberta operacao, mapeamos risco e entregamos uma estrutura com valor visivel nas primeiras 30 dias.</p>
+                <div class="hero-actions">
+                    <a href="@contactHref" class="btn btn-primary">Agendar contato executivo</a>
+                    <button class="btn btn-outline" type="button" data-open-chat>Falar com assistente agora</button>
+                </div>
+            </article>
         </div>
     </section>
 </section>

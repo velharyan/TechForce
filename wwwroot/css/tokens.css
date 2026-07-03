@@ -1,50 +1,69 @@
-/* Design tokens extracted from site.css */
+/* Global design tokens for the new premium studio visual */
 :root {
-  --bg: #07090d;
-  --bg-2: #0e141b;
-  --surface: rgba(18, 24, 32, 0.88);
-  --surface-solid: #121821;
-  --surface-soft: rgba(255, 255, 255, 0.065);
-  --line: rgba(220, 230, 244, 0.14);
-  --text: #f7f9fc;
-  --muted: #aeb8c7;
-  --muted-2: #7d899a;
-  --brand: #66e3d4;
-  --brand-2: #f3c766;
-  --accent: #ff7a5c;
-  --violet: #9b8cff;
-  --success: #5ed59b;
-  --danger: #ff6b73;
-  --warning: #f2b84b;
-  --radius: 8px;
-  --radius-lg: 12px;
-  --shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
-  --shadow-lg: 0 40px 120px rgba(0, 0, 0, 0.52);
-  --shadow-soft: 0 14px 46px rgba(0, 0, 0, 0.22);
-  --glass-bg: rgba(18, 24, 32, 0.72);
-  --glass-border: rgba(255, 255, 255, 0.06);
-  --font-display: "Sora", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  --font-body: "Plus Jakarta Sans", "Sora", system-ui, -apple-system, sans-serif;
-  --reveal-delay: 0;
-  /* Additional design tokens */
+  --bg: #090a10;
+  --bg-2: #0e1320;
+  --surface: rgba(18, 24, 38, 0.84);
+  --surface-solid: #111a2a;
+  --surface-soft: rgba(255, 255, 255, 0.05);
+  --line: rgba(149, 168, 191, 0.16);
+
+  --text: #eff1f8;
+  --muted: #9ca7b8;
+  --muted-2: #76829a;
+
+  --brand: #5ed6ff;
+  --brand-2: #7f72ff;
+  --brand-3: #cbb15f;
+  --accent: #f2a47d;
+  --violet: #96a0ff;
+
+  --success: #55d4a0;
+  --danger: #ff7086;
+  --warning: #f2b64c;
+  --online: #54d68f;
+
+  --radius: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+
+  --shadow-soft: 0 14px 44px rgba(4, 8, 18, 0.32);
+  --shadow: 0 30px 86px rgba(4, 9, 18, 0.56);
+  --shadow-lift: 0 10px 30px rgba(10, 16, 28, 0.4);
+  --shadow-lg: 0 40px 120px rgba(4, 8, 18, 0.7);
+
+  --glass-bg: rgba(14, 20, 34, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.1);
+
+  --font-display: "Sora", "Inter", "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-body: "Inter", "Sora", "Space Grotesk", system-ui, -apple-system, sans-serif;
+
   --whatsapp-bg: #25d366;
-  --whatsapp-text: #04150a;
-  --btn-primary-text: var(--text);
+  --whatsapp-text: #f8fffd;
+  --btn-primary-text: #081018;
+  --focus-ring: 0 0 0 3px rgba(125, 214, 255, 0.32);
+
+  --reveal-delay: 0;
 }
 
 html[data-theme="light"] {
-  --bg: #f7f8f6;
-  --bg-2: #eef2ef;
-  --surface: rgba(255, 255, 255, 0.9);
-  --surface-solid: #ffffff;
-  --surface-soft: rgba(13, 24, 36, 0.055);
-  --line: rgba(13, 24, 36, 0.13);
-  --text: #111820;
-  --muted: #536173;
-  --muted-2: #697789;
-  --shadow: 0 28px 80px rgba(34, 45, 58, 0.14);
-  --shadow-lg: 0 40px 120px rgba(34, 45, 58, 0.18);
-  --shadow-soft: 0 14px 40px rgba(34, 45, 58, 0.1);
-  --glass-bg: rgba(255, 255, 255, 0.82);
-  --glass-border: rgba(13, 24, 36, 0.06);
+  --bg: #f8f9fb;
+  --bg-2: #f2f6fc;
+  --surface: rgba(255, 255, 255, 0.86);
+  --surface-solid: #f8fbff;
+  --surface-soft: rgba(10, 20, 32, 0.05);
+  --line: rgba(20, 38, 64, 0.14);
+
+  --text: #05101f;
+  --muted: #5a6a7f;
+  --muted-2: #73809a;
+
+  --shadow-soft: 0 14px 44px rgba(25, 40, 62, 0.14);
+  --shadow: 0 28px 80px rgba(25, 40, 62, 0.16);
+  --shadow-lg: 0 38px 110px rgba(24, 39, 60, 0.2);
+  --shadow-lift: 0 10px 24px rgba(24, 39, 60, 0.14);
+
+  --glass-bg: rgba(248, 250, 255, 0.78);
+  --glass-border: rgba(8, 22, 39, 0.11);
+  --whatsapp-bg: #20b45a;
+  --btn-primary-text: #051019;
 }

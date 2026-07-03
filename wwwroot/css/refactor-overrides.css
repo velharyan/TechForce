@@ -1,0 +1,14 @@
+:root {
+  --header-height: 86px;
+}
+
+.demo-page-shell .proex-shell,
+.demo-page-shell .proex-toolbar,
+.demo-page-shell .module-layout {
+  margin-top: 0;
+}
+
+html[data-theme="light"] .brand img {
+  background: rgba(255, 255, 255, 0.85);
+}
+

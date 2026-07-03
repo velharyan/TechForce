@@ -7,7 +7,7 @@ public class ServicesController : Controller
     public IActionResult Index()
     {
         ViewData["Title"] = "Servicos - TechForce";
-        ViewData["Description"] = "Desenvolvimento de software, web apps, aplicativos e automacoes para empresas.";
+        ViewData["Description"] = "Software sob medida, web apps, aplicativos mobile, automacao e arquitetura para crescimento com previsibilidade.";
         return View();
     }
 
